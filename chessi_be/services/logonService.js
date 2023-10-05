@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { sendVerificationMail } = require('../utils/mail');
 const { user } = require('../models/user');
 const { email } = require('../models/email');
 const jwt = require('jsonwebtoken');
@@ -25,6 +26,8 @@ let signupService = async (username, password, userEmail) => {
         verificationToken: Date.now()
     });
 
+    await sendVerificationMail(userEmail, newEmail.verificationToken);
+
     return { userEmail: newEmail.email, verificationToken: newEmail.verificationToken }
 }
 
@@ -38,7 +41,10 @@ let verifyEmailService = async (token) => {
     await emailFound.update({ verificationStatus: true });
 }
 
-let loginService = async (username, password) => {
+let loginService = async (username, password, socketID) => {
+
+    console.log(socketID);
+
     let userFound = await user.findOne({ 
         where: { username: username },
         include: { model: email }
@@ -54,28 +60,35 @@ let loginService = async (username, password) => {
         throw ({ httpStatus: 401, msg: "Wrong credentials" });
     }
 
-    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: '1d' });
-    let sessionToken = jwt.sign({ uid: userFound.uid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: '7d' });
-
     if (!userFound.email.verificationStatus) {
         throw ({ httpStatus: 403, msg: "Verify your email before continue" });
     }
 
-    return { accessToken: accessToken, sessionToken: sessionToken };
+    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: '1d' });
+    let sessionToken = jwt.sign({ uid: userFound.uid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: '7d' });
+    let profile = { uid: userFound.uid, username: userFound.username };
+
+    return { accessToken: accessToken, sessionToken: sessionToken, profile: profile };
 }
 
 let requestAccessTokenService = async (uid) => {
     let userFound = await user.findOne({ 
-        where: { uid: uid }
+        where: { uid: uid },
+        include: { model: email }
     });
-
-    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: '1d' });
 
     if (!userFound) {
         throw ({ httpStatus: 403, msg: "Please log in again" });
     }
+    
+    if (!userFound.email.verificationStatus) {
+        throw ({ httpStatus: 403, msg: "Verify your email before continue" });
+    }
 
-    return { accessToken: accessToken };
+    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: '1d' });
+    let profile = { uid: userFound.uid, username: userFound.username };
+
+    return { accessToken: accessToken, profile: profile };
 }
 
 module.exports = { signupService, verifyEmailService, loginService, requestAccessTokenService }

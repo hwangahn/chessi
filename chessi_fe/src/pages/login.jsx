@@ -1,8 +1,18 @@
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { AuthContext, ProfileContext } from '../components/auth';
+import socket from '../utils/socket';
 
 export default function Login() {
+  let navigate = useNavigate();
+
+  let { setAccessToken, setSessionToken } = useContext(AuthContext);
+  let { setProfile } = useContext(ProfileContext);
+
   const onFinish = ( formData ) => {
+    formData.socketID = socket.id;
     fetch("/api/login", {
       headers: {
         "Content-Type": "application/json",
@@ -15,7 +25,17 @@ export default function Login() {
     .then(res => { return res.json() } )
     .then(data => {
       console.log(data);
-      (data.status == "ok") ? message.success(data.msg): message.warning(data.msg);
+      if (data.status == "ok") {
+        message.success(data.msg);
+
+        setAccessToken(data.accessToken);
+        setSessionToken(data.sessionToken);
+        setProfile(data.profile);
+
+        navigate("/");
+      } else {
+        message.warning(data.msg);
+      }
     })
   };
 

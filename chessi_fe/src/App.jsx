@@ -1,11 +1,47 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
-import { FloatButton } from 'antd';
+import { FloatButton, message } from 'antd';
 import Home from './pages/home';
 import Login from './pages/login';
 import Signup from './pages/signup';
-import socket from './utils/socket';
+import { useContext, useEffect } from 'react';
+import { AuthContext, ProfileContext } from './components/auth';
 
 export default function App() {
+  let { accessToken, setAccessToken, sessionToken, setSessionToken } = useContext(AuthContext);
+  let { setProfile } = useContext(ProfileContext);
+
+  useEffect(() => {
+    if (sessionToken) {
+      fetch("/api/gettoken", {
+        method: "post",
+        headers: {
+          'authorization': 'Bearer ' + sessionToken
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "error") {
+          message.error(data.msg);
+          setSessionToken(null);
+        } else {
+          setAccessToken(data.accessToken);
+          setProfile(data.profile);
+        }
+      });
+    }
+
+    return () => {
+      if (accessToken) {
+        fetch("/api/leave", {
+          method: "post",
+          headers: {
+            'authorization': 'Bearer ' + accessToken
+          }
+        });
+      }
+    }
+  }, []);
+
 	return (
 		<BrowserRouter>
 			<Routes>

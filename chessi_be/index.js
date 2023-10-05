@@ -26,7 +26,7 @@ app.use(express.json());
 app.use('/', require('./APIs/logonAPI'));
 
 io.on("connection", (socket) => {
-    console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
+    console.log(socket.id);
 });
 
 httpServer.listen(port, () => {

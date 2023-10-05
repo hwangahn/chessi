@@ -6,8 +6,6 @@ let handleSignup = async (req, res) => {
 
         let { userEmail, verificationToken } = await signupService(username, password, email);
 
-        await sendVerificationMail(userEmail, verificationToken);
-
         res.status(200).json({ status: "ok", msg: "Head over to your mailbox for verification" });
     } catch(err) {
         console.log(err);
@@ -34,11 +32,11 @@ let handleVerifyEmail = async (req, res) => {
 
 let handleLogin = async (req, res) => {
     try {
-        let { username, password } = req.body.data;
+        let { username, password, socketID } = req.body.data;
          
-        let { accessToken, sessionToken } = await loginService(username, password);
+        let { accessToken, sessionToken, profile } = await loginService(username, password, socketID);
 
-        res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, sessionToken: sessionToken });
+        res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, sessionToken: sessionToken, profile: profile });
     } catch(err) {
         console.log(err);
         if (err.httpStatus) {
@@ -51,9 +49,9 @@ let handleRequestAccessToken = async (req, res) => {
     try {
         let { uid } = req.token;
 
-        let { accessToken } = await requestAccessTokenService(uid);
+        let { accessToken, profile } = await requestAccessTokenService(uid);
 
-        res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken });
+        res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, profile: profile });
     } catch(err) {
         console.log(err);
         if (err.httpStatus) {

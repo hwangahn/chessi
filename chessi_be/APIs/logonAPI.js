@@ -7,6 +7,6 @@ let router = express.Router();
 router.post('/api/signup', handleSignup);
 router.post('/api/login', handleLogin);
 router.get('/verify', handleVerifyEmail);
-router.get('/api/token', verifyJWT, handleRequestAccessToken);
+router.post('/api/gettoken', verifyJWT, handleRequestAccessToken);
 
 module.exports = router;
