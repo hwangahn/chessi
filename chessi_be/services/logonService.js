@@ -2,8 +2,12 @@ const bcrypt = require('bcrypt');
 const { sendVerificationMail } = require('../utils/mail');
 const { user } = require('../models/user');
 const { email } = require('../models/email');
+const { userOnline } = require('../cache/userOnlineCache');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
+let accessTokenLifetime = '1d';
+let sessionTokenLifetime = '7d';
 
 let signupService = async (username, password, userEmail) => {
     let usersFound = await user.findOne({ where: { username: username }});
@@ -26,9 +30,7 @@ let signupService = async (username, password, userEmail) => {
         verificationToken: Date.now()
     });
 
-    await sendVerificationMail(userEmail, newEmail.verificationToken);
-
-    return { userEmail: newEmail.email, verificationToken: newEmail.verificationToken }
+    await sendVerificationMail(userEmail, newEmail.verificationToken); 
 }
 
 let verifyEmailService = async (token) => {
@@ -42,8 +44,6 @@ let verifyEmailService = async (token) => {
 }
 
 let loginService = async (username, password, socketID) => {
-
-    console.log(socketID);
 
     let userFound = await user.findOne({ 
         where: { username: username },
@@ -64,14 +64,22 @@ let loginService = async (username, password, socketID) => {
         throw ({ httpStatus: 403, msg: "Verify your email before continue" });
     }
 
-    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: '1d' });
-    let sessionToken = jwt.sign({ uid: userFound.uid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: '7d' });
+    let userOnlineStatus = userOnline.findUserByUid(userFound.uid) // check if user is online
+
+    if (userOnlineStatus) {
+        throw ({ httpStatus: 403, msg: "This account is logged in on another computer. Log out of the existing session then proceed to log in again" });
+    }
+
+    userOnline.addUser({ uid: userFound.uid, socketID: socketID, loginTime: Date.now() }); // push user to online list
+
+    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
+    let sessionToken = jwt.sign({ uid: userFound.uid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: sessionTokenLifetime });
     let profile = { uid: userFound.uid, username: userFound.username };
 
     return { accessToken: accessToken, sessionToken: sessionToken, profile: profile };
 }
 
-let requestAccessTokenService = async (uid) => {
+let requestAccessTokenService = async (uid, socketID) => {
     let userFound = await user.findOne({ 
         where: { uid: uid },
         include: { model: email }
@@ -80,15 +88,27 @@ let requestAccessTokenService = async (uid) => {
     if (!userFound) {
         throw ({ httpStatus: 403, msg: "Please log in again" });
     }
-    
-    if (!userFound.email.verificationStatus) {
-        throw ({ httpStatus: 403, msg: "Verify your email before continue" });
+
+    let userOnlineStatus = userOnline.findUserByUid(uid) // check if user is online
+
+    if (userOnlineStatus) {
+        throw ({ httpStatus: 403, msg: "This account is logged in on another computer. Log out of the existing session then proceed to log in again" });
     }
 
-    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: '1d' });
+    userOnline.addUser({ uid: uid, socketID: socketID, loginTime: Date.now() }); // push user to online list
+
+    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
     let profile = { uid: userFound.uid, username: userFound.username };
 
     return { accessToken: accessToken, profile: profile };
 }
 
-module.exports = { signupService, verifyEmailService, loginService, requestAccessTokenService }
+let logoutService = async (uid) => {
+    let userOnlineFound = userOnline.findUserByUid(uid);
+
+    if (userOnlineFound) {
+        userOnline.filterUserByUid(uid);
+    }
+}
+
+module.exports = { signupService, verifyEmailService, loginService, requestAccessTokenService, logoutService }

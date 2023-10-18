@@ -1,10 +1,10 @@
-const { signupService, verifyEmailService, loginService, requestAccessTokenService } = require('../services/logonService');
+const { signupService, verifyEmailService, loginService, requestAccessTokenService, logoutService } = require('../services/logonService');
 
 let handleSignup = async (req, res) => {
     try {
         let { username, password, email } = req.body.data;
 
-        let { userEmail, verificationToken } = await signupService(username, password, email);
+        await signupService(username, password, email);
 
         res.status(200).json({ status: "ok", msg: "Head over to your mailbox for verification" });
     } catch(err) {
@@ -47,9 +47,9 @@ let handleLogin = async (req, res) => {
 
 let handleRequestAccessToken = async (req, res) => {
     try {
-        let { uid } = req.token;
+        let { uid, socketID } = { uid: req.token.uid, socketID: req.body.socketID };
 
-        let { accessToken, profile } = await requestAccessTokenService(uid);
+        let { accessToken, profile } = await requestAccessTokenService(uid, socketID);
 
         res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, profile: profile });
     } catch(err) {
@@ -60,4 +60,17 @@ let handleRequestAccessToken = async (req, res) => {
     }
 }
 
-module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleRequestAccessToken }
+let handleLogout = async (req, res) => {
+    try {
+        let { uid } = req.token;
+
+        await logoutService(uid);
+    } catch(err) {
+        console.log(err);
+        if (err.httpStatus) {
+            res.status(err.httpStatus).json({ status: "error", msg: err.msg });
+        }
+    }
+}
+
+module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleLogout, handleRequestAccessToken }

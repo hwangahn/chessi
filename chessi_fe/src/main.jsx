@@ -4,9 +4,9 @@ import App from './App.jsx'
 import { Auth } from './components/auth.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Auth>
-      <App />
-    </Auth>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <Auth>
+    <App />
+  </Auth>
+  // </React.StrictMode>,
 )

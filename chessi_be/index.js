@@ -4,19 +4,20 @@ const { createServer } = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
 require('./models/initDB');
+require('./cache/startCache');
 
 let app = express();
 let httpServer = createServer(app);
 const io = new Server(httpServer, { 
     cors: {
-        origin: "http://localhost:3000"
+        origin: process.env.CLIENT_URL
     }  
 });
 
 let port = process.env.PORT;
 
 app.use(cors({
-    origin: "http://localhost:3000", 
+    origin: process.env.CLIENT_URL, 
     credentials: "false"
 }));
 
@@ -27,6 +28,7 @@ app.use('/', require('./APIs/logonAPI'));
 
 io.on("connection", (socket) => {
     console.log(socket.id);
+    require('./socketEventListeners/socketStatusListener')(io, socket);
 });
 
 httpServer.listen(port, () => {
