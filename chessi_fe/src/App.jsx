@@ -8,7 +8,7 @@ import { useContext, useEffect } from 'react';
 import { AuthContext, ProfileContext } from './components/auth';
 
 export default function App() {
-  let { setAccessToken, sessionToken } = useContext(AuthContext);
+  let { setAccessToken, sessionToken, setSessionToken } = useContext(AuthContext);
   let { setProfile } = useContext(ProfileContext);
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function App() {
         .then(res => res.json())
         .then(data => {
           if (data.status === "error") {
+            setSessionToken(null);
             message.error(data.msg);
           } else {
             setAccessToken(data.accessToken);
