@@ -1,3 +1,5 @@
 // starts internal caching
 
-require('./userOnlineCache');
+const { userOnline } = require('./userOnlineCache');
+
+setInterval(userOnline.filterUserBySessionTime, 1000);

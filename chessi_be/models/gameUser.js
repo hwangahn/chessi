@@ -3,34 +3,30 @@ require('dotenv').config();
 
 const connection = new Sequelize(process.env.DB_KEY);
 
-let user = connection.define('user', {
+let gameUser = connection.define('gameUser', {
+    gameid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+    },
     userid: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
     },
-    username: {
+    side: {
         type: DataTypes.STRING,
-        allowNull: false,
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    isAdmin: {
-        type: DataTypes.BOOLEAN,
         allowNull: false
     }, 
-    rating: {
+    ratingChange: {
         type: DataTypes.INTEGER,
         allowNull: false
     }
 }, {
-    tableName: "user",
+    tableName: "gameUser",
     timestamps: false,
     createdAt: false,
     updatedAt: false
 });
 
-module.exports = { user };
+module.exports = { gameUser };

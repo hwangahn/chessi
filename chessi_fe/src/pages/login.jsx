@@ -1,42 +1,43 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { AuthContext, ProfileContext } from '../components/auth';
+import { AuthContext } from '../components/auth';
 import socket from '../utils/socket';
 
 export default function Login() {
   let navigate = useNavigate();
 
-  let { setAccessToken, setSessionToken } = useContext(AuthContext);
-  let { setProfile } = useContext(ProfileContext);
+  let { login } = useContext(AuthContext);
 
   const onFinish = ( formData ) => {
-    formData.socketID = socket.id;
-    fetch("/api/login", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-      body: JSON.stringify({
-        data: formData
+    if (socket.connected) {
+      formData.socketID = socket.id;
+      fetch("/api/login", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "post",
+        body: JSON.stringify({
+          data: formData
+        })
       })
-    })
-    .then(res => { return res.json() } )
-    .then(data => {
-      console.log(data);
-      if (data.status == "ok") {
-        message.success(data.msg);
+      .then(res => { return res.json() } )
+      .then(data => {
+        console.log(data);
+        if (data.status == "ok") {
+          message.success(data.msg);
 
-        setAccessToken(data.accessToken);
-        setSessionToken(data.sessionToken);
-        setProfile(data.profile);
+          login(data.accessToken, data.profile, data.sessionToken);
 
-        navigate("/");
-      } else {
-        message.warning(data.msg);
-      }
-    })
+          navigate("/");
+        } else {
+          message.warning(data.msg);
+        }
+      })
+    } else {
+      message.warning("Cannot connect to server. Please try again later")
+    }
   };
 
   return (
@@ -75,7 +76,8 @@ export default function Login() {
           Log in
         </Button>
       </Form.Item>
-      Or <a href="/signup">register now!</a>
+      Or <Link to={"/signup"}>register now!</Link>
+      {/* <Button onClick={() => socket.disconnect()}>Disconnect socket</Button> */}
     </Form>
   );
 };

@@ -2,8 +2,8 @@ let userOnline = (function() { // wrapper object
     let userOnlineList = new Array();
     let accessTokenLifetime = 24 * 60 * 60 * 1000;
 
-    let findUserByUid = (uid) => {
-        return userOnlineList.find(Element => Element.uid === uid);
+    let findUserByuserid = (userid) => {
+        return userOnlineList.find(Element => Element.userid === userid);
     };
     
     let addUser = (userObj) => {
@@ -14,16 +14,14 @@ let userOnline = (function() { // wrapper object
         userOnlineList = userOnlineList.filter(Element => Element.socketID !== socketID);
     };
     
-    let filterUserByUid = (uid) => {
-        userOnlineList = userOnlineList.filter(Element => Element.uid !== uid);
+    let filterUserByuserid = (userid) => {
+        userOnlineList = userOnlineList.filter(Element => Element.userid !== userid);
     };
     
     let filterUserBySessionTime = () => {
-        userOnlineList = userOnlineList.filter(Element => Date.now() - Element.loginTime <= accessTokenLifetime) // remove users' sessions exceeds access token time limit
+        userOnlineList = userOnlineList.filter(Element => Date.now() - Element.loginTime <= accessTokenLifetime) // remove users' sessions exceeds access token time limit\
     }
-    return {findUserByUid, addUser, filterUserBySocket, filterUserByUid, filterUserBySessionTime}
+    return {findUserByuserid, addUser, filterUserBySocket, filterUserByuserid, filterUserBySessionTime}
 })()
-
-setInterval(userOnline.filterUserBySessionTime, 1000);
 
 module.exports = { userOnline }

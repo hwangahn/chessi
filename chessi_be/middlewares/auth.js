@@ -20,12 +20,19 @@ let verifyJWT = (req, res, next) => {
     }
 }
 
-let verifyAccessToken = (req, res, next) => {
-    if (req.token.type !== "access token") {
-        res.status(401).json({ status: "error", msg: "You are not logged in"});
+let verifySessionToken = (req, res, next) => {
+    if (req.token.type !== "session token") {
+        return res.status(401).json({ status: "error", msg: "Cannot verify session"});
     }
     next();
 }
 
-module.exports = { verifyJWT, verifyAccessToken };
+let verifyAccessToken = (req, res, next) => {
+    if (req.token.type !== "access token") {
+        return res.status(401).json({ status: "error", msg: "You are not logged in"});
+    }
+    next();
+}
+
+module.exports = { verifyJWT, verifyAccessToken, verifySessionToken };
 

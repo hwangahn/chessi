@@ -4,7 +4,7 @@ require('dotenv').config();
 const connection = new Sequelize(process.env.DB_KEY);
 
 let email = connection.define('email', {
-    uid: {
+    userid: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,

@@ -3,34 +3,30 @@ require('dotenv').config();
 
 const connection = new Sequelize(process.env.DB_KEY);
 
-let user = connection.define('user', {
-    userid: {
+let comment = connection.define('comment', {
+    commentid: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    username: {
-        type: DataTypes.STRING,
+    postid: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    isAdmin: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-    }, 
-    rating: {
+    authorid: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    comment: {
+        type: DataTypes.TEXT,
         allowNull: false
     }
 }, {
-    tableName: "user",
-    timestamps: false,
-    createdAt: false,
+    tableName: "comment",
+    timestamps: true,
+    createdAt: "timestamp",
     updatedAt: false
 });
 
-module.exports = { user };
+module.exports = { comment };

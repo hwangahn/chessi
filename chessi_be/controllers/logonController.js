@@ -1,4 +1,4 @@
-const { signupService, verifyEmailService, loginService, requestAccessTokenService, logoutService } = require('../services/logonService');
+const { signupService, verifyEmailService, loginService, silentLoginService, logoutService } = require('../services/logonService');
 
 let handleSignup = async (req, res) => {
     try {
@@ -45,11 +45,11 @@ let handleLogin = async (req, res) => {
     }
 }
 
-let handleRequestAccessToken = async (req, res) => {
+let handleSilentLogin = async (req, res) => {
     try {
-        let { uid, socketID } = { uid: req.token.uid, socketID: req.body.socketID };
+        let { userid, socketID } = { userid: req.token.userid, socketID: req.body.socketID };
 
-        let { accessToken, profile } = await requestAccessTokenService(uid, socketID);
+        let { accessToken, profile } = await silentLoginService(userid, socketID);
 
         res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, profile: profile });
     } catch(err) {
@@ -62,9 +62,9 @@ let handleRequestAccessToken = async (req, res) => {
 
 let handleLogout = async (req, res) => {
     try {
-        let { uid } = req.token;
+        let { userid } = req.token;
 
-        await logoutService(uid);
+        await logoutService(userid);
     } catch(err) {
         console.log(err);
         if (err.httpStatus) {
@@ -73,4 +73,4 @@ let handleLogout = async (req, res) => {
     }
 }
 
-module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleLogout, handleRequestAccessToken }
+module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleLogout, handleSilentLogin }

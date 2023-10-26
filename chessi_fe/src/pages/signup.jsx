@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, RedoOutlined, MailOutlined } from '@ant-design/icons';
+import socket from '../utils/socket';
 
 export default function Signup() {
   const onFinish = ( formData ) => {
@@ -113,7 +115,7 @@ export default function Signup() {
           Register
         </Button>
       </Form.Item>
-        Already have an account? <a href="/login">Login now!</a>
+      Already have an account? <Link to={"/login"}>Login now!</Link>
     </Form>
   );
 };

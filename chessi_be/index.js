@@ -7,8 +7,8 @@ require('./models/initDB');
 require('./cache/startCache');
 
 let app = express();
-let httpServer = createServer(app);
-const io = new Server(httpServer, { 
+let server = createServer(app);
+const io = new Server(server, { 
     cors: {
         origin: process.env.CLIENT_URL
     }  
@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
     require('./socketEventListeners/socketStatusListener')(io, socket);
 });
 
-httpServer.listen(port, () => {
+server.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
 

@@ -21,11 +21,12 @@ let signupService = async (username, password, userEmail) => {
     let newUser = await user.create({
         username: username, 
         password: hashedPassword, 
-        isAdmin: false
+        isAdmin: false,
+        rating: 1500
     });
 
     let newEmail = await email.create({
-        uid: newUser.uid,
+        userid: newUser.userid,
         email: userEmail,
         verificationToken: Date.now()
     });
@@ -64,24 +65,24 @@ let loginService = async (username, password, socketID) => {
         throw ({ httpStatus: 403, msg: "Verify your email before continue" });
     }
 
-    let userOnlineStatus = userOnline.findUserByUid(userFound.uid) // check if user is online
+    let userOnlineStatus = userOnline.findUserByuserid(userFound.userid) // check if user is online
 
     if (userOnlineStatus) {
         throw ({ httpStatus: 403, msg: "This account is logged in on another computer. Log out of the existing session then proceed to log in again" });
     }
 
-    userOnline.addUser({ uid: userFound.uid, socketID: socketID, loginTime: Date.now() }); // push user to online list
+    userOnline.addUser({ userid: userFound.userid, socketID: socketID, loginTime: Date.now() }); // push user to online list
 
-    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
-    let sessionToken = jwt.sign({ uid: userFound.uid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: sessionTokenLifetime });
-    let profile = { uid: userFound.uid, username: userFound.username };
+    let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
+    let sessionToken = jwt.sign({ userid: userFound.userid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: sessionTokenLifetime });
+    let profile = { userid: userFound.userid, username: userFound.username };
 
     return { accessToken: accessToken, sessionToken: sessionToken, profile: profile };
 }
 
-let requestAccessTokenService = async (uid, socketID) => {
+let silentLoginService = async (userid, socketID) => {
     let userFound = await user.findOne({ 
-        where: { uid: uid },
+        where: { userid: userid },
         include: { model: email }
     });
 
@@ -89,26 +90,26 @@ let requestAccessTokenService = async (uid, socketID) => {
         throw ({ httpStatus: 403, msg: "Please log in again" });
     }
 
-    let userOnlineStatus = userOnline.findUserByUid(uid) // check if user is online
+    let userOnlineStatus = userOnline.findUserByuserid(userid) // check if user is online
 
     if (userOnlineStatus) {
         throw ({ httpStatus: 403, msg: "This account is logged in on another computer. Log out of the existing session then proceed to log in again" });
     }
 
-    userOnline.addUser({ uid: uid, socketID: socketID, loginTime: Date.now() }); // push user to online list
+    userOnline.addUser({ userid: userid, socketID: socketID, loginTime: Date.now() }); // push user to online list
 
-    let accessToken = jwt.sign({ uid: userFound.uid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
-    let profile = { uid: userFound.uid, username: userFound.username };
+    let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
+    let profile = { userid: userFound.userid, username: userFound.username };
 
     return { accessToken: accessToken, profile: profile };
 }
 
-let logoutService = async (uid) => {
-    let userOnlineFound = userOnline.findUserByUid(uid);
+let logoutService = async (userid) => {
+    let userOnlineFound = userOnline.findUserByuserid(userid);
 
     if (userOnlineFound) {
-        userOnline.filterUserByUid(uid);
+        userOnline.filterUserByuserid(userid);
     }
 }
 
-module.exports = { signupService, verifyEmailService, loginService, requestAccessTokenService, logoutService }
+module.exports = { signupService, verifyEmailService, loginService, silentLoginService, logoutService }
