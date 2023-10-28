@@ -13,6 +13,10 @@ let game = connection.define('game', {
     pgn: {
         type: DataTypes.TEXT,
         allowNull: false
+    },
+    finalFen: {
+        type: DataTypes.TEXT,
+        allowNull: false
     }
 }, {
     tableName: "game",

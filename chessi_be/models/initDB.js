@@ -8,6 +8,7 @@ const { ratingChange } = require('./ratingChange');
 const { post } = require('./post');
 const { comment } = require('./comment');
 const { transaction } = require('./transaction');
+const { userFollow } = require('./userFollow');
 
 let connection = new Sequelize(process.env.DB_KEY);
 
@@ -17,27 +18,26 @@ connection.authenticate()
 })
 .catch( err => console.log(err) );
 
+// user - email: 1:1
 user.hasOne(email, {
     foreignKey: 'userid'
 });
 email.belongsTo(user, {
     foreignKey: 'userid'
 });
-
+// user - game: M:N through 'gameUser'
 user.hasMany(gameUser, {
     foreignKey: "userid"
 });
 gameUser.belongsTo(user, {
     foreignKey: "userid"
 });
-
 game.hasMany(gameUser, {
     foreignKey: "gameid"
 });
 gameUser.belongsTo(game, {
     foreignKey: "gameid"
 });
-
 game.belongsToMany(user, {
     through: gameUser, 
     foreignKey: "gameid"
@@ -46,51 +46,59 @@ user.belongsToMany(game, {
     through: gameUser, 
     foreignKey: "userid"
 });
-
+// game - move: 1:N
 move.belongsTo(game, {
     foreignKey: "gameid"
 }); 
 game.hasMany(move, {
     foreignKey: "gameid"
 });
-
+// user - ratingChange: 1:N
 ratingChange.belongsTo(user, {
     foreignKey: "userid"
 });
 user.hasMany(ratingChange, {
     foreignKey: "userid"
 });
-
+// user - post: 1:N
 post.belongsTo(user, {
     foreignKey: "authorid"
 });
 user.hasMany(post, {
     foreignKey: "authorid"
 });
-
+// post - comment: 1:N
 comment.belongsTo(post, {
     foreignKey: "postid"
 });
 post.hasMany(comment, {
     foreignKey: "postid"
 });
-
+// user - comment: 1:N
 comment.belongsTo(user, {
     foreignKey: "authorid"
 });
 user.hasMany(comment, {
     foreignKey: "authorid"
 });
-
+// user - transaction: 1:1
 transaction.belongsTo(user, {
     foreignKey: "userid"
 });
 user.hasOne(transaction, {
     foreignKey: "userid"
 });
+// user - user: M:N through 'userFollow'
+user.belongsToMany(user, {
+    as: "Follow",
+    through: userFollow, 
+    foreignKey: "userid",
+    otherKey: "followerid"
+});
 
 let drop = async () => {
     try {
+        await userFollow.drop();
         await transaction.drop();
         await comment.drop();
         await post.drop();
@@ -116,6 +124,7 @@ let create = async () => {
         await move.sync();
         await ratingChange.sync();
         await comment.sync();
+        await userFollow.sync();
     } catch(err) {
         console.log(err)
     }

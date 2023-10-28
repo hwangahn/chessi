@@ -3,6 +3,7 @@ const { sendVerificationMail } = require('../utils/mail');
 const { user } = require('../models/user');
 const { email } = require('../models/email');
 const { userOnline } = require('../cache/userOnlineCache');
+const { httpError } = require('../error/httpError');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -13,7 +14,7 @@ let signupService = async (username, password, userEmail) => {
     let usersFound = await user.findOne({ where: { username: username }});
 
     if (usersFound) {
-        throw ({ httpStatus: 403, msg: "Username Exist" });
+        throw (new httpError(403, "Username Exist"));
     }
 
     let hashedPassword = await bcrypt.hash(password, 10);
@@ -38,7 +39,7 @@ let verifyEmailService = async (token) => {
     let emailFound = await email.findOne({ where: { verificationToken: token }});
 
     if (!emailFound) {
-        throw ({ httpStatus: 404, msg: "Invalid link" });
+        throw (new httpError(404, "Invalid link"));
     } 
 
     await emailFound.update({ verificationStatus: true });
@@ -52,23 +53,24 @@ let loginService = async (username, password, socketID) => {
     });
 
     if (!userFound) {
-        throw ({ httpStatus: 401, msg: "Wrong credentials" });
+        throw (new httpError(401, "Wrong credentials"));
     }
 
     let checkPassword = await bcrypt.compare(password, userFound.password);
 
     if (!checkPassword) {
-        throw ({ httpStatus: 401, msg: "Wrong credentials" });
+        throw (new httpError(401, "Wrong credentials"));
+
     }
 
     if (!userFound.email.verificationStatus) {
-        throw ({ httpStatus: 403, msg: "Verify your email before continue" });
+        throw (new httpError(403, "Verify your email before continue"));
     }
 
     let userOnlineStatus = userOnline.findUserByuserid(userFound.userid) // check if user is online
 
     if (userOnlineStatus) {
-        throw ({ httpStatus: 403, msg: "This account is logged in on another computer. Log out of the existing session then proceed to log in again" });
+        throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
     userOnline.addUser({ userid: userFound.userid, socketID: socketID, loginTime: Date.now() }); // push user to online list
@@ -87,13 +89,13 @@ let silentLoginService = async (userid, socketID) => {
     });
 
     if (!userFound) {
-        throw ({ httpStatus: 403, msg: "Please log in again" });
+        throw (new httpError(403, "Please log in again"));
     }
 
     let userOnlineStatus = userOnline.findUserByuserid(userid) // check if user is online
 
     if (userOnlineStatus) {
-        throw ({ httpStatus: 403, msg: "This account is logged in on another computer. Log out of the existing session then proceed to log in again" });
+        throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
     userOnline.addUser({ userid: userid, socketID: socketID, loginTime: Date.now() }); // push user to online list

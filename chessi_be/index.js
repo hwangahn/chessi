@@ -27,7 +27,6 @@ app.use(express.json());
 app.use('/', require('./APIs/logonAPI'));
 
 io.on("connection", (socket) => {
-    console.log(socket.id);
     require('./socketEventListeners/socketStatusListener')(io, socket);
 });
 
