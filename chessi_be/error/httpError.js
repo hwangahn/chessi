@@ -14,8 +14,6 @@ class httpError extends Error {
 	getMessage() {
 		return this.message;
 	}
-
-	
 }
   
 module.exports = { httpError }  
