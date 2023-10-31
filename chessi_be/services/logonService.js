@@ -60,7 +60,6 @@ let loginService = async (username, password, socketID) => {
 
     if (!checkPassword) {
         throw (new httpError(401, "Wrong credentials"));
-
     }
 
     if (!userFound.email.verificationStatus) {

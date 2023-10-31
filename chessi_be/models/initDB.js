@@ -88,12 +88,19 @@ transaction.belongsTo(user, {
 user.hasOne(transaction, {
     foreignKey: "userid"
 });
-// user - user: M:N through 'userFollow'
-user.belongsToMany(user, {
-    as: "Follow",
-    through: userFollow, 
-    foreignKey: "userid",
-    otherKey: "followerid"
+// user - user: M:N through "userFollow" but cannot be eager loaded through "user"
+// must be retrieved through "userFollow"
+user.hasMany(userFollow, {
+    foreignKey: "userid"
+});
+userFollow.belongsTo(user, {
+    foreignKey: "userid"
+});
+user.hasMany(userFollow, {
+    foreignKey: "followerid"
+});
+userFollow.belongsTo(user, {
+    foreignKey: "followerid"
 });
 
 let drop = async () => {
@@ -132,11 +139,11 @@ let create = async () => {
 
 (async () => {
     try {
-        // await drop();
+        await drop();
 
         await create();
-        // let res = await user.findAll({ include: { model: gameUser, include: { model: game } } });
-        // console.log(res);
+        let res = await game.findAll({ include: { model: move }});
+        console.log(res);
     } catch(err) {
         console.log(err);
     }
