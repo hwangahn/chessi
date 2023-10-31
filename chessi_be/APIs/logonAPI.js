@@ -1,7 +1,7 @@
 const express = require('express');
 const { handleSignup, handleVerifyEmail, handleLogin, handleLogout, handleSilentLogin } = require('../controllers/logonController');
 const { verifyJWT, verifyAccessToken, verifySessionToken } = require('../middlewares/auth');
-
+ 
 let router = express.Router();
 
 router.post('/api/signup', handleSignup);
