@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const { socketServerSingleton } = require('./socketServer');
 require('dotenv').config();
 require('./models/initDB');
 require('./cache/startCache');
@@ -33,4 +34,5 @@ io.on("connection", (socket) => {
 server.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
+
 

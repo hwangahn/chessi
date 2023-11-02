@@ -3,6 +3,8 @@
 const { userOnline } = require('./userOnlineCache');
 const { matchMaking } = require('./matchmakingCache');
 
+console.log(userOnline);
+
 let players = [
     {userid: 1, elo: 1700, sideHistory: ["white", "white", "white", "white", "white"], priority: 0}, // 5
     {userid: 2, elo: 1600, sideHistory: ["black", "black", "black", "black", "white"], priority: 0}, // -3

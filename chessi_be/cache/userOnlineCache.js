@@ -19,9 +19,10 @@ let userOnline = (function() { // wrapper object
     };
     
     let filterUserBySessionTime = () => {
-        userOnlineList = userOnlineList.filter(Element => Date.now() - Element.loginTime <= accessTokenLifetime) // remove users' sessions exceeds access token time limit\
+        userOnlineList = userOnlineList.filter(Element => Date.now() - Element.loginTime <= accessTokenLifetime) // remove users' sessions exceeds access token time limit
     }
-    return {findUserByuserid, addUser, filterUserBySocket, filterUserByuserid, filterUserBySessionTime}
+    return { findUserByuserid, addUser, filterUserBySocket, filterUserByuserid, filterUserBySessionTime }
 })()
 
 module.exports = { userOnline }
+

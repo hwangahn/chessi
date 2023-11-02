@@ -26,7 +26,7 @@ let handleVerifyEmail = async (req, res) => {
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
-            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+            res.status(err.getHttpCode()).send("<p>Invalid link"); 
         }
     }
 }
