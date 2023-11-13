@@ -8,7 +8,6 @@ let game = connection.define('game', {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
     }, 
     pgn: {
         type: DataTypes.TEXT,

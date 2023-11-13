@@ -138,9 +138,11 @@ let create = async () => {
 }
 
 (async () => {
+
+    
     try {
         // await drop();
-
+        
         await create();
         let res = await game.findAll({ include: { model: move }});
         console.log(res);
