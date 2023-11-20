@@ -1,6 +1,8 @@
 module.exports = (io, socket) => {
-    const { handleDisconnect } = require('../socketEventHandlers/socketStatusHandler')(io);
-    
+    const { handleConnect, handleDisconnect } = require('../socketEventHandlers/socketStatusHandler')(io);
+
+    handleConnect(socket);
+
     socket.on('disconnect', handleDisconnect);
 }
   

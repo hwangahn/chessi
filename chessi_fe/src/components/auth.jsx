@@ -1,33 +1,31 @@
 import { createContext, useReducer } from "react"
-import { message } from "antd";
 import socket from "../utils/socket";
 
 export const AuthContext = createContext(null);
 
-let accessTokenReducer = (accessToken, action) => {
-  console.log(accessToken);
-  switch (action.type) {
-    case "set": {
-      return action.accessToken;
-    }
-    case "clear": {
-      return null;
-    }
-  }
-}
-
-let profileReducer = (profile, action) => {
-  switch (action.type) {
-    case "set": {
-      return action.profile;
-    }
-    case "clear": {
-      return null;
-    }
-  }
-}
-
 export function Auth({ children }) {
+
+  let accessTokenReducer = (accessToken, action) => {
+    switch (action.type) {
+      case "set": {
+        return action.accessToken;
+      }
+      case "clear": {
+        return null;
+      }
+    }
+  }
+  
+  let profileReducer = (profile, action) => {
+    switch (action.type) {
+      case "set": {
+        return action.profile;
+      }
+      case "clear": {
+        return null;
+      }
+    }
+  }
 
   let [accessToken, dispatchAccessToken] = useReducer(accessTokenReducer, null);
   let [profile, dispatchProfile] = useReducer(profileReducer, null);
@@ -42,9 +40,9 @@ export function Auth({ children }) {
     localStorage.clear("sessionToken");
   }
 
-  let useSilentLogin = () => {
-    if (sessionToken) {
-      fetch("/api/silent-login", {
+  let useSilentLogin = async () => {
+    if (sessionToken) { // persisting session
+      let rawData = await fetch("/api/silent-login", {
         method: "post",
         headers: {
           'authorization': 'Bearer ' + sessionToken,
@@ -53,15 +51,81 @@ export function Auth({ children }) {
         body: JSON.stringify({
           socketID: socket.id
         })
+      });
+
+      let data = await rawData.json();
+      
+      if (data.status === "ok") {
+        silentLogin(data.accessToken, data.profile);
+      } else {
+        logout();
+      }
+
+      return data;
+    } else {
+      if (accessToken && profile) { // user tries to open website in another tab, leading to loss of session token
+        logout();
+        return { status: "error", msg: "Please log in again" }
+      }
+    }
+  }
+
+  let useLogin = async (formData) => {
+    if (socket.connected) {
+      let rawData = await fetch("/api/login", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "post",
+        body: JSON.stringify({
+          data: formData
+        })
+      });
+
+      let data = await rawData.json();
+
+      if (data.status === "ok") {
+        login(data.accessToken, data.profile, data.sessionToken);
+      }
+
+      return data;
+
+    } else {
+      return { status: "error", msg: "Cannot connect to server. Please try again later" }
+    }
+  }
+
+  let useSignup = async (formData) => {
+    let rawData = await fetch("/api/signup", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "post",
+      body: JSON.stringify({
+        data: formData
       })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === "error") {
-          message.error(data.msg);
-        } else {
-          silentLogin(data.accessToken, data.profile);
+    });
+
+    let data = await rawData.json();
+     
+    return data;
+  }
+
+  let useLogout = async () => {
+    if (socket.connected) {
+
+      logout();
+
+      await fetch("/api/logout", {
+        method: "post",
+        headers: {
+          'authorization': 'Bearer ' + accessToken,
         }
       });
+      
+      return { status: "ok", msg: "Logged out" }
+    } else {
+      return { status: "error", msg: "Cannot connect to server" };
     }
   }
 
@@ -99,7 +163,7 @@ export function Auth({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ accessToken, dispatchAccessToken, sessionToken, setSessionToken, profile, dispatchProfile, useSilentLogin, login, logout }}>
+    <AuthContext.Provider value={{ accessToken, sessionToken, profile, silentLogin, useSilentLogin, useLogin, useSignup, useLogout }}>
         { children }
     </AuthContext.Provider>
   )

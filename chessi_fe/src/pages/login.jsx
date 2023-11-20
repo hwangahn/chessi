@@ -8,35 +8,19 @@ import socket from '../utils/socket';
 export default function Login() {
   let navigate = useNavigate();
 
-  let { login } = useContext(AuthContext);
+  let { useLogin } = useContext(AuthContext);
 
-  const onFinish = ( formData ) => {
-    if (socket.connected) {
-      formData.socketID = socket.id;
-      fetch("/api/login", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "post",
-        body: JSON.stringify({
-          data: formData
-        })
-      })
-      .then(res => { return res.json() } )
-      .then(data => {
-        console.log(data);
-        if (data.status == "ok") {
-          message.success(data.msg);
+  const onFinish = async ( formData ) => {
+    formData.socketID = socket.id;
 
-          login(data.accessToken, data.profile, data.sessionToken);
+    let { status, msg } = await useLogin(formData);
 
-          navigate("/");
-        } else {
-          message.warning(data.msg);
-        }
-      })
+    if (status === "ok") {
+      message.success(msg);
+
+      navigate("/");
     } else {
-      message.warning("Cannot connect to server. Please try again later")
+      message.warning(msg);
     }
   };
 
@@ -77,7 +61,7 @@ export default function Login() {
         </Button>
       </Form.Item>
       Or <Link to={"/signup"}>register now!</Link>
-      {/* <Button onClick={() => socket.disconnect()}>Disconnect socket</Button> */}
+      <Button onClick={() => socket.disconnect()}>Disconnect socket</Button>
     </Form>
   );
 };

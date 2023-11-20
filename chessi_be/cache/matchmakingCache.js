@@ -115,10 +115,6 @@ let matchMakingCache = (function() {
 
         queue = waitingQueue;
 
-        addUser({userid: Date.now(), elo: 1900, sideHistory: [], priority: 0})
-
-        console.log(queue);
-
         return matches;
     }
 

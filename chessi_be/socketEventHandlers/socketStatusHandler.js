@@ -1,15 +1,17 @@
 let { userOnline } = require("../cache/userOnlineCache");
 
-
-
 module.exports = (io) => { 
-    let handleDisconnect = function() {
+    let handleConnect = function(socket) {
+        console.log(`socket ${socket.id} connected`);
+    }
+
+    let handleDisconnect = function(reasons) {
         let socket = this;
 
-        userOnline.filterUserBySocket(socket.id);
+        userOnline.filterUserBysocketid(socket.id); // remove user from online list
 
-        console.log(`socket ${socket.id} disconnected`);
-    } 
+        console.log(`socket ${socket.id} disconnected because ${reasons}`);
+    };
     
-    return { handleDisconnect }
+    return { handleConnect, handleDisconnect }
 }

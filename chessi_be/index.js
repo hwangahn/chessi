@@ -12,7 +12,7 @@ let server = createServer(app);
 socketInstance.set(new Server(server, { 
     cors: {
         origin: process.env.CLIENT_URL
-    }  
+    }
 }));
 
 let port = process.env.PORT;

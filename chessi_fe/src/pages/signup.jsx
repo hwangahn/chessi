@@ -1,23 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, RedoOutlined, MailOutlined } from '@ant-design/icons';
-import socket from '../utils/socket';
+import { AuthContext } from '../components/auth';
 
 export default function Signup() {
-  const onFinish = ( formData ) => {
-    fetch("/api/signup", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-      body: JSON.stringify({
-        data: formData
-      })
-    })
-    .then(res => { return res.json() } )
-    .then(data => {
-      (data.status == "ok") ? message.success(data.msg): message.error(data.msg);
-    })
+  let { useSignup } = useContext(AuthContext);
+
+  const onFinish = async ( formData ) => {
+    let { status, msg } = await useSignup(formData);
+
+    (status == "ok") ? message.success(msg): message.error(msg);
   };
 
   return (

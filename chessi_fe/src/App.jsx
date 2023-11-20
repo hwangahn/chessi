@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
-import { FloatButton } from 'antd';
+import { FloatButton, message } from 'antd';
 import Home from './pages/home';
 import Login from './pages/login';
 import Signup from './pages/signup';
@@ -11,9 +11,17 @@ export default function App() {
   let { useSilentLogin } = useContext(AuthContext);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      useSilentLogin();
-    })
+    socket.on("connect", async () => {
+      let { status, msg } = await useSilentLogin();
+
+      if (status === "error") {
+        message.warning(msg);
+      }
+    });
+    
+    return () => {
+      socket.off();
+    }
   }, []);
 
 	return (

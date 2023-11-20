@@ -66,13 +66,13 @@ let loginService = async (username, password, socketID) => {
         throw (new httpError(403, "Verify your email before continue"));
     }
 
-    let userOnlineStatus = userOnline.findUserByuserid(userFound.userid) // check if user is online
+    let userOnlineStatus = userOnline.findUserByuserid(userFound.userid); // find user from online user list to check if user is online
 
-    if (userOnlineStatus) {
+    if (userOnlineStatus) { // if found
         throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
-    userOnline.addUser({ userid: userFound.userid, socketID: socketID, loginTime: Date.now() }); // push user to online list
+    userOnline.addUser({ userid: userFound.userid, socketid: socketID, loginTime: Date.now() }); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
     let sessionToken = jwt.sign({ userid: userFound.userid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: sessionTokenLifetime });
@@ -91,13 +91,13 @@ let silentLoginService = async (userid, socketID) => {
         throw (new httpError(403, "Please log in again"));
     }
 
-    let userOnlineStatus = userOnline.findUserByuserid(userid) // check if user is online
+    let userOnlineStatus = userOnline.findUserByuserid(userid); // find user from online user list to check if user is online
 
-    if (userOnlineStatus) {
+    if (userOnlineStatus) { // if found
         throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
-    userOnline.addUser({ userid: userid, socketID: socketID, loginTime: Date.now() }); // push user to online list
+    userOnline.addUser({ userid: userid, socketid: socketID, loginTime: Date.now() }); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
     let profile = { userid: userFound.userid, username: userFound.username };

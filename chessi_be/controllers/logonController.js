@@ -66,6 +66,8 @@ let handleLogout = async (req, res) => {
         let { userid } = req.token;
 
         await logoutService(userid);
+
+        res.status(200).json({ status: "ok", msg: "Logged out" });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {

@@ -1,8 +1,8 @@
-
 const { checkHttpError } = require('../utils/checkError');
 
 let findMatchController = (req, res) => {
     try {
+        let { userid } = req.token;
         
     } catch(err) {
         console.log(err);
@@ -14,6 +14,7 @@ let findMatchController = (req, res) => {
 
 let stopFindMatchController = (req, res) => {
     try {
+        let { userid } = req.token;
         
     } catch(err) {
         console.log(err);
