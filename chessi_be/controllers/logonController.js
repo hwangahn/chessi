@@ -33,9 +33,9 @@ let handleVerifyEmail = async (req, res) => {
 
 let handleLogin = async (req, res) => {
     try {
-        let { username, password, socketID } = req.body.data;
+        let { username, password, socketid } = req.body.data;
          
-        let { accessToken, sessionToken, profile } = await loginService(username, password, socketID);
+        let { accessToken, sessionToken, profile } = await loginService(username, password, socketid);
 
         res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, sessionToken: sessionToken, profile: profile });
     } catch(err) {
@@ -48,9 +48,9 @@ let handleLogin = async (req, res) => {
 
 let handleSilentLogin = async (req, res) => {
     try {
-        let { userid, socketID } = { userid: req.token.userid, socketID: req.body.socketID };
+        let { userid, socketid } = { userid: req.token.userid, socketid: req.body.socketid };
 
-        let { accessToken, profile } = await silentLoginService(userid, socketID);
+        let { accessToken, profile } = await silentLoginService(userid, socketid);
 
         res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, profile: profile });
     } catch(err) {

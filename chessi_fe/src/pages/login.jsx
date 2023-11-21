@@ -11,7 +11,7 @@ export default function Login() {
   let { useLogin } = useContext(AuthContext);
 
   const onFinish = async ( formData ) => {
-    formData.socketID = socket.id;
+    formData.socketid = socket.id;
 
     let { status, msg } = await useLogin(formData);
 

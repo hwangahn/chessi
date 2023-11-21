@@ -33,6 +33,8 @@ let signupService = async (username, password, userEmail) => {
     });
 
     await sendVerificationMail(userEmail, newEmail.verificationToken); 
+
+    console.log("new user signed up");
 }
 
 let verifyEmailService = async (token) => {
@@ -45,7 +47,7 @@ let verifyEmailService = async (token) => {
     await emailFound.update({ verificationStatus: true });
 }
 
-let loginService = async (username, password, socketID) => {
+let loginService = async (username, password, socketid) => {
 
     let userFound = await user.findOne({ 
         where: { username: username },
@@ -72,16 +74,18 @@ let loginService = async (username, password, socketID) => {
         throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
-    userOnline.addUser({ userid: userFound.userid, socketid: socketID, loginTime: Date.now() }); // push user to online list
+    userOnline.addUser({ userid: userFound.userid, socketid: socketid, loginTime: Date.now() }); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
     let sessionToken = jwt.sign({ userid: userFound.userid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: sessionTokenLifetime });
     let profile = { userid: userFound.userid, username: userFound.username };
 
+    console.log(`user ${userFound.userid} logged in`)
+
     return { accessToken: accessToken, sessionToken: sessionToken, profile: profile };
 }
 
-let silentLoginService = async (userid, socketID) => {
+let silentLoginService = async (userid, socketid) => {
     let userFound = await user.findOne({ 
         where: { userid: userid },
         include: { model: email }
@@ -97,20 +101,18 @@ let silentLoginService = async (userid, socketID) => {
         throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
-    userOnline.addUser({ userid: userid, socketid: socketID, loginTime: Date.now() }); // push user to online list
+    userOnline.addUser({ userid: userid, socketid: socketid, loginTime: Date.now() }); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
     let profile = { userid: userFound.userid, username: userFound.username };
+
+    console.log(`user ${userFound.userid} logged in silently`);
 
     return { accessToken: accessToken, profile: profile };
 }
 
 let logoutService = async (userid) => {
-    let userOnlineFound = userOnline.findUserByuserid(userid);
-
-    if (userOnlineFound) {
-        userOnline.filterUserByuserid(userid);
-    }
+    userOnline.filterUserByuserid(userid);
 }
 
 module.exports = { signupService, verifyEmailService, loginService, silentLoginService, logoutService }

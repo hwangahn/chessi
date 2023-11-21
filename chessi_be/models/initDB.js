@@ -144,8 +144,6 @@ let create = async () => {
         // await drop();
         
         await create();
-        let res = await game.findAll({ include: { model: move }});
-        console.log(res);
     } catch(err) {
         console.log(err);
     }

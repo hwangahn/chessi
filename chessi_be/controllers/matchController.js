@@ -1,9 +1,13 @@
+const { findMatchService, stopFindMatchService } = require('../services/matchService');
 const { checkHttpError } = require('../utils/checkError');
 
-let findMatchController = (req, res) => {
+let findMatchController = async (req, res) => {
     try {
         let { userid } = req.token;
         
+        await findMatchService(userid);
+
+        res.status(200).json({ status: "ok" });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
@@ -12,10 +16,13 @@ let findMatchController = (req, res) => {
     }
 }
 
-let stopFindMatchController = (req, res) => {
+let stopFindMatchController = async (req, res) => {
     try {
         let { userid } = req.token;
         
+        await stopFindMatchService(userid);
+
+        res.status(200).json({ status: "ok" });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {

@@ -42,26 +42,30 @@ export function Auth({ children }) {
 
   let useSilentLogin = async () => {
     if (sessionToken) { // persisting session
-      let rawData = await fetch("/api/silent-login", {
-        method: "post",
-        headers: {
-          'authorization': 'Bearer ' + sessionToken,
-          'Content-Type': 'application/json',
-        }, 
-        body: JSON.stringify({
-          socketID: socket.id
-        })
-      });
+      try {
+        let rawData = await fetch("/api/silent-login", {
+          method: "post",
+          headers: {
+            'authorization': 'Bearer ' + sessionToken,
+            'Content-Type': 'application/json',
+          }, 
+          body: JSON.stringify({
+            socketid: socket.id
+          })
+        });
 
-      let data = await rawData.json();
-      
-      if (data.status === "ok") {
-        silentLogin(data.accessToken, data.profile);
-      } else {
-        logout();
+        let data = await rawData.json();
+        
+        if (data.status === "ok") {
+          silentLogin(data.accessToken, data.profile);
+        } else {
+          logout();
+        }
+
+        return data;
+      } catch(err) {
+        console.log(err);
       }
-
-      return data;
     } else {
       if (accessToken && profile) { // user tries to open website in another tab, leading to loss of session token
         logout();
@@ -72,7 +76,35 @@ export function Auth({ children }) {
 
   let useLogin = async (formData) => {
     if (socket.connected) {
-      let rawData = await fetch("/api/login", {
+      try {
+        let rawData = await fetch("/api/login", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "post",
+          body: JSON.stringify({
+            data: formData
+          })
+        });
+
+        let data = await rawData.json();
+
+        if (data.status === "ok") {
+          login(data.accessToken, data.profile, data.sessionToken);
+        }
+
+        return data;
+      } catch(err) {
+        console.log(err);
+      }
+    } else {
+      return { status: "error", msg: "Cannot connect to server. Please try again later" }
+    }
+  }
+
+  let useSignup = async (formData) => {
+    try {
+      let rawData = await fetch("/api/signup", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -83,47 +115,29 @@ export function Auth({ children }) {
       });
 
       let data = await rawData.json();
-
-      if (data.status === "ok") {
-        login(data.accessToken, data.profile, data.sessionToken);
-      }
-
+      
       return data;
-
-    } else {
-      return { status: "error", msg: "Cannot connect to server. Please try again later" }
+    } catch(err) {
+      console.log(err);
     }
-  }
-
-  let useSignup = async (formData) => {
-    let rawData = await fetch("/api/signup", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-      body: JSON.stringify({
-        data: formData
-      })
-    });
-
-    let data = await rawData.json();
-     
-    return data;
   }
 
   let useLogout = async () => {
     if (socket.connected) {
-
-      logout();
-
-      await fetch("/api/logout", {
-        method: "post",
-        headers: {
-          'authorization': 'Bearer ' + accessToken,
-        }
-      });
-      
-      return { status: "ok", msg: "Logged out" }
+      try {
+        await fetch("/api/logout", {
+          method: "post",
+          headers: {
+            'authorization': 'Bearer ' + accessToken,
+          }
+        });
+        
+        logout();
+        
+        return { status: "ok", msg: "Logged out" }
+      } catch(err) {
+        console.log(err);
+      }
     } else {
       return { status: "error", msg: "Cannot connect to server" };
     }
