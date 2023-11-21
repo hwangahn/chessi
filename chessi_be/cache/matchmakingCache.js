@@ -113,8 +113,6 @@ let matchMakingCache = (function() {
 
         queue = waitingQueue;
 
-        console.log(queue);
-
         return { matches, playerRemovedFromQueue };
     }
 
