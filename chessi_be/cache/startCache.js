@@ -1,21 +1,38 @@
 // starts internal caching
 
-const { userOnline } = require('./userOnlineCache');
+const { userOnlineCache } = require('./userOnlineCache');
 const { matchMakingCache } = require('./matchmakingCache');
 const { socketInstance } = require('../socketInstance');
-
-setInterval(userOnline.filterUserBySessionTime, 1000);
+const { activeGameCache } = require('./activeGameCache');
+const { activeGame } = require('./gameCache');
 
 setInterval(() => {
-    let { matches, playerRemovedFromQueue } = matchMakingCache.matchMaking();
+    userOnlineCache.filterUserBySessionTime();
+
+    let gamesOver = activeGameCache.filterGameOver();
+    
+    gamesOver.forEach(Element => {
+        socketInstance.get().to(Element.gameid).emit("game over", Element.reason);  
+    });
+}, 1000);
+
+setInterval(() => {
+    let { games, playerRemovedFromQueue } = matchMakingCache.matchMaking();
 
     playerRemovedFromQueue.forEach(Element => {
-        socketInstance.get().to(Element.socketid).emit("cannot find match"); // notify user of inability to find match
+        Element.priority = 0; // reset player priority
+        socketInstance.get().to(Element.socketid).emit("cannot find game"); // notify user of inability to find game
     });
 
-    matches.forEach((Element, index) => {
-        // notify user of match found and room id
-        socketInstance.get().to(Element.white.socketid).emit("match found", `${Date.now()}${index}`);
-        socketInstance.get().to(Element.black.socketid).emit("match found", `${Date.now()}${index}`);
+    games.forEach((Element, index) => {
+        let gameid = `${Date.now()}${index}`;
+        activeGameCache.addGame(new activeGame(gameid, Element.white, Element.black));
+
+        // notify user of game found and room id
+        socketInstance.get().to(Element.white.socketid).emit("game found", gameid);
+        socketInstance.get().to(Element.black.socketid).emit("game found", gameid);
     });
-}, 5000);
+
+}, 1000);
+
+

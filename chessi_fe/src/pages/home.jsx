@@ -10,28 +10,49 @@ export default function Home() {
   let { useLogout, accessToken, profile } = useContext(AuthContext);
 
   let [connected, setConnected] = useState(socket.connected);
-  let [isFindingMatch, setIsFindingMatch] = useState(false);
+  let [isFindingGame, setIsFindingGame] = useState(false);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      setConnected(socket.connected);
+    socket.on("connect", async () => {
+      setConnected(true);
     });
 
-    socket.on("cannot find match", () => {
-      setIsFindingMatch(false);
-      message.error("Cannot find match. Please try again");
+    socket.on("cannot find game", () => {
+      setIsFindingGame(false);
+      message.error("Cannot find game. Please try again");
     });
 
-    socket.on("match found", (roomid) => {
-      // navigate(`/game/${roomid}`);
-      setIsFindingMatch(false);
-      message.success(`Match found! Game room ${roomid}`);
+    socket.on("game found", (gameid) => {
+      navigate(`/game/${gameid}`);
+      setIsFindingGame(false);
     });
 
     return () => {
       socket.off();
     }
-  }, [])
+  }, []);
+
+  useEffect(() => { // runs every re-render to get user's active game
+    (async function() {
+      console.log(accessToken);
+      if (accessToken) {
+        let rawData = await fetch('/api/get-users-active-game', {
+          method: 'get',
+          headers: {
+            'authorization': 'Bearer ' + accessToken,
+          }
+        });
+
+        let { status, inGame, gameid } = await rawData.json();
+
+        if (status === "error") {
+          message.warning(msg);
+        } else if (inGame) {
+          navigate(`/game/${gameid}`);
+        }
+      }
+    })();
+  })
 
   let handleLogout = async () => {
     let { status, msg } = await useLogout();
@@ -39,39 +60,43 @@ export default function Home() {
     (status === "ok") ? message.success(msg) : message.error(msg);
   }
 
-  const handleFindMatch = async () => {
-    if (!isFindingMatch) {
-      try {
-        let rawData = await fetch('/api/find-match', { // request to join match making queue
-          method: "post",
-          headers: {
-            'authorization': 'Bearer ' + accessToken,
-            'Content-Type': 'application/json',
-          }
-        });
+  const handleFindGame = async () => {
+    if (socket.connected) {
+      if (!isFindingGame) {
+        try {
+          let rawData = await fetch('/api/find-game', { // request to join match making queue
+            method: "post",
+            headers: {
+              'authorization': 'Bearer ' + accessToken,
+              'Content-Type': 'application/json',
+            }
+          });
 
-        let data = await rawData.json();
+          let data = await rawData.json();
 
-        data.status === "ok" ? setIsFindingMatch(true) : message.error(data.msg);
-      } catch (error) {
-        console.error(error);
+          data.status === "ok" ? setIsFindingGame(true) : message.error(data.msg);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        try {
+          let rawData = await fetch('/api/stop-find-game', { // request to leave match making queue
+            method: "post",
+            headers: {
+              'authorization': 'Bearer ' + accessToken,
+              'Content-Type': 'application/json',
+            }
+          });
+
+          let data = await rawData.json();      
+
+          data.status === "ok" ? setIsFindingGame(false) : message.error(data.msg);
+        } catch (error) {
+          console.error(error);
+        }
       }
     } else {
-      try {
-        let rawData = await fetch('/api/stop-find-match', { // request to leave match making queue
-          method: "post",
-          headers: {
-            'authorization': 'Bearer ' + accessToken,
-            'Content-Type': 'application/json',
-          }
-        });
-
-        let data = await rawData.json();      
-
-        data.status === "ok" ? setIsFindingMatch(false) : message.error(data.msg);
-      } catch (error) {
-        console.error(error);
-      }
+      message.error("Cannot connect to server");
     }
   }
 
@@ -87,10 +112,15 @@ export default function Home() {
     <div>
       {accessToken ? 
         <>
-          <p>Hello {profile.username}</p>
+          <p>{`Hello ${profile.username}`}</p>
+          <p>{`Rating: ${profile.rating}`}</p>
           <p>{`Status: ${connected}`}</p>
           <Button type='primary' onClick={handleLogout} style={{marginRight: "10px"}}>Logout</Button>
-          <Button type='primary' onClick={handleFindMatch} style={{marginRight: "10px"}}>{!isFindingMatch ? "Find match" : "Cancel"}</Button>
+          {!isFindingGame ? 
+          <Button type='primary' onClick={handleFindGame} style={{marginRight: "10px", width: "100px"}}>Find Game</Button>
+          : 
+          <Button danger onClick={handleFindGame} style={{marginRight: "10px", width: "100px"}}>Cancel</Button>
+          }
           <Button onClick={handleTestDisconnect}>Test disconnect</Button>
         </> : 
         <>

@@ -1,6 +1,5 @@
-let userOnline = (function() { // wrapper object
+let userOnlineCache = (function() { // wrapper object
     let userOnlineList = new Array();
-    let accessTokenLifetime = 24 * 60 * 60 * 1000;
 
     let findUserByuserid = (userid) => {
         return userOnlineList.find(Element => Element.userid === userid);
@@ -23,11 +22,11 @@ let userOnline = (function() { // wrapper object
     };
     
     let filterUserBySessionTime = () => {
-        userOnlineList = userOnlineList.filter(Element => Date.now() - Element.loginTime <= accessTokenLifetime) // remove users' sessions exceeds access token time limit
+        userOnlineList = userOnlineList.filter(Element => Element.isStillInSession()) // remove users' sessions exceeds access token time limit
     };
 
     return { findUserByuserid, findUserBysocketid, addUser, filterUserBysocketid, filterUserByuserid, filterUserBySessionTime }
 })()
 
-module.exports = { userOnline }
+module.exports = { userOnlineCache }
 

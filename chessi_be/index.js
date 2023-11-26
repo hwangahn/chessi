@@ -26,10 +26,11 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 app.use('/', require('./APIs/logonAPI'));
-app.use('/', require('./APIs/matchAPI'));
+app.use('/', require('./APIs/gameAPI'));
 
 socketInstance.get().on("connection", (socket) => {
     require('./socketEventListeners/socketStatusListener')(socketInstance.get(), socket);
+    require('./socketEventListeners/socketGameListener')(socketInstance.get(), socket);
 });
 
 server.listen(port, () => {
