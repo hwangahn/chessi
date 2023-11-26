@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { message } from 'antd'
 import socket from "../utils/socket";
 
@@ -7,6 +7,7 @@ export default function Game() {
   let [gameInfo, setGameInfo] = useState(null);
 
   let param = useParams();
+  let navigate = useNavigate();
   
   useEffect(() => {
     let changeGameTime; // game clock interval ref
@@ -34,6 +35,7 @@ export default function Game() {
         }, 1000);
       } else {
         message.error(data.msg);
+        navigate('/'); // return to main page
       }
     }
 
