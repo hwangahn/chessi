@@ -71,8 +71,10 @@ function GameInfo() {
   }, []);
 
   useEffect(() => { // runs every re render to set side
-    if (profile) {
-      setSide(playerInfo?.white.username === profile.username ? "white" : "black");
+    if (profile?.username !== playerInfo?.white.username && profile?.username !== playerInfo?.black.username) {
+      setSide("spectator");
+    } else {
+      setSide(playerInfo?.white.username === profile?.username ? "white" : "black");
     }
   })
 
