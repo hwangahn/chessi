@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { AuthContext } from '../components/auth';
+import { AuthContext } from '../contexts/auth';
 import socket from '../utils/socket';
 
 export default function Login() {

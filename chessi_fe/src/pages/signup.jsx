@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, RedoOutlined, MailOutlined } from '@ant-design/icons';
-import { AuthContext } from '../components/auth';
+import { AuthContext } from '../contexts/auth';
 
 export default function Signup() {
   let { useSignup } = useContext(AuthContext);

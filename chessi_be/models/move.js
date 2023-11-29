@@ -10,13 +10,12 @@ let move = connection.define('move', {
         primaryKey: true,
         autoIncrement: true
     }, 
-    side: {
-        type: DataTypes.STRING,
-        primaryKey: true
-    },
     moveOrder: {
         type: DataTypes.INTEGER,
         primaryKey: true
+    },
+    side: {
+        type: DataTypes.STRING,
     },
     notation: {
         type: DataTypes.INTEGER, 

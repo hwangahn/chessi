@@ -1,30 +1,21 @@
+const { Chess } = require('chess.js');
+
 class activeGame {
     constructor(gameid, whitePlayer, blackPlayer) {
+        this.game = new Chess();
         this.gameid = gameid;
         this.black = blackPlayer;
         this.white = whitePlayer;
-        this.turn = "white";
-        this.timeLeft = 10;
+        this.timeLeft = 30;
         this.eloChange = 7;
-        this.usersConnected = 2;
+        this.outcome = ""; // outcome of the game. can be draw or not draw
+        this.winner = ""; // the winner of the game. empty if draw
         this.over = false;
-        this.reason = "";
+        this.reason = ""; // reason the game end
     }
 
     getTimeLeft() {
-        return this.timeLeft;
-    }
-
-    getTurn() {
-        return this.turn;
-    }
-
-    getBlack() {
-        return this.black;
-    }
-
-    getWhite() {
-        return this.white;
+        return { turn: this.game.turn(), timeLeft: this.timeLeft };
     }
 
     getGameInfo() {
@@ -38,7 +29,9 @@ class activeGame {
                 username: this.white.username,
                 rating: this.white.rating,
             },
-            turn: this.turn,
+            position: this.game.fen(),
+            history: this.game.history({ verbose: true }),
+            turn: this.game.turn(),
             timeLeft: this.timeLeft
         }
     }
@@ -52,9 +45,26 @@ class activeGame {
     }
 
     isGameOver() {
-        if (!this.isTimeLeft()) {
+        if (!this.isTimeLeft()) { // check game timer
             this.over = true;
-            this.reason = `${this.turn} timed out`;
+            this.reason = `${this.game.turn() === "w" ? "White" : "Black"} timed out`;
+            this.outcome = "not draw";
+        } else if (this.game.isGameOver()) { // else check game state
+            this.over = true;
+            this.outcome = this.game.isCheckmate() ? "not draw" : "draw";
+            this.reason = this.game.isCheckmate() ? "Checkmate" : this.reason;
+            this.reason = this.game.isDraw() ? "50-move Rule" : this.reason;
+            this.reason = this.game.isInsufficientMaterial() ? "Insufficient Material" : this.reason;
+            this.reason = this.game.isStalemate() ? "Stalemate" : this.reason;
+            this.reason = this.game.isThreefoldRepetition() ? "Threefold Repetition" : this.reason;
+        }
+
+        if (this.over) {
+            if (this.outcome === "not draw" && this.reason === "Checkmate") {
+                this.winner = this.game.turn() === "w" ? "black" : "white";
+            } else {
+                this.winner = this.game.turn() === "w" ? "white" : "black";
+            }
         }
 
         return this.over;
@@ -62,6 +72,16 @@ class activeGame {
 
     isUserInGame(userid) { // check whether user is in this game
         return this.black.userid === userid || this.white.userid === userid;
+    }
+
+    makeMove(move) { // try making move
+        try {
+            this.timeLeft = 30;
+            return this.game.move(move); 
+        } catch(err) {
+            console.log(err);
+            return null; // null if illegal
+        }
     }
 } 
 

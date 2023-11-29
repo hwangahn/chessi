@@ -1,6 +1,6 @@
 import { Button, message } from 'antd';
 import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../components/auth"
+import { AuthContext } from "../contexts/auth"
 import { Link, useNavigate } from 'react-router-dom';
 import socket from '../utils/socket';
 
@@ -28,7 +28,9 @@ export default function Home() {
     });
 
     return () => {
-      socket.off();
+      socket.off("connect");
+      socket.off("cannot find game");
+      socket.off("game found");
     }
   }, []);
 

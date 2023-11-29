@@ -9,11 +9,16 @@ const { activeGame } = require('./gameCache');
 setInterval(() => {
     userOnlineCache.filterUserBySessionTime();
 
-    let gamesOver = activeGameCache.filterGameOver();
+    let {gamesOver, gamesActive} = activeGameCache.filterGameOver();
     
     gamesOver.forEach(Element => {
-        socketInstance.get().to(Element.gameid).emit("game over", Element.reason);  
+        socketInstance.get().to(Element.gameid).emit("game over", Element.reason); // notify room of game outcome
     });
+
+    gamesActive.forEach(Element => {
+        socketInstance.get().to(Element.gameid).emit("time left", Element.getTimeLeft().turn, Element.getTimeLeft().timeLeft); // notify room of time left
+    }) 
+
 }, 1000);
 
 setInterval(() => {
@@ -28,11 +33,11 @@ setInterval(() => {
         let gameid = `${Date.now()}${index}`;
         activeGameCache.addGame(new activeGame(gameid, Element.white, Element.black));
 
-        // notify user of game found and room id
+        // notify user of game and room id
         socketInstance.get().to(Element.white.socketid).emit("game found", gameid);
         socketInstance.get().to(Element.black.socketid).emit("game found", gameid);
     });
 
-}, 1000);
+}, 5000);
 
 
