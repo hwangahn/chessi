@@ -5,7 +5,7 @@ const connection = new Sequelize(process.env.DB_KEY);
 
 let move = connection.define('move', {
     gameid: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
@@ -18,7 +18,7 @@ let move = connection.define('move', {
         type: DataTypes.STRING,
     },
     notation: {
-        type: DataTypes.INTEGER, 
+        type: DataTypes.STRING, 
         allowNull: false
     },
     fen: {

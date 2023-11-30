@@ -5,7 +5,7 @@ const connection = new Sequelize(process.env.DB_KEY);
 
 let gameUser = connection.define('gameUser', {
     gameid: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
     },

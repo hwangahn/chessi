@@ -126,7 +126,7 @@ function Board() {
     <>
       {
         side ? 
-        <Chessboard position={position} onPieceDrop={handlePieceDrop} boardOrientation={side} customBoardStyle={{width: "100%"}} animationDuration={100} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} /> : 
+        <Chessboard position={position} onPieceDrop={handlePieceDrop} boardOrientation={side} customBoardStyle={{width: "100%"}} animationDuration={0} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} /> : 
         <Spin/> 
       }
       {side}

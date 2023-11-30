@@ -64,7 +64,6 @@ let loginService = async (username, password, socketid) => {
                 model: gameUser, 
                 include: {
                     model: game, 
-                    order: [[ "timestamp", "DESC" ]],
                 }
             }
         ]
@@ -113,7 +112,6 @@ let silentLoginService = async (userid, socketid) => {
                 model: gameUser, 
                 include: {
                     model: game, 
-                    order: [[ "timestamp", "DESC" ]],
                 }
             }
         ]

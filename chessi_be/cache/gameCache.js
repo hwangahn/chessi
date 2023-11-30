@@ -7,7 +7,7 @@ class activeGame {
         this.black = blackPlayer;
         this.white = whitePlayer;
         this.timeLeft = 30;
-        this.eloChange = 7;
+        this.ratingChange = 7;
         this.outcome = ""; // outcome of the game. can be draw or not draw
         this.winner = ""; // the winner of the game. empty if draw
         this.over = false;
@@ -47,7 +47,7 @@ class activeGame {
     isGameOver() {
         if (!this.isTimeLeft()) { // check game timer
             this.over = true;
-            this.reason = `${this.game.turn() === "w" ? "White" : "Black"} timed out`;
+            this.reason = "Timed out";
             this.outcome = "not draw";
         } else if (this.game.isGameOver()) { // else check game state
             this.over = true;
@@ -59,11 +59,10 @@ class activeGame {
             this.reason = this.game.isThreefoldRepetition() ? "Threefold Repetition" : this.reason;
         }
 
+        // update winner
         if (this.over) {
-            if (this.outcome === "not draw" && this.reason === "Checkmate") {
+            if (this.outcome === "not draw") {
                 this.winner = this.game.turn() === "w" ? "black" : "white";
-            } else {
-                this.winner = this.game.turn() === "w" ? "white" : "black";
             }
         }
 
