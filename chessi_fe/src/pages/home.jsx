@@ -38,7 +38,7 @@ export default function Home() {
     (async function() {
       console.log(accessToken);
       if (accessToken) {
-        let rawData = await fetch('/api/get-users-active-game', {
+        let rawData = await fetch('/api/user-active-game', {
           method: 'get',
           headers: {
             'authorization': 'Bearer ' + accessToken,
@@ -82,8 +82,8 @@ export default function Home() {
         }
       } else {
         try {
-          let rawData = await fetch('/api/stop-find-game', { // request to leave match making queue
-            method: "post",
+          let rawData = await fetch('/api/find-game', { // request to leave match making queue
+            method: "delete",
             headers: {
               'authorization': 'Bearer ' + accessToken,
               'Content-Type': 'application/json',

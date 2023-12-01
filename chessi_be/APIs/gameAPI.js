@@ -5,8 +5,8 @@ const { findGameController, stopFindGameController, getGameController, getUserAc
 let router = express.Router();
 
 router.post('/api/find-game', verifyJWT, verifyAccessToken, findGameController);
-router.post('/api/stop-find-game', verifyJWT, verifyAccessToken, stopFindGameController);
+router.delete('/api/find-game', verifyJWT, verifyAccessToken, stopFindGameController);
 router.get('/api/game-info/:gameid', getGameController);
-router.get('/api/get-users-active-game', verifyJWT, verifyAccessToken, getUserActiveGameController);
+router.get('/api/user-active-game', verifyJWT, verifyAccessToken, getUserActiveGameController);
 
 module.exports = router;
