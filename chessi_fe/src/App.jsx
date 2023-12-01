@@ -8,6 +8,7 @@ import Login from './pages/login';
 import Signup from './pages/signup';
 import Game from './pages/game';
 
+//test
 export default function App() {
   let { useSilentLogin } = useContext(AuthContext);
 
