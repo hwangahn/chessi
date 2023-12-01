@@ -75,8 +75,11 @@ class activeGame {
 
     makeMove(move) { // try making move
         try {
-            this.timeLeft = 30;
-            return this.game.move(move); 
+            if (!this.over) {
+                let moveMade = this.game.move(move)
+                this.timeLeft = 30;
+                return moveMade; 
+            }
         } catch(err) {
             console.log(err);
             return null; // null if illegal
