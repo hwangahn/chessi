@@ -14,6 +14,8 @@ let matchMakingCache = (function() {
     }
 
     let filterUserBysocketid = (socketid) => {
+        let userFound = userOnlineList.find(Element => Element.socketid === socketid);
+        userFound.resetPriority(); // reset users match making priority
         queue = queue.filter(Element => Element.socketid !== socketid);
     }
     
@@ -50,6 +52,10 @@ let matchMakingCache = (function() {
         while (i < mustBeWhite.length && j < mustBeBlack.length) {
             // see if any black-white pair is within acceptable gap
             if (Math.abs(mustBeWhite[i].rating - mustBeBlack[j].rating) <= ratingGap) {
+                // reset user's match making priority
+                mustBeWhite[i].resetPriority();
+                mustBeBlack[j].resetPriority();
+
                 games.push({ white: mustBeWhite[i], black: mustBeBlack[j] });
                 i++;
                 j++;
@@ -81,6 +87,10 @@ let matchMakingCache = (function() {
 
         for (let k = 0; k < neutral.length; k++) {
             if (k + 1 < neutral.length && neutral[k + 1].rating - neutral[k].rating <= ratingGap) {
+                // reset user's match making priority
+                neutral[k].resetPriority();
+                neutral[k + 1].resetPriority()
+
                 games.push(neutral[k + 1].getSideIndex() < neutral[k].getSideIndex() ? 
                                     { white: neutral[k + 1], black: neutral[k] } : 
                                     { white: neutral[k], black: neutral[k + 1] });
@@ -90,6 +100,10 @@ let matchMakingCache = (function() {
                 newQueue.push(neutral[k]);
             }
         }
+
+        playerRemovedFromQueue.forEach(Element => {
+            Element.resetPriority(); // reset user's match making priority
+        })
 
         queue = newQueue;
 

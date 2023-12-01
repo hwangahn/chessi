@@ -80,14 +80,10 @@ setInterval(() => { // match making cache
     let { games, playerRemovedFromQueue } = matchMakingCache.matchMaking();
 
     playerRemovedFromQueue.forEach(Element => {
-        Element.resetPriority(); // reset player priority
         socketInstance.get().to(Element.socketid).emit("cannot find game"); // notify user of inability to find game
     });
 
     games.forEach((Element, index) => {
-        // reset player priority
-        Element.white.resetPriority();
-        Element.black.resetPriority();
 
         let gameid = `${Date.now()}${index}`;
         activeGameCache.addGame(new activeGame(gameid, Element.white, Element.black));
