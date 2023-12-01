@@ -8,7 +8,7 @@ let matchMakingCache = (function() {
     }
 
     let filterUserByuserid = (userid) => {
-        let userFound = userOnlineList.find(Element => Element.userid === userid);
+        let userFound = queue.find(Element => Element.userid === userid);
         userFound.resetPriority(); // reset users match making priority
         queue = queue.filter(Element => Element.userid !== userid);
     }
