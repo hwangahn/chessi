@@ -9,13 +9,16 @@ let findGameService = async ( userid ) => {
     if (!userFound) {
         throw new httpError(500, "Cannot find game. Try again later");
     }
+
+    console.log(`user ${userid} finding match`);
     
     matchMakingCache.addUser(userFound); // add user to match making queue
-
 }
 
 let stopFindGameService = async ( userid ) => {
     matchMakingCache.filterUserByuserid(userid); // remove user from match making queue
+
+    console.log(`user ${userid} stop finding match`);
 }
 
 let getGameService = async (gameid) => {

@@ -11,7 +11,7 @@ class activeUser {
     }
 
     getSideIndex() { // in matchmaking
-        let sideIndex = this.sideHistory.reduce((accumulator, currentValue) => {
+        let sideIndex = this.sideHistory.reduce((accumulator, currentValue) => { // calculate side index based on game side history
             let index = currentValue === "white" ? 1 : -1; // white counts as 1, black counts as -1
             return accumulator + index;
         }, 0);

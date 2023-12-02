@@ -14,8 +14,10 @@ let matchMakingCache = (function() {
     }
 
     let filterUserBysocketid = (socketid) => {
-        let userFound = userOnlineList.find(Element => Element.socketid === socketid);
-        userFound.resetPriority(); // reset users match making priority
+        let userFound = queue.find(Element => Element.socketid === socketid);
+        if (userFound) {
+            userFound.resetPriority(); // reset users match making priority
+        }
         queue = queue.filter(Element => Element.socketid !== socketid);
     }
     
