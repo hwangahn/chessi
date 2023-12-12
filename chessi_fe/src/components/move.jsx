@@ -11,16 +11,16 @@ export default function Move({ movePair, moveOrder }) {
   }
 
   return (
-    <div id="move" style={{display: "block", width: "100%", height: "50px"}}>
-      <div style={{float: "left", width: "10%"}}>
+    <div id="move" style={{display: "block", width: "100%", height: "2vw", marginTop: "0.3vw"}}>
+      <div style={{float: "left", width: "5.8%", marginLeft: "5px"}}>
         <p>{moveOrder + 1}</p>
       </div>
       <div style={{float: "left", width: "45%"}}>
-        <Button type={isOnMove === movePair[0].moveIndex ? "primary" : "default"} onClick={() => handleClick(movePair[0])} style={{width: "100%", height: "50px"}}>{movePair[0].history.san}</Button>
+        <Button type={isOnMove === movePair[0].moveIndex ? "primary" : "default"} onClick={() => handleClick(movePair[0])} style={{width: "100%", height: "2vw", fontSize: "1vw"}}>{movePair[0].history.san}</Button>
       </div>
-      <div style={{float: "right", width: "45%"}}>
+      <div style={{float: "left", width: "45%"}}>
         {movePair[1].history && 
-        <Button type={isOnMove === movePair[1].moveIndex ? "primary" : "default"} onClick={() => handleClick(movePair[1])} style={{width: "100%", height: "50px"}}>{movePair[1].history.san}</Button>}
+        <Button type={isOnMove === movePair[1].moveIndex ? "primary" : "default"} onClick={() => handleClick(movePair[1])} style={{width: "100%", height: "2vw", fontSize: "1vw"}}>{movePair[1].history.san}</Button>}
       </div>
     </div>
   )
