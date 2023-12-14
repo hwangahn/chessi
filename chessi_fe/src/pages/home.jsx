@@ -1,9 +1,11 @@
 import { Button, message } from 'antd';
-import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../contexts/auth"
+
+
 import { Link, useNavigate } from 'react-router-dom';
 import { Chessboard } from 'react-chessboard';
 import socket from '../utils/socket';
+import { AuthContext } from "../contexts/auth"
+import { useContext, useEffect, useState } from "react"
 import Verticalmenu from './verticalmenu';
 
 export default function Home() {
@@ -181,5 +183,4 @@ export default function Home() {
         </>
       }
     </div>
-  )
-}
+  )}
