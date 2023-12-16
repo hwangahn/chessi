@@ -10,7 +10,7 @@ import Move from "../components/move";
 
 function GameInfo() {
   let { profile } = useContext(AuthContext);
-  let { setSide, setPosition, setHistory, timeLeft, setTimeLeft } = useContext(GameContentContext);
+  let { setSide, setPosition, setOnMove, history, setHistory, timeLeft, setTimeLeft } = useContext(GameContentContext);
 
   let [playerInfo, setPlayerInfo] = useState(null);
   let [turn, setTurn] = useState(null);
@@ -31,11 +31,15 @@ function GameInfo() {
       let data = await rawData.json();
 
       if (data.status === "ok") {        
-        setHistory(data.gameInfo.history);
+        setHistory(() => {
+          data.gameInfo.history.forEach(Element => { history.push(Element) });
+          return [ ...history ];
+        });
         setPosition(data.gameInfo.position);
         setPlayerInfo({ white: data.gameInfo.white, black: data.gameInfo.black });
         setTimeLeft(data.gameInfo.timeLeft);
         setTurn(data.gameInfo.turn);
+        setOnMove(data.gameInfo.history.length - 1);
       } else {
         message.error(data.msg);
         navigate('/'); // return to main page
@@ -97,9 +101,8 @@ function Board() {
   useEffect(() => {
     socket.on("move made", (move) => {
       history.push(move);
-      let newHistory = history.map(Element => { return Element });
-      setHistory(prev => newHistory);
-      setPosition(prev => move.after);
+      setHistory([ ...history ]);
+      setPosition(move.after);
       setOnMove(history.length - 1); // selecting latest move
     });
 
@@ -126,7 +129,7 @@ function Board() {
     <>
       {
         side ? 
-        <Chessboard position={position} onPieceDrop={handlePieceDrop} boardOrientation={side} customBoardStyle={{width: "100%"}} animationDuration={0} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} /> : 
+        <Chessboard id={1000000000} position={position} onPieceDrop={handlePieceDrop} boardOrientation={side} customBoardStyle={{width: "100%"}} animationDuration={0} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} /> : 
         <Spin/> 
       }
       {side}
@@ -152,7 +155,7 @@ function MoveHistory() {
   }
 
   return (
-    <div style={{width: "100%", height: "calc(40vw * 0.45)", marginBottom: "calc(40vw * 0.05)", overflowY: "scroll"}}>
+    <div style={{width: "100%", height: "calc(14.2vw)", marginBottom: "calc(40vw * 0.05)", overflowY: "scroll"}}>
       {moveByPair.map((Element, index) => {
         return <Move movePair={Element} moveOrder={index}/>
       })}
@@ -196,14 +199,14 @@ function Chat() {
   }
 
   return (
-    <div id="chat" style={{width: "100%", height: "calc(40vw * 0.5)"}}>
+    <div id="chat" style={{backgroundColor: "#1E1D2F", width: "92%", height: "calc(60vw * 0.5)", padding: "10px 0px"}}>
       <div id="chat-message" style={{width: "99%", marginLeft: "auto", height: "calc(100% - 67px)", overflowY: "scroll"}}>
         {chatHistory.map(Element => {
           return <p><b>{Element.sender}</b>: {Element.message}</p>
         })}
         <div ref={lastMessage} style={{height: "0px"}}></div>
       </div>
-      <div id="message-input" style={{width: "100%", height: "fit-content"}}>
+      <div id="message-input" style={{width: "92%", height: "fit-content", marginLeft: "1vw"}}>
         <TextArea id="message-input" placeholder="Enter your message..." value={message} autoSize={{ minRows: 1, maxRows: 3}} 
         style={{width: "100%"}} onChange={(e) => {setMessage(e.target.value)}} onPressEnter={handleSendChat} />
         <Button id="submit-message" type="primary" style={{width: "100%"}} onClick={handleSendChat}>Send</Button>
@@ -213,17 +216,119 @@ function Chat() {
 }
 
 export default function Game() {
+
+  const leftbar = {
+    float:"left",
+    width: "27.5%",
+    marginTop: "0px",
+    paddingTop: "0.8vw",
+    paddingLeft: "2vw"
+  };
+
+  const gameInfor = {
+    backgroundColor: "#1E1D2F",
+    color: "#BEC1DC",
+    width: "92%",
+    height: "10vw",
+    marginBottom: "1.5vw"
+  }
+
+  const rightbar = {
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: "4%",
+    marginTop: "23%",
+    justifyContent: "center"
+}
+
+const playerComponent = {
+    display: "flex",
+    flexDirection: "row"
+}
+
+const playerAva = {
+    margin: "1vw 5.5vw 0.5vw 0vw",
+    color: "#B0ABAB",
+    fontSize: "1.6vw",
+    fontWeight: "bold"
+}
+
+const playerTimer = {
+    color: "#B0ABAB",
+    fontSize: "1.6vw",
+    marginTop: "1.5vw",
+    paddingTop: "0.33vw",
+    backgroundColor: "#1E1D2F",
+    width: "6.5vw",
+    height: "2.4vw",
+    textAlign: "center"
+}
+
+const gameComponent = {
+    backgroundColor: "#1E1D2F",
+    width: "93%",
+    height: "17vw"
+}
+
+const gc1 = {
+    position: "relative",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%"
+}
+
+const gameButton = {
+    color: "white",
+    backgroundColor: "#2D2C45",
+    width: "48.5%",
+    padding: "0.7vw 0vw",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "1.1vw"
+}
+
   return (
     <GameContent>
-      <div id="game-info" style={{float: "left", width: "25%"}}>
-        <GameInfo />
+    <div style={leftbar}>
+      <div className="lb1">
+        <div style={gameInfor}>
+          <GameInfo />
+        </div>
       </div>
-      <div id="game-board" style={{float: "left", width: "40%"}}>
+      <div className="lb2" style={{color: "#BEC1DC"}}>
+        <Chat />
+      </div>
+    </div>
+      <div id="game-board" style={{float: "left", width: "42%"}}>
         <Board />
       </div>
       <div id="game-misc" style={{float: "right", width: "30%"}}>
-        <MoveHistory />
-        <Chat />
+      <div style = {rightbar}>
+                <div style = {playerComponent}>
+                    <div style = {playerAva}>
+                        <img src="" alt="" style = {{width: "3.3vw", height: "3.3vw"}}/>
+                        <span style = {{position: "relative", bottom: "2vw", marginLeft: "0.7vw"}}>Name (point)</span>
+                    </div>
+                    <div style = {playerTimer}>10:00</div>
+                </div>
+                <div style = {gameComponent}>
+                    <div style = {gc1}>
+                        <div style = {gameButton}>Hoà cờ</div>
+                        <div style = {gameButton}>Đầu hàng</div>
+                    </div>
+                    <div style={{color: "#BEC1DC"}}>
+                        <MoveHistory />
+                    </div>
+                </div>
+                <div style = {playerComponent}>
+                    <div style = {playerAva}>
+                        <img src="" alt="" style = {{width: "3.3vw", height: "3.3vw"}}/>
+                        <span style = {{position: "relative", bottom: "2vw", marginLeft: "0.7vw"}}>Name (point)</span>
+                    </div>
+                    <div style = {playerTimer}>10:00</div>
+                </div>
+            </div>
       </div>
     </GameContent>
   )

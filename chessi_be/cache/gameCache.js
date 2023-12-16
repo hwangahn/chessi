@@ -6,7 +6,7 @@ class activeGame {
         this.gameid = gameid;
         this.black = blackPlayer;
         this.white = whitePlayer;
-        this.timeLeft = 30;
+        this.timeLeft = 900;
         this.ratingChange = 7;
         this.outcome = ""; // outcome of the game. can be draw or not draw
         this.winner = ""; // the winner of the game. empty if draw
@@ -77,7 +77,7 @@ class activeGame {
         try {
             if (!this.over) {
                 let moveMade = this.game.move(move)
-                this.timeLeft = 30;
+                this.timeLeft = 900;
                 return moveMade; 
             }
         } catch(err) {

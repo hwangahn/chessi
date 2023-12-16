@@ -7,7 +7,9 @@ import Home from './pages/home';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Game from './pages/game';
+import Header from './pages/header';
 
+//test
 export default function App() {
   let { useSilentLogin } = useContext(AuthContext);
 
@@ -27,6 +29,7 @@ export default function App() {
 
 	return (
 		<BrowserRouter>
+      <Header />
 			<Routes>
 				<Route exact path='/' Component={Home}></Route>
 				<Route path='/login' Component={Login}></Route>
