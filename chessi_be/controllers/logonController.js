@@ -26,16 +26,16 @@ let handleVerifyEmail = async (req, res) => {
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
-            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+            res.status(err.getHttpCode()).send("<p>Invalid link"); 
         }
     }
 }
 
 let handleLogin = async (req, res) => {
     try {
-        let { username, password, socketID } = req.body.data;
+        let { username, password, socketid } = req.body.data;
          
-        let { accessToken, sessionToken, profile } = await loginService(username, password, socketID);
+        let { accessToken, sessionToken, profile } = await loginService(username, password, socketid);
 
         res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, sessionToken: sessionToken, profile: profile });
     } catch(err) {
@@ -48,9 +48,9 @@ let handleLogin = async (req, res) => {
 
 let handleSilentLogin = async (req, res) => {
     try {
-        let { userid, socketID } = { userid: req.token.userid, socketID: req.body.socketID };
+        let { userid, socketid } = { userid: req.token.userid, socketid: req.body.socketid };
 
-        let { accessToken, profile } = await silentLoginService(userid, socketID);
+        let { accessToken, profile } = await silentLoginService(userid, socketid);
 
         res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, profile: profile });
     } catch(err) {
@@ -66,6 +66,8 @@ let handleLogout = async (req, res) => {
         let { userid } = req.token;
 
         await logoutService(userid);
+
+        res.status(200).json({ status: "ok", msg: "Logged out" });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {

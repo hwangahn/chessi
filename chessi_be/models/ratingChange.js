@@ -6,12 +6,10 @@ const connection = new Sequelize(process.env.DB_KEY);
 let ratingChange = connection.define('ratingChange', {
     userid: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         allowNull: false,
     },
     rating: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         allowNull: false
     }
 }, {

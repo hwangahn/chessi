@@ -5,21 +5,20 @@ const connection = new Sequelize(process.env.DB_KEY);
 
 let move = connection.define('move', {
     gameid: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     }, 
-    side: {
-        type: DataTypes.STRING,
-        primaryKey: true
-    },
     moveOrder: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
+    side: {
+        type: DataTypes.STRING,
+    },
     notation: {
-        type: DataTypes.INTEGER, 
+        type: DataTypes.STRING, 
         allowNull: false
     },
     fen: {
