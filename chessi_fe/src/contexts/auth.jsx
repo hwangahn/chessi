@@ -176,6 +176,8 @@ export function Auth({ children }) {
     clearSessionToken();
   }
 
+  // profile: { username, userid, rating };
+
   return (
     <AuthContext.Provider value={{ accessToken, sessionToken, profile, silentLogin, useSilentLogin, useLogin, useSignup, useLogout }}>
         { children }
