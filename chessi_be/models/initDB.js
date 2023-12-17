@@ -9,8 +9,14 @@ const { post } = require('./post');
 const { comment } = require('./comment');
 const { transaction } = require('./transaction');
 const { userFollow } = require('./userFollow');
+const mysql = require('mysql2');
+const util = require('util');
 
-let connection = new Sequelize(process.env.DB_KEY);
+let DB_KEY = process.env.DB_KEY;
+
+let dummyConnection = mysql.createConnection(DB_KEY.slice(0, - 3)); // connect to mysql with the url string except the last 3 letters, which is the schema/database name
+let dbName = DB_KEY.substring(DB_KEY.length - 3); // extract the database name
+let connection = new Sequelize(DB_KEY);
 
 connection.authenticate()
 .then(() => {
@@ -138,9 +144,16 @@ let create = async () => {
 }
 
 (async () => {
-
-    
     try {
+        const query = util.promisify(dummyConnection.query).bind(dummyConnection); // bind all query to a promise
+        await util.promisify(dummyConnection.connect).call(dummyConnection); // connect to mysql
+        console.log('created dummy connection to MySQL!');
+
+        await query(`CREATE DATABASE IF NOT EXISTS ${dbName}`); // create schema/database
+        console.log(`database '${dbName}' created successfully (if it didn't exist already)`);
+
+        await dummyConnection.end();
+
         // await drop();
         
         await create();
