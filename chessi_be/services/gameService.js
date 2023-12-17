@@ -7,7 +7,7 @@ let findGameService = async ( userid ) => {
     let userFound = userOnlineCache.findUserByuserid(userid);
     
     if (!userFound) {
-        throw new httpError(500, "Cannot find game. Try again later");
+        throw new httpError(403, "Cannot find game. Try again later");
     }
 
     console.log(`user ${userid} finding match`);

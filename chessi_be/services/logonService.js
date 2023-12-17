@@ -55,7 +55,7 @@ let loginService = async (username, password, socketid) => {
 
     let userFound = await user.findOne({ 
         where: { username: username },
-        attributes: ["username", "password", "userid", "rating"],
+        attributes: ["username", "password", "userid", "rating", "isAdmin"],
         include: [
             { 
                 model: email,
@@ -86,14 +86,14 @@ let loginService = async (username, password, socketid) => {
     let userOnlineStatus = userOnlineCache.findUserByuserid(userFound.userid); // find user from online user list to check if user is online
 
     if (userOnlineStatus) { // if found
-        throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
+        throw (new httpError(409, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
     userOnlineCache.addUser(new activeUser(userFound.userid, userFound.username, socketid, userFound.rating, userFound.gameUsers.map(Element =>  Element.side))); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
     let sessionToken = jwt.sign({ userid: userFound.userid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: sessionTokenLifetime });
-    let profile = { userid: userFound.userid, username: userFound.username, rating: userFound.rating };
+    let profile = { userid: userFound.userid, username: userFound.username, isAdmin: userFound.isAdmin, rating: userFound.rating };
 
     console.log(`user ${userFound.userid} logged in`)
 
@@ -103,7 +103,7 @@ let loginService = async (username, password, socketid) => {
 let silentLoginService = async (userid, socketid) => {
     let userFound = await user.findOne({ 
         where: { userid: userid },
-        attributes: ["username", "userid", "rating"],
+        attributes: ["username", "userid", "rating", "isAdmin"],
         include: [
             { 
                 model: email
@@ -134,7 +134,7 @@ let silentLoginService = async (userid, socketid) => {
     userOnlineCache.addUser(new activeUser(userFound.userid, userFound.username, socketid, userFound.rating, userFound.gameUsers.map(Element =>  Element.side))); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
-    let profile = { userid: userFound.userid, username: userFound.username, rating: userFound.rating };
+    let profile = { userid: userFound.userid, username: userFound.username, isAdmin: userFound.isAdmin, rating: userFound.rating };
 
     console.log(`user ${userFound.userid} logged in silently`);
 
