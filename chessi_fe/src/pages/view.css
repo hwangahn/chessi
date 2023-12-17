@@ -1,0 +1,264 @@
+
+.content {
+
+    margin-left: 214px;
+    display: block;
+    width: calc(100% - 214px);
+    color: white;
+
+}
+
+.title {
+    border-bottom: 2px solid #2C2B4D;
+
+}
+
+.table1 {
+    margin-top: 20px;
+    border-radius: 8px;
+    margin-left: 11%;
+    margin-right: 3%;
+    display: inline-block;
+    /*border: 1px solid red;*/
+    width: 50%;
+    background: #1E1D2F;
+    float: left;
+
+    .sreachbox {
+        margin: 2%;
+        background: #B0ABAB;
+        width: 96%;
+        height: 35px;
+        margin-right: 500px;
+        margin-top: 10px;
+        margin-bottom: 2px;
+        position: relative;
+        border-radius: 10px;
+    }
+
+    .text-primary {
+        font-family: Arial;
+        border: 3px solid #ff0000;
+    }
+}
+
+.table1 td {
+    padding-top: 15px;
+    width: 25%;
+    text-align: center;
+}
+
+.tablesorter {
+    width: 100%;
+}
+
+.table2 {
+    margin-top: 20px;
+    text-align: center;
+    width: 25%;
+    border-radius: 8px;
+    background: #1E1D2F;
+    display: inline-block;
+    min-height: 200px;
+
+    .title {
+        margin: 10px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #2C2B4D;
+
+    }
+}
+
+.Profile {
+    margin-top: 20px;
+    min-height: 200px;
+    border-radius: 8px;
+    margin-left: 11%;
+    margin-right: 3%;
+    display: inline-block;
+    float: left;
+    /*border: 1px solid red;*/
+    width: 50%;
+    background: #1E1D2F;
+
+    .Profile-image {
+        margin: 2% 2% 2% 2%;
+        box-sizing: border-box;
+
+        display: block;
+        width: 22%;
+        border-radius: 50%;
+        float: left;
+    }
+
+    .Profile-text {
+        color: white;
+        display: inline-block;
+        min-height: 100px;
+        margin: 2%;
+    }
+
+    .Profile-button {
+        /*text-align: center;*/
+        display: block;
+        margin-bottom: 2%;
+    }
+    .btn-fill {
+        background-image: linear-gradient(92.88deg, #455EB5 9.16%, rgba(86, 67, 204, 0.8) 43.89%, rgba(103, 63, 215, 0.8) 64.72%);
+        border-radius: 8px;
+        border-style: none;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        cursor: pointer;
+        flex-shrink: 0;
+        font-family: "Inter UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        height: 35px;
+        padding: 0 1.6rem;
+        /*text-align: right;*/
+        text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+        transition: all .5s;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        margin-left: 20px;
+    }
+
+    .btn-fill:hover {
+        box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+        transition-duration: .1s;
+    }
+
+
+}
+
+
+
+.table1 a {
+    display: flex;
+    align-Items: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: Arial;
+    font-weight: lighter;
+    font-size: 16px;
+    top: 10px;
+    left: 35px;
+    color: #BEC1DC;
+}
+
+.table1 .ranking-table a:hover {
+    color: red;
+}
+
+.ranking-table {
+    margin-top: 20px;
+    border-radius: 8px;
+
+    margin-left:13%;
+    display: inline-block;
+    /*border: 1px solid red;*/
+    width: 70%;
+    background: #1E1D2F;
+    float: left;
+
+}
+
+.ranking-table td {
+    width: 11%;
+    text-align: center;
+}
+
+td.Stt {
+    width: 6%;
+    text-align: center;
+}
+
+.Stt2 {
+    width: 6%;
+    text-align: center;
+}
+
+.ranking-table a {
+    display: flex;
+    align-Items: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: Arial;
+    font-weight: lighter;
+    font-size: 16px;
+    top: 10px;
+    left: 35px;
+    color: #BEC1DC;
+}
+
+.ranking-table a:hover {
+    color: red;
+}
+
+.friend {
+    width: 100%;
+    height: 100px;
+    /*background: #EEE;*/
+    border-bottom: 1px solid #1e1d2f;
+    cursor: pointer;
+    display: flex;
+    position: relative;
+    .btn-fill {
+
+        background-image: linear-gradient(92.88deg, #455EB5 9.16%, rgba(86, 67, 204, 0.8) 43.89%, rgba(103, 63, 215, 0.8) 64.72%);
+        border-radius: 8px;
+        border-style: none;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        cursor: pointer;
+        flex-shrink: 0;
+        font-family: "Inter UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        height: 35px;
+        padding: 0 1.6rem;
+        /*text-align: right;*/
+        text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+        transition: all .5s;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        position: relative;
+        display: block;
+        margin-top:4%;
+        margin-right: 20px;
+        margin-left: 45%;
+    }
+
+    .btn-fill:hover {
+        box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+        transition-duration: .1s;
+    }
+
+}
+
+.friend img {
+
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid #AAA;
+    object-fit: cover;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.friend .name {
+    margin:0;
+    font-size: 18px;
+}
+
+.friend.selected img {
+    border-color: white;
+}
+
+.friend:not(.selected):hover {
+    background: #DDD;
+}
