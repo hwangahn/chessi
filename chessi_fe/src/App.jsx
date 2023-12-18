@@ -10,7 +10,7 @@ import Game from './pages/game';
 import Header from './pages/header';
 import APIdocs from './pages/api-docs';
 import History from './pages/History';
-import "./pages/view.css";
+
 import './pages/TrangChu.css'
 import Verticalmenu from './pages/verticalmenu';
 import FriendList from './pages/FriendList';
