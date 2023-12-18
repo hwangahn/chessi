@@ -1,4 +1,5 @@
 import React from "react";
+import view from './view.module.css';
 import {NavLink, Link, useLocation} from "react-router-dom";
 import {
     Row,
@@ -14,48 +15,48 @@ export default function History() {
         <div id="leftbar" style={{float:"left"}}>
             <Verticalmenu />
         </div>   
-        <div className="content">
-        <div className="title">
+        <div className={view.content}>
+        <div className={view.title}>
             <h1>Lịch sử đấu </h1>
         </div>
 
-                <div className="Profile">
+                <div className={view.Profile}>
                     <img src="https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg"
-                         className="Profile-image"/>
-                    <div className="Profile-text">
+                         className={view.Profile_image}/>
+                    <div className={view.Profile_text}>
                         <h1> Dat 09</h1>
                         <p>Không là nhà vô địch nhưng tôi có người yêu</p>
                     </div>
-                    <div className="Profile-button">
-                        <Button className="btn-fill" type="submit">Kết bạn
+                    <div className={view.Profile_button}>
+                        <Button className={view.btn_fill} type="submit">Kết bạn
                         </Button>
-                        <Button className="btn-fill" type="submit">Kết bạn
+                        <Button className={view.btn_fill} type="submit">Kết bạn
                         </Button>
-                        <Button className="btn-fill"  type="submit">Kết bạn
+                        <Button className={view.btn_fill}  type="submit">Kết bạn
                         </Button>
-                        <Button className="btn-fill"  type="submit">Kết bạn
+                        <Button className={view.btn_fill}  type="submit">Kết bạn
                         </Button>
                     </div>
 
                 </div>
-                <div className="table2">
-                    <div className="author">
+                <div className={view.table2}>
+                    <div className={view.author}>
 
-                        <h2 className="title">Trận đấu đang diễn ra</h2>
-                        <p className="description">Không có trận đấu nào đang diễn ra</p>
+                        <h2 className={view.title}>Trận đấu đang diễn ra</h2>
+                        <p className={view.description}>Không có trận đấu nào đang diễn ra</p>
                     </div>
                 </div>
 
-                <div className="table1">
+                <div className={view.table1}>
                     <h2 style={{textAlign: "center"}}>Lịch sử đấu</h2>
-                    <Input placeholder="SEARCH" type="text" className="sreachbox"/>
+                    <Input placeholder="SEARCH" type="text" className={view.sreachbox}/>
 
-                    <Table className="tablesorter">
-                        <thead className="text-primary">
+                    <Table className={view.tablesorter}>
+                        <thead className={view.text_primary}>
                         <tr>
                             <th style={{textAlign: "left"}}>Đối thủ</th>
                             <th>Kết quả</th>
-                            <th className="text-center">Số nước đi</th>
+                            <th className={view.text_center}>Số nước đi</th>
                             <th> Ngày</th>
                         </tr>
                         </thead>
@@ -67,7 +68,7 @@ export default function History() {
                                 <p style={{marginLeft: "6px", alignSelf: "center"}}>asdsakjd</p>
                             </td>
                             <td>-100</td>
-                            <td className="text-center">1500</td>
+                            <td className={view.text_center}>1500</td>
                             <td>30/02/2003</td>
                         </tr>
                         </tbody>
