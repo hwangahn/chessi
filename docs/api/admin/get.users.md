@@ -1,12 +1,12 @@
-# Get all users
-**URL** : `/api/admin/all-user`
+# Get user account
+**URL** : `/api/user/{userid}`
 
 **Method** : `GET`
 
 **Auth required** : YES
 
 ## Success responses
-**Condition** :  User list retrieved.
+**Condition** :  User account info retrieved.
 
 **Code** : `200 Success`
 
@@ -15,14 +15,30 @@
 {
     "status": "ok",
     "msg": "Done",
-    "user": [
+    "username": "something",
+    "rating": 1500,
+    "ratingChange": [
         {
-          "userid": 1,
-          "username": "something",
-          "rating": 1500
+            "timestamp": "2023-11-30 18:26:03",
+            "rating": 1493
         },
         {
-          "...": "same format"
+            "...": "same format"
+        }
+    ],
+    "gameHistory": [
+        {
+            "gameid": 17013687199650,
+            "reason": "Timed out",
+            "timestamp": "2023-11-30 18:26:03",
+            "finalFen": "rn1qkbnr/pppB1ppp/8/3p4/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 0 5",
+            "white": "something",
+            "black": "something",
+            "whiteRatingChange": 7,
+            "blackRatingChange": -7
+        },
+        {
+            "...": "same format"
         }
     ]
 }
@@ -35,42 +51,14 @@
 
 ### Or
 
-**Condition** :  User has not logged in.
+**Condition** :  User account does not exist.
 
-**Code** : `401 Unauthorized`
-
-**Content** :
-```json
-{
-    "status": "error",
-    "msg": "You are not logged in"
-}
-```
-
-### Or
-
-**Condition** :  Login session expired.
-
-**Code** : `401 Unauthorized`
+**Code** : `404 Not found`
 
 **Content** :
 ```json
 {
     "status": "error",
-    "msg": "Session expired. Please log in again"
-}
-```
-
-### Or
-
-**Condition** :  Permission denied.
-
-**Code** : `401 Unauthorized`
-
-**Content** :
-```json
-{
-    "status": "error",
-    "msg": "Not admin"
+    "msg": "Cannot find user"
 }
 ```
