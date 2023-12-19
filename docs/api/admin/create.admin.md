@@ -41,7 +41,7 @@
 
 ### Or
 
-**Condition** :  Data provided is invalid and Admin account is not created.
+**Condition** :  User not logged in and Admin account is not created.
 
 **Code** : `401 1 Unauthorized`
 
@@ -55,7 +55,7 @@
 
 ### Or
 
-**Condition** :  Authorization expired and Admin account is not created.
+**Condition** :  Login session expired and Admin account is not created.
 
 **Code** : `401 2 Unauthorized`
 
@@ -69,7 +69,7 @@
 
 ### Or
 
-**Condition** :  Data provided is invalid and Admin account is not created.
+**Condition** :  Permission denied and Admin accoutn is not created.
 
 **Code** : `401 3 Unauthorized`
 
