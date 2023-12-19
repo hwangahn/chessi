@@ -736,6 +736,56 @@
         }
       }
     },
+    "/reset-password": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Reset password. A random password will be sent to the user via email",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": "true",
+          "schema": {
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "email": {
+                    "type": "string",
+                    "default": "john@example.com"
+                  }
+                }
+              }
+            },
+            "required": ["username", "email"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Head over to your mailbox to obtain new password"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user with given username/email"
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/{userid}": {
       "get": {
         "tags": ["User"],

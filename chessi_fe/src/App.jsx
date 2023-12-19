@@ -9,8 +9,8 @@ import Signup from './pages/signup';
 import Game from './pages/game';
 import Header from './pages/header';
 import APIdocs from './pages/api-docs';
+import forgotPassword from './pages/forgotPassword';
 import History from './pages/History';
-import "./pages/view.css";
 import './pages/TrangChu.css';
 import FriendList from './pages/FriendList';
 import Ranking from './pages/Ranking';
@@ -48,8 +48,10 @@ export default function App() {
         <Route path='/friendlist' Component={FriendList}></Route>
         <Route path='/ranking' Component={Ranking}></Route>
         <Route Component={ProtectedRoute}> 
-          <Route path='/:roomID' Component={Admin} />
+          <Route path='/admin' Component={Admin} />
 				</Route>
+        <Route path='/forgot-password' Component={forgotPassword}></Route>
+
 			</Routes>
 			<FloatButton.BackTop visibilityHeight={100} />
 		</BrowserRouter>

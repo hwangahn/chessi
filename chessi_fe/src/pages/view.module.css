@@ -36,7 +36,7 @@
         border-radius: 10px;
     }
 
-    .text-primary {
+    .text_primary {
         font-family: Arial;
         border: 3px solid #ff0000;
     }
@@ -81,7 +81,7 @@
     width: 50%;
     background: #1E1D2F;
 
-    .Profile-image {
+    .Profile_image {
         margin: 2% 2% 2% 2%;
         box-sizing: border-box;
 
@@ -91,19 +91,19 @@
         float: left;
     }
 
-    .Profile-text {
+    .Profile_text {
         color: white;
         display: inline-block;
         min-height: 100px;
         margin: 2%;
     }
 
-    .Profile-button {
+    .Profile_button {
         /*text-align: center;*/
         display: block;
         margin-bottom: 2%;
     }
-    .btn-fill {
+    .btn_fill {
         background-image: linear-gradient(92.88deg, #455EB5 9.16%, rgba(86, 67, 204, 0.8) 43.89%, rgba(103, 63, 215, 0.8) 64.72%);
         border-radius: 8px;
         border-style: none;
@@ -125,7 +125,7 @@
         margin-left: 20px;
     }
 
-    .btn-fill:hover {
+    .btn_fill:hover {
         box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
         transition-duration: .1s;
     }
@@ -148,11 +148,11 @@
     color: #BEC1DC;
 }
 
-.table1 .ranking-table a:hover {
+.table1 .ranking_table a:hover {
     color: red;
 }
 
-.ranking-table {
+.ranking_table {
     margin-top: 20px;
     border-radius: 8px;
 
@@ -165,7 +165,7 @@
 
 }
 
-.ranking-table td {
+.ranking_table td {
     width: 11%;
     text-align: center;
 }
@@ -180,7 +180,7 @@ td.Stt {
     text-align: center;
 }
 
-.ranking-table a {
+.ranking_table a {
     display: flex;
     align-Items: center;
     text-decoration: none;
@@ -193,7 +193,7 @@ td.Stt {
     color: #BEC1DC;
 }
 
-.ranking-table a:hover {
+.ranking_table a:hover {
     color: red;
 }
 
@@ -205,7 +205,7 @@ td.Stt {
     cursor: pointer;
     display: flex;
     position: relative;
-    .btn-fill {
+    .btn_fill {
 
         background-image: linear-gradient(92.88deg, #455EB5 9.16%, rgba(86, 67, 204, 0.8) 43.89%, rgba(103, 63, 215, 0.8) 64.72%);
         border-radius: 8px;
@@ -232,7 +232,7 @@ td.Stt {
         margin-left: 45%;
     }
 
-    .btn-fill:hover {
+    .btn_fill:hover {
         box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
         transition-duration: .1s;
     }
