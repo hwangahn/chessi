@@ -9,7 +9,7 @@ import Signup from './pages/signup';
 import Game from './pages/game';
 import Header from './pages/header';
 import APIdocs from './pages/api-docs';
-import forgotPassword from './pages/forgotPassword';
+import ForgotPassword from './pages/forgotPassword';
 import History from './pages/History';
 import "./pages/view.css";
 import './pages/TrangChu.css'
@@ -47,7 +47,7 @@ export default function App() {
         <Route path='/history' Component={History}></Route>
         <Route path='/friendlist' Component={FriendList}></Route>
         <Route path='/ranking' Component={Ranking}></Route>
-        <Route path='/forgot-password' Component={forgotPassword}></Route>
+        <Route path='/forgot-password' Component={ForgotPassword}></Route>
 			</Routes>
 			<FloatButton.BackTop visibilityHeight={100} />
 		</BrowserRouter>

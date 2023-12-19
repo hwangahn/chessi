@@ -838,7 +838,7 @@
             "examples": {
               "application/json": {
                 "status": "error",
-                "msg": "Cannot find admin"
+                "msg": "Cannot find user"
               }
             }
           },
@@ -913,7 +913,7 @@
       },
       "delete": {
         "tags": ["Game"],
-        "summary": "User find game",
+        "summary": "User stop find game",
         "produces": ["application/json"],
         "parameters": [{
           "name": "Authorization",

@@ -1,33 +1,19 @@
-const { userDataService, gameDataService, gameMoveService} = require('../services/userService')
+const { getUserDataService } = require('../services/userService')
 const { checkHttpError } = require('../utils/checkError')
 
-let takeUserData = async (req, res) => {
+let handleGetUserData = async (req, res) => {
     try {
-        let { userId } = req.body
+        let userid = req.params.userid;
 
-        let { userData } = await userDataService(userId);
+        let { username, rating, ratingChange, gameHistory } = await getUserDataService(userid);
 
-        res.status(200).json({ status: "ok", msg: ""})
+        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
-            res.status(err.getHttpCode()).json({ status: "error", msg: ""})
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
         }
     }
 }
 
-let takeGameData = async (req, res) => {
-    try {
-        let { gameId } = req.body
-
-        await gameDataService(gameId);
-        await gameMoveService(gameId);
-        res.status(200).json( { status: "ok", msg: ""} )
-    } catch(err) {
-        console.log(err);
-        res.status(err.getHttpCode()).json({status: "error", msg: ""})
-    }
-}
-
-
-module.exports = { takeUserData, takeGameData }
+module.exports = { handleGetUserData }

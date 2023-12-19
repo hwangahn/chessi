@@ -27,6 +27,7 @@ app.use(express.json());
 
 app.use('/', require('./APIs/logonAPI'));
 app.use('/', require('./APIs/gameAPI'));
+app.use('/', require('./APIs/userAPI'));
 
 socketInstance.get().on("connection", (socket) => {
     require('./socketEventListeners/socketStatusListener')(socketInstance.get(), socket);

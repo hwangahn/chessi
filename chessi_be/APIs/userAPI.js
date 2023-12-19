@@ -1,9 +1,8 @@
 const express = require('express')
-const { takeUserData, takeGameData } = require('../controllers/userController')
+const { handleGetUserData } = require('../controllers/userController')
 
-let router = express.router();
+let router = express.Router();
 
-router.post('/api/userData',takeUserData)
-router.post('/api/gameData',takeGameData)
+router.get('/api/user/:userid', handleGetUserData);
 
 module.exports = router;
