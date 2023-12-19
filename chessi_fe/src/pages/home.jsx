@@ -114,30 +114,25 @@ export default function Home() {
     }
   }
 
-  const leftbar = {display:"inline", float:"left", width: "210px", height: "92vh", marginTop: "0px",
-  borderRight: "2px solid #2C2B4D"}
-
   const introduce = {marginLeft: "212px", padding: "5px 0px", color:"#B0ABAB", textAlign: "center",
-  borderBottom: "2px solid #2C2B4D", fontSize: "24px", fontWeight: "bold"}
+  borderBottom: "2px solid #2C2B4D", fontSize: "1.6vw", fontWeight: "bold"}
 
-  const title = {position: "relative", color: "#00ace3", fontWeight: "bold", fontSize: "46px",
-  top:"70px", left: "210px", width: "280px"}
+  const title = {position: "relative", color: "#00ace3", fontWeight: "bold", fontSize: "3vw",
+  top:"5vw", left: "15vw", width: "19vw"}
 
   return (
     <div>
       {accessToken ? 
         <>
-          <div id="leftbar" style={leftbar}>
             <Verticalmenu />
-          </div>
-           
+
           <div className="introduce" style={introduce}>
             👋Hello {profile.username}! <br/>
             Let's play a game.
           </div>
 
           <div className="game-screen" style={{display: "flex",padding: "0px",margin: "0px"}}>
-            <div className="board" style={{width: "46.3%"}}>
+            <div className="board" style={{width: "46%"}}>
               <Chessboard id={0} arePiecesDraggable={false} />              
             </div>
             <div className="play">
