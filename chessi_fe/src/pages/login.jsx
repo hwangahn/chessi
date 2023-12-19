@@ -13,12 +13,18 @@ export default function Login() {
   const onFinish = async ( formData ) => {
     formData.socketid = socket.id;
 
-    let { status, msg } = await useLogin(formData);
+    let { status, msg, profile } = await useLogin(formData);
 
     if (status === "ok") {
       message.success(msg);
 
-      navigate("/");
+      if (profile.isAdmin === "true") {
+        navigate("/admin");
+      }
+      else {
+        navigate("/");
+      }
+      
     } else {
       message.warning(msg);
     }
