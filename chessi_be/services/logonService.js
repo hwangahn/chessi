@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { sendVerificationMail } = require('../utils/mail');
+const { sendVerificationMail, sendPassword } = require('../utils/mail');
 const { user } = require('../models/user');
 const { email } = require('../models/email');
 const { gameUser } = require('../models/gameUser');
@@ -146,4 +146,33 @@ let logoutService = async (userid) => {
     matchMakingCache.filterUserByuserid(userid); // remove user from match making queue if in
 }
 
-module.exports = { signupService, verifyEmailService, loginService, silentLoginService, logoutService }
+let resetPasswordService = async (username, _email) => {
+    let userFound = await user.findOne({ where: { username: username } });
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user with given username/email")); 
+    }
+
+    let emailFound = await email.findOne({ 
+        where: {
+            userid: userFound.userid,
+            email: _email
+        }
+    });
+
+    if (!emailFound) {
+        throw (new httpError(404, "Cannot find user with given username/email")); 
+    }
+
+    let seed = "afshkfhg" + Date.now() + "alkglw";
+
+    let password = await bcrypt.hash(seed, 5);
+
+    let hashedPassword = await bcrypt.hash(password, 10);
+
+    userFound.update({ password: hashedPassword });
+
+    sendPassword(_email, password);
+}
+
+module.exports = { signupService, verifyEmailService, loginService, silentLoginService, logoutService, resetPasswordService }

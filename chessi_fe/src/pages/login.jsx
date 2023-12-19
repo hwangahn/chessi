@@ -60,8 +60,12 @@ export default function Login() {
           Log in
         </Button>
       </Form.Item>
-      Or <Link to={"/signup"}>register now!</Link>
-      <Button onClick={() => socket.disconnect()}>Disconnect socket</Button>
+      <div style={{float: "left"}}>
+        Or <Link to={"/signup"}>register now!</Link>
+      </div>
+      <div style={{float: "right", textAlign: "right"}}>
+        <Link to={"/forgot-password"}>Forgot password?</Link>
+      </div>
     </Form>
   );
 };
