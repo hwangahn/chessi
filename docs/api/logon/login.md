@@ -1,11 +1,20 @@
 # Login
-**URL** : `/admin/login`
+**URL** : `/api/login`
 
 **Method** : `POST`
 
 **Auth required** : NO
 
-
+**Data constraints** :
+```json
+{
+    "data": {
+        "username": "string",
+        "password": "Must include lowercase, uppercase, number and no other symbol. Min length 8",
+        "socketid": "string"
+    }
+}
+```
 
 ## Success responses
 **Condition** :  Successfully logged in.
