@@ -6,7 +6,7 @@
 **Auth required** : YES
 
 ## Success responses
-**Condition** :  Admin account removed.
+**Condition** :  User list retrieved.
 
 **Code** : `200 Success`
 
