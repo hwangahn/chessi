@@ -1,5 +1,5 @@
 # Get all active users
-**URL** : `/admin/active-user`
+**URL** : `/api/admin/active-user`
 
 **Method** : `GET`
 
@@ -37,7 +37,7 @@
 
 **Condition** :  User has not logged in.
 
-**Code** : `401 1 Unauthorized`
+**Code** : `401 Unauthorized`
 
 **Content** :
 ```json
@@ -51,7 +51,7 @@
 
 **Condition** :  Login session expired.
 
-**Code** : `401 2 Unauthorized`
+**Code** : `401 Unauthorized`
 
 **Content** :
 ```json
@@ -65,7 +65,7 @@
 
 **Condition** :  Permission denied.
 
-**Code** : `401 3 Unauthorized`
+**Code** : `401 Unauthorized`
 
 **Content** :
 ```json
