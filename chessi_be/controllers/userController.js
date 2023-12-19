@@ -5,7 +5,7 @@ let takeUserData = async (req, res) => {
     try {
         let { userId } = req.body
 
-        await userDataService(userId);
+        let { userData } = await userDataService(userId);
 
         res.status(200).json({ status: "ok", msg: ""})
     } catch(err) {

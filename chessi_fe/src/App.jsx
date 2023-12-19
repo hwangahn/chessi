@@ -9,6 +9,7 @@ import Signup from './pages/signup';
 import Game from './pages/game';
 import Header from './pages/header';
 import APIdocs from './pages/api-docs';
+import forgotPassword from './pages/forgotPassword';
 
 //test
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
 				<Route path='/signup' Component={Signup}></Route>
 				<Route path='/game/:roomid' Component={Game}></Route>
 				<Route path='/docs' Component={APIdocs}></Route>
+        <Route path='/forgot-password' Component={forgotPassword}></Route>
 			</Routes>
 			<FloatButton.BackTop visibilityHeight={100} />
 		</BrowserRouter>
