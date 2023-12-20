@@ -11,6 +11,7 @@ const { transaction } = require('./transaction');
 const { userFollow } = require('./userFollow');
 const mysql = require('mysql2');
 const util = require('util');
+const bcrypt = require('bcrypt');
 
 let DB_KEY = process.env.DB_KEY;
 
@@ -157,6 +158,18 @@ let create = async () => {
         // await drop();
         
         await create();
+
+        let hashedPassword = await bcrypt.hash("Admin123", 10);
+        let usersFound = await user.findOne({ where: { username: "admin" }});
+        if (!usersFound) {
+            await user.create({
+                userid: 0,
+                username: "admin",
+                password: hashedPassword,
+                isAdmin: true,
+                rating: -1
+            })
+        }
     } catch(err) {
         console.log(err);
     }
