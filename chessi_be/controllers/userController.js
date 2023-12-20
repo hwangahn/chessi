@@ -1,4 +1,4 @@
-const { getUserDataService } = require('../services/userService')
+const { getUserDataService, userFollowService } = require('../services/userService')
 const { checkHttpError } = require('../utils/checkError')
 
 let handleGetUserData = async (req, res) => {
@@ -16,4 +16,19 @@ let handleGetUserData = async (req, res) => {
     }
 }
 
-module.exports = { handleGetUserData }
+let handleUserFollow = async (req, res) => {
+    try {
+        let { followerid, userid } = { followerid: req.token.userid, userid: req.params.userid } // userid indicates user to follow\
+
+        await userFollowService(followerid, userid);
+
+        res.status(200).json({ status: "ok" });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+module.exports = { handleGetUserData, handleUserFollow }

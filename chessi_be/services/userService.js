@@ -3,7 +3,8 @@ const { user } = require('../models/user')
 const { gameUser } = require('../models/gameUser')
 const { game } = require('../models/game')
 const { httpError } = require('../error/httpError')
-const { ratingChange } = require('../models/ratingChange')
+const { ratingChange } = require('../models/ratingChange');
+const { userFollow } = require('../models/userFollow');
 require('dotenv').config();
 
 let getUserDataService = async (userid) => {
@@ -15,7 +16,7 @@ let getUserDataService = async (userid) => {
 
     let _ratingChange = await ratingChange.findAll({ where: { userid: userid } });
 
-    let gameHistoryList = await game.findAll({
+    let gameHistoryList = await game.findAll({ // get all games user played
         include: {
             model: gameUser,
             where: { userid: userid }
@@ -23,12 +24,12 @@ let getUserDataService = async (userid) => {
         order: [['gameid', 'DESC']]
     });
 
-    let conditions = gameHistoryList.map(Element => {
+    let conditions = gameHistoryList.map(Element => { // building condition array for Sequelize query
         return { gameid: Element.gameid }
     });
 
-    let gameUserInfo = await gameUser.findAll({
-        where: {
+    let gameUserInfo = await gameUser.findAll({ // get info of games user played
+        where: { 
             [Op.or]: conditions
         }, 
         include: {
@@ -62,4 +63,32 @@ let getUserDataService = async (userid) => {
     return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory }
 }
 
-module.exports = { getUserDataService }
+let userFollowService = async (followerid, userid) => { // userid indicates user to follow 
+    let userFound = await user.findOne({ where: { userid: userid } }); // check uhether user exists
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user")); // if not, throw error
+    }
+
+    if (followerid == userid) { // check if user is requesting to follow themself
+        throw (new httpError(403, "You cannot follow yourself")); // throw error
+    }
+
+    let isFollowing = await userFollow.findOne({ // check if user is already following  
+        where: {
+            followerid: followerid, 
+            userid: userid,
+        }
+    });
+
+    if (isFollowing) {
+        throw (new httpError(409, "You are already following this player")); // throw error
+    }
+
+    await userFollow.create({
+        userid: userid,
+        followerid: followerid
+    });
+}
+
+module.exports = { getUserDataService, userFollowService }
