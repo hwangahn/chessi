@@ -8,7 +8,7 @@
 - Match analysis (premium feature).
 - Social features: connect with friends, create posts, view match results, ranking and customize profile.
 
-<a href="https://www.markdownguide.org" target="_blank">Learn Markdown!</a>
+<a href="https://docs.google.com/spreadsheets/d/1z9Phjlf06sw7jjuOinoH5bs-Hfou5OYCP_5bG5yTaMs/edit?usp=sharing" target="_blank">Detailed sheet with all features here</a>
 
 
 ## Tech
