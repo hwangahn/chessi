@@ -11,11 +11,11 @@ import Header from './pages/header';
 import APIdocs from './pages/api-docs';
 import ForgotPassword from './pages/forgotPassword';
 import History from './pages/History';
-import "./pages/view.css";
-import './pages/TrangChu.css'
-import Verticalmenu from './pages/verticalmenu';
+import './pages/TrangChu.css';
 import FriendList from './pages/FriendList';
 import Ranking from './pages/Ranking';
+import ProtectedRoute from './components/protectedRoute';
+import Admin from './pages/admin';
 
 //test
 export default function App() {
@@ -57,8 +57,11 @@ export default function App() {
           <Route path='/history' Component={History}></Route>
           <Route path='/friendlist' Component={FriendList}></Route>
           <Route path='/ranking' Component={Ranking}></Route>
-          <Route path='/forgot-password' Component={ForgotPassword}></Route>
-        </Routes>
+          <Route Component={ProtectedRoute}> 
+            <Route path='/admin' Component={Admin} />
+          </Route>
+          <Route path='/forgot-password' Component={forgotPassword}></Route>
+         </Routes>
         <FloatButton.BackTop visibilityHeight={100} />
       </BrowserRouter>
     )

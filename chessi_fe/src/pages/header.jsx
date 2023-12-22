@@ -5,10 +5,10 @@ export default function header() {
     return(
         <> 
         <div className="header">
-            <div className="logo">
-                <Link to ="/">Chessi</Link>
+            <img className="logo" src="Chessi.png" alt=""/>
+            <div className="home">
+                <Link to={"/"}>Home</Link>
             </div>
-            <div className="home">Home</div>
             <div className="sreachbox">
                 <input type="text" className="sreachbox_input" placeholder="Tìm kiếm..." />
             </div>
