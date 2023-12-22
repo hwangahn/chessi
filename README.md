@@ -1,29 +1,41 @@
 # Chessi
 ## _A real-time, elo-based online chess game with matchmaking_
 
-## Features
+## Features 
 - Play online against other players/bot.
 - In-match conversations.
 - Match spectator mode.
 - Match analysis (premium feature).
 - Social features: connect with friends, create posts, view match results, ranking and customize profile.
 
+<a href="https://www.markdownguide.org" target="_blank">Learn Markdown!</a>
+
+
 ## Tech
 
 ## Installation
 #### _Pre-requisites_
+- Node.js (latest version)
+- MySQL
+- A text editor
 
 #### _Getting started_
-
+1. Clone the repository
+```sh
+git clone https://github.com/pn-minh/chessi
+```
+2. 
 ## Documentation
 
 ## Contribution
-| Member | Student ID | Role |
-| ------ | ---------- | ---- |
-| Dương Hoàng Anh | 21020603 | Literally did everything |
-| Đoàn Ngọc Long | 21020646 | smth |
-| Hoàng Quốc Đạt | 21020617 | smth |
-| Phạm Nhật Minh | 21020651 | Documentation & Sildes |
-| Phan Minh Phong | 21020657 | smth |
-| Vũ Hải Đăng | 21021479 | smth |
+| Member | Student ID | Role | Contribution (%) |
+| ------ | ---------- | ---- | ---------------- |
+| Dương Hoàng Anh | 21020603 | Literally did everything | 25 |
+| Đoàn Ngọc Long | 21020646 | smth | 15 |
+| Hoàng Quốc Đạt | 21020617 | smth | 15 |
+| Phạm Nhật Minh | 21020651 | Documentation & Sildes | 15 |
+| Phan Minh Phong | 21020657 | smth | 15 |
+| Vũ Hải Đăng | 21021479 | smth | 15 |
+
+
 
