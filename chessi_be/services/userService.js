@@ -89,6 +89,36 @@ let userFollowService = async (followerid, userid) => { // userid indicates user
         userid: userid,
         followerid: followerid
     });
+    
+    console.log(`user ${followerid} followed user ${userid}`);
 }
 
-module.exports = { getUserDataService, userFollowService }
+let userUnfollowService = async (followerid, userid) => {
+    let userFound = await user.findOne({ where: { userid: userid } }); // check uhether user exists
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user")); // if not, throw error
+    }
+
+    if (followerid == userid) { // check if user is requesting to follow themself
+        throw (new httpError(403, "You cannot unfollow yourself")); // throw error
+    }
+
+    let isFollowing = await userFollow.findOne({ // check if user is following  
+        where: {
+            followerid: followerid, 
+            userid: userid,
+        }
+    });
+
+    if (!isFollowing) {
+        throw (new httpError(409, "You are not following this player")); // throw error
+    }
+
+    await isFollowing.destroy();
+
+    console.log(`user ${followerid} unfollowed user ${userid}`);
+
+}
+
+module.exports = { getUserDataService, userFollowService, userUnfollowService }

@@ -70,6 +70,8 @@ export function Auth({ children }) {
       if (accessToken && profile) { // user tries to open website in another tab, leading to loss of session token
         logout();
         return { status: "error", msg: "Please log in again" }
+      } else {
+        return { status: "ok", msg: "Not logged in" }
       }
     }
   }

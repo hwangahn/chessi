@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
-import { FloatButton, message } from 'antd';
+import { FloatButton, Spin, message } from 'antd';
 import socket from './utils/socket';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './contexts/auth';
 import Home from './pages/home';
 import Login from './pages/login';
@@ -19,11 +19,15 @@ import Ranking from './pages/Ranking';
 
 //test
 export default function App() {
+  let [ isLoading, setLoading ] = useState(true);
+
   let { useSilentLogin } = useContext(AuthContext);
 
   useEffect(() => {
     socket.on("connect", async () => {
       let { status, msg } = await useSilentLogin();
+
+      setLoading(false);
 
       if (status === "error") {
         message.warning(msg);
@@ -36,21 +40,28 @@ export default function App() {
   }, []);
 
 	return (
-		<BrowserRouter>
-      <Header />
-			<Routes>
-				<Route exact path='/' Component={Home}></Route>
-				<Route path='/login' Component={Login}></Route>
-				<Route path='/signup' Component={Signup}></Route>
-				<Route path='/game/:roomid' Component={Game}></Route>
-				<Route path='/docs' Component={APIdocs}></Route>
-        <Route path='/history' Component={History}></Route>
-        <Route path='/friendlist' Component={FriendList}></Route>
-        <Route path='/ranking' Component={Ranking}></Route>
-        <Route path='/forgot-password' Component={ForgotPassword}></Route>
-			</Routes>
-			<FloatButton.BackTop visibilityHeight={100} />
-		</BrowserRouter>
-	)
+    (isLoading === true ? 
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' Component={Spin}></Route>
+        </Routes>
+      </BrowserRouter> : 
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route exact path='/' Component={Home}></Route>
+          <Route path='/login' Component={Login}></Route>
+          <Route path='/signup' Component={Signup}></Route>
+          <Route path='/game/:roomid' Component={Game}></Route>
+          <Route path='/docs' Component={APIdocs}></Route>
+          <Route path='/history' Component={History}></Route>
+          <Route path='/friendlist' Component={FriendList}></Route>
+          <Route path='/ranking' Component={Ranking}></Route>
+          <Route path='/forgot-password' Component={ForgotPassword}></Route>
+        </Routes>
+        <FloatButton.BackTop visibilityHeight={100} />
+      </BrowserRouter>
+    )
+  )
 }
 
