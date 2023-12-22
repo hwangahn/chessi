@@ -32,7 +32,7 @@ let activeGameCache = (function() {
         return { gamesOver: gamesOver, gamesActive: gameList };
     }
 
-    return {addGame, findGameBygameid, checkUserInGame, filterGameOver }
+    return { addGame, findGameBygameid, checkUserInGame, filterGameOver }
 })();
 
 module.exports = { activeGameCache }

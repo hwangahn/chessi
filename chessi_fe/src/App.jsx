@@ -60,7 +60,7 @@ export default function App() {
           <Route Component={ProtectedRoute}> 
             <Route path='/admin' Component={Admin} />
           </Route>
-          <Route path='/forgot-password' Component={forgotPassword}></Route>
+          <Route path='/forgot-password' Component={ForgotPassword}></Route>
          </Routes>
         <FloatButton.BackTop visibilityHeight={100} />
       </BrowserRouter>
