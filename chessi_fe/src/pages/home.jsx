@@ -1,26 +1,22 @@
 import { Button, message } from 'antd';
-
-
 import { Link, useNavigate } from 'react-router-dom';
 import { Chessboard } from 'react-chessboard';
 import socket from '../utils/socket';
 import { AuthContext } from "../contexts/auth"
 import { useContext, useEffect, useState } from "react"
 import Verticalmenu from './verticalmenu';
+import UseGetGame from '../utils/useGetGame';
 
 export default function Home() {
   let navigate = useNavigate();
 
   let { useLogout, accessToken, profile } = useContext(AuthContext);
 
-  let [connected, setConnected] = useState(socket.connected);
   let [isFindingGame, setIsFindingGame] = useState(false);
 
-  useEffect(() => {
-    socket.on("connect", async () => {
-      setConnected(true);
-    });
+  UseGetGame({accessToken});
 
+  useEffect(() => {
     socket.on("cannot find game", () => {
       setIsFindingGame(false);
       message.error("Cannot find game. Please try again");
@@ -32,33 +28,10 @@ export default function Home() {
     });
 
     return () => {
-      socket.off("connect");
       socket.off("cannot find game");
       socket.off("game found");
     }
   }, []);
-
-  useEffect(() => { // runs every re-render to get user's active game
-    (async function() {
-      console.log(accessToken);
-      if (accessToken) {
-        let rawData = await fetch('/api/user-active-game', {
-          method: 'get',
-          headers: {
-            'authorization': 'Bearer ' + accessToken,
-          }
-        });
-
-        let { status, inGame, gameid } = await rawData.json();
-
-        if (status === "error") {
-          message.warning(msg);
-        } else if (inGame) {
-          navigate(`/game/${gameid}`);
-        }
-      }
-    })();
-  })
 
   let handleLogout = async () => {
     let { status, msg } = await useLogout();
@@ -148,7 +121,7 @@ export default function Home() {
                     {!isFindingGame ?
                     <a onClick={handleFindGame}>Chơi với người</a>
                     : 
-                    <Button danger onClick={handleFindGame}>Cancel</Button>
+                    <a onClick={handleFindGame}>Cancel</a>
                     }
                   </div>
                   <div id="gm2" className="game-mode">
