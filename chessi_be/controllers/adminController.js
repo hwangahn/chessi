@@ -59,6 +59,18 @@ let handleDeleteAdminAccount = async (req, res) => {
     }
 }
 
+let handleGetAllAdminData = async (req,res) => {
+    try {
+        let data = await getAllAdminDataService();
+        
+        res.status(200).json({status: "ok",msg: "done", data:data})
+    } catch(err) {
+        console.log(err);
+        if(checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({status: "error", msg: err.getMassage()})
+        }
+    }
+}
 
 
 
@@ -78,4 +90,4 @@ let handleGetAllGameData = async (req, res) => {
         }
     }
 }
-module.exports = { handleDeleteAdminAccount, handleGetAdminAccount, handleGetAllGameData, handleGetAllUserData, handlePutAdminAccount }
+module.exports = { handleDeleteAdminAccount, handleGetAdminAccount, handleGetAllGameData, handleGetAllUserData, handlePutAdminAccount, handleGetAllAdminData }

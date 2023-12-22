@@ -64,6 +64,16 @@ let deleteAdminAccountService = async (userid) => {
       console.log("admin deleted")
 }
 
+let getAllAdminDataService = async () => {
+    let data = await user.findAll({
+        where: {
+            isAdmin: 1
+        },
+        attributes: ['userid', 'username', 'rating']
+    })
+
+    return {data}
+}
 
 
 // let getAllGameDataService = async () => {
@@ -80,4 +90,4 @@ let deleteAdminAccountService = async (userid) => {
 // }
 
 
-module.exports = { getAllUserDataService , getAllGameDataService, getAdminAccountService, putAdminAccountService, deleteAdminAccountService}
+module.exports = { getAllUserDataService , getAllGameDataService, getAdminAccountService, putAdminAccountService, deleteAdminAccountService , getAllAdminDataService } 
