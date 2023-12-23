@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 // reactstrap components
 import { Table } from "reactstrap";
-import "./view.css"
+import "./view.module.css"
 export default function Admin() {
     return (
         <>
