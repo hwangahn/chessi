@@ -6,14 +6,14 @@ import {
     Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
 
 } from "reactstrap";
-import Verticalmenu from './verticalmenu';
+import VerticalmenuUser from './verticalmenuUser';
 
 export default function History() {
     return (
         <>
         
         <div id="leftbar" style={{float:"left"}}>
-            <Verticalmenu />
+            <VerticalmenuUser />
         </div>   
         <div className={view.content}>
         <div className={view.title}>
