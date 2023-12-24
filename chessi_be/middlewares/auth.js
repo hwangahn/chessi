@@ -34,5 +34,13 @@ let verifyAccessToken = (req, res, next) => {
     next();
 }
 
-module.exports = { verifyJWT, verifyAccessToken, verifySessionToken };
+let verifyAdmin = (req,res,next) => {
+    if (!req.token.isAdmin) {
+        return res.status(401).json({status:"error", msg :"Not admin"});
+    }
+    next();
+}
+
+
+module.exports = { verifyJWT, verifyAccessToken, verifySessionToken, verifyAdmin };
 
