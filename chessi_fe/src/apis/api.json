@@ -806,6 +806,56 @@
         }
       }
     },
+    "/reset-password": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Reset password. A random password will be sent to the user via email",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": "true",
+          "schema": {
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "email": {
+                    "type": "string",
+                    "default": "john@example.com"
+                  }
+                }
+              }
+            },
+            "required": ["username", "email"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Head over to your mailbox to obtain new password"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user with given username/email"
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/{userid}": {
       "get": {
         "tags": ["User"],
@@ -858,7 +908,193 @@
             "examples": {
               "application/json": {
                 "status": "error",
-                "msg": "Cannot find admin"
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/follow/{userid}": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Follow other user",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "User id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot verify session"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You cannot follow yourself"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already following this player"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Unfollow other user if following",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "User id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot verify session"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You cannot unfollow yourself"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not following this player"
               }
             }
           },
@@ -933,7 +1169,7 @@
       },
       "delete": {
         "tags": ["Game"],
-        "summary": "User find game",
+        "summary": "User stop find game",
         "produces": ["application/json"],
         "parameters": [{
           "name": "Authorization",

@@ -18,21 +18,22 @@ body{
 }
 
 .logo{
-    font-weight: bold;
-    font-size: 24px;
     align-items: center;
-    padding: 10px 72px 0px 70px;
+    margin-left: 4.75vw;
+    padding-top: 20px;
+    padding-right: 4.8vw;
     border-right: 2px solid #2C2B4D;
-}
-.logo a{
-    color: #00ace3;
-    text-decoration: none;
+    padding-bottom: 20px;
+    width: 9.35vw;
 }
 
 .home{
-    color: #BEC1DC;
     font-size: 24px;
-    margin: 10px 30px 0px 20px;
+    margin: 14px 30px 0px 20px;
+}
+.home a{
+    color: #BEC1DC;
+    text-decoration: none;
 }
 
 .right_item{
@@ -50,7 +51,7 @@ body{
     background: #B0ABAB;
     width: 400px;
     height: 35px;
-    margin-right: 500px;
+    margin-right: 33.5vw;
     margin-top: 10px;
     position: relative;
     border-radius: 10px;
@@ -67,12 +68,12 @@ body{
 
 ul.single-vertical-menu  {
 	padding:0px;
-    padding-top: 10px;
+    padding-top: 0.7vw;
 
 }
 ul.single-vertical-menu  li {
 	left:0px;
-	height:70px;
+	height: 4.7vw;
 	padding:0px ;  
     margin:0px;        
 	list-style:none;
@@ -82,50 +83,51 @@ ul.single-vertical-menu  li > a {
 	text-decoration:none;
 	cursor: pointer;
 	position:relative;
-    font-size: 20px;
-    top: 10px;
-    left: 35px;
+    font-size: 1.4vw;
+    top: 0.7vw;
+    left: 2.4vw;
 	color: #BEC1DC;
 }
 
 ul.single-vertical-menu  li > img {
     position:relative;
-	top: 17px;
-	left: 25px;
+	width: 1.9vw;
+	top: 1.2vw;
+	left: 1.7vw;
 }
 
 ul.single-vertical-menu  li > a:hover {
-	color:red;
+	color:#B5E67B;
 }
 
 .gp1{
     position: relative;
     justify-content: space-between;
-    top: 120px;
+    top: 8vw;
 }
 
 .gp2{
     position: relative;
-    top: 120px;
-    left: 60px;
+    top: 8vw;
+    left: 4vw;
 }
 
 #gm2, #gm4{
     position:relative;
-    top: 50px;
+    top: 3.4vw;
 }
 
 .game-mode{
     background-color: #1E1D2F;
-    width: 310px;
-    padding: 50px 0px;
+    width: 21vw;
+    padding: 3.4vw 0vw;
     text-align: center;
 }
 
 .game-mode a{
     text-decoration:none;
     color:#B0ABAB;
-    font-size: 22px;
+    font-size: 1.6vw;
     font-weight: bold;
 }
 .game-mode a:hover{
