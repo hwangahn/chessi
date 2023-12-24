@@ -6,7 +6,7 @@ import { Chessboard } from 'react-chessboard';
 import socket from '../utils/socket';
 import { AuthContext } from "../contexts/auth"
 import { useContext, useEffect, useState } from "react"
-import Verticalmenu from './verticalmenu';
+import VerticalmenuUser from './verticalmenuUser';
 
 export default function Home() {
   let navigate = useNavigate();
@@ -124,7 +124,7 @@ export default function Home() {
     <div>
       {accessToken ? 
         <>
-            <Verticalmenu />
+            <VerticalmenuUser />
 
           <div className="introduce" style={introduce}>
             👋Hello {profile.username}! <br/>
@@ -139,13 +139,11 @@ export default function Home() {
               <div className="title" style={title}>So tài cờ vua</div>
               <div className="game-play" style={{display: "flex", justifyContent: "space-between"}}>
                 <div className="gp1">
-                  <div id="gm1" className="game-mode">
-                    {!isFindingGame ?
-                    <a onClick={handleFindGame}>Chơi với người</a>
+                  {!isFindingGame ?
+                    <div id="gm1" className="game-mode" onClick={handleFindGame}>Chơi với người</div>
                     : 
-                    <Button danger onClick={handleFindGame}>Cancel</Button>
-                    }
-                  </div>
+                    <div className="game-mode" onClick={handleFindGame}>Cancel</div>
+                  }
                   <div id="gm2" className="game-mode">
                     <Link to ="/new">Chơi với bạn</Link>
                   </div>
@@ -155,22 +153,12 @@ export default function Home() {
                     <Link to ="/new">Chơi với máy</Link>
                   </div>
                   <div id="gm4" className="game-mode">
-                    <Link to ="/new">Theo dõi trận đấu</Link>
+                    <Link to ="/new">Xem lại trận đấu</Link>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* <p>{`Hello ${profile.username}`}</p>
-          <p>{`Rating: ${profile.rating}`}</p>
-          <p>{`Status: ${connected}`}</p> */}
-          <Button type='primary' onClick={handleLogout} style={{marginRight: "10px"}}>Logout</Button>
-          {/* {!isFindingGame ? 
-          <Button type='primary' onClick={handleFindGame} style={{marginRight: "10px", width: "100px"}}>Find Game</Button>
-          : 
-          <Button danger onClick={handleFindGame} style={{marginRight: "10px", width: "100px"}}>Cancel</Button>
-          }
-          <Button onClick={handleTestDisconnect}>Test disconnect</Button> */}
         </> : 
         <>
           <Link to={"/login"}><Button type='primary' style={{marginRight: "10px"}}>Login</Button></Link>
