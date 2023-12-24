@@ -40,6 +40,7 @@ function GameInfo() {
         setTimeLeft(data.gameInfo.timeLeft);
         setTurn(data.gameInfo.turn);
         setOnMove(data.gameInfo.history.length - 1);
+        setSide(data.gameInfo.white.username === profile.username ? "white" : "black");
       } else {
         message.error(data.msg);
         navigate('/'); // return to main page
@@ -73,14 +74,6 @@ function GameInfo() {
       socket.off("game over");
     }
   }, []);
-
-  useEffect(() => { // runs every re render to set side
-    if (profile?.username !== playerInfo?.white.username && profile?.username !== playerInfo?.black.username) {
-      setSide("spectator");
-    } else {
-      setSide(playerInfo?.white.username === profile?.username ? "white" : "black");
-    }
-  })
 
   const playerComponent = {
     display: "flex",
@@ -128,7 +121,7 @@ function GameInfo() {
       fontWeight: "bold",
       fontSize: "1.1vw"
   }
-  
+
   return (
     <>
       <div style = {playerComponent}>

@@ -1,30 +1,34 @@
-# Get all users
-**URL** : `/api/admin/all-user`
+# Login using session token
+**URL** : `/api/silent-login`
 
-**Method** : `GET`
+**Method** : `POST`
 
 **Auth required** : YES
 
+**Data constraints** : 
+```json
+{
+    "socketid": "string"
+}
+```
+
 ## Success responses
-**Condition** :  User list retrieved.
+**Condition** :  Successfully logged in.
 
 **Code** : `200 Success`
 
-**Content** :
+**Content example** :
 ```json
 {
     "status": "ok",
-    "msg": "Done",
-    "user": [
-        {
-          "userid": 1,
-          "username": "something",
-          "rating": 1500
-        },
-        {
-          "...": "same format"
-        }
-    ]
+    "msg": "Logged in",
+    "accessToken": "JWT token",
+    "profile": {
+        "userid": 1,
+        "username": "something",
+        "isAdmin": false,
+        "rating": 1500
+    }
 }
 ```
 
@@ -63,7 +67,7 @@
 
 ### Or
 
-**Condition** :  Permission denied.
+**Condition** :  Failed to verify session.
 
 **Code** : `401 Unauthorized`
 
@@ -71,6 +75,6 @@
 ```json
 {
     "status": "error",
-    "msg": "Not admin"
+    "msg": "Cannot verify session"
 }
 ```

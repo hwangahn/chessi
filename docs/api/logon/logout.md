@@ -1,30 +1,20 @@
-# Get all users
-**URL** : `/api/admin/all-user`
+# Logout
+**URL** : `/api/logout`
 
-**Method** : `GET`
+**Method** : `POST`
 
 **Auth required** : YES
 
 ## Success responses
-**Condition** :  User list retrieved.
+**Condition** :  Successfully logged out.
 
 **Code** : `200 Success`
 
-**Content** :
+**Content example** :
 ```json
 {
     "status": "ok",
-    "msg": "Done",
-    "user": [
-        {
-          "userid": 1,
-          "username": "something",
-          "rating": 1500
-        },
-        {
-          "...": "same format"
-        }
-    ]
+    "msg": "Logged out"
 }
 ```
 
@@ -58,19 +48,5 @@
 {
     "status": "error",
     "msg": "Session expired. Please log in again"
-}
-```
-
-### Or
-
-**Condition** :  Permission denied.
-
-**Code** : `401 Unauthorized`
-
-**Content** :
-```json
-{
-    "status": "error",
-    "msg": "Not admin"
 }
 ```

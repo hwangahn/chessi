@@ -1,30 +1,21 @@
-# Get all users
-**URL** : `/api/admin/all-user`
+# Get user's current active game
+**URL** : `/api/user-active-game`
 
 **Method** : `GET`
 
 **Auth required** : YES
 
 ## Success responses
-**Condition** :  User list retrieved.
+**Condition** :  Found user's active game.
 
 **Code** : `200 Success`
 
-**Content** :
+**Content example** :
 ```json
 {
     "status": "ok",
-    "msg": "Done",
-    "user": [
-        {
-          "userid": 1,
-          "username": "something",
-          "rating": 1500
-        },
-        {
-          "...": "same format"
-        }
-    ]
+    "inGame": true,
+    "gameid": 17013687199650
 }
 ```
 
@@ -58,19 +49,5 @@
 {
     "status": "error",
     "msg": "Session expired. Please log in again"
-}
-```
-
-### Or
-
-**Condition** :  Permission denied.
-
-**Code** : `401 Unauthorized`
-
-**Content** :
-```json
-{
-    "status": "error",
-    "msg": "Not admin"
 }
 ```

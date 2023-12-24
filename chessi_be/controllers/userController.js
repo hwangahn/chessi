@@ -1,33 +1,49 @@
-const { userDataService, gameDataService, gameMoveService} = require('../services/userService')
+const { getUserDataService, userFollowService, userUnfollowService } = require('../services/userService')
 const { checkHttpError } = require('../utils/checkError')
 
-let takeUserData = async (req, res) => {
+let handleGetUserData = async (req, res) => {
     try {
-        let { userId } = req.body
+        let userid = req.params.userid;
 
-        let { userData } = await userDataService(userId);
+        let { username, rating, ratingChange, gameHistory } = await getUserDataService(userid);
 
-        res.status(200).json({ status: "ok", msg: ""})
+        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
-            res.status(err.getHttpCode()).json({ status: "error", msg: ""})
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
         }
     }
 }
 
-let takeGameData = async (req, res) => {
+let handleUserFollow = async (req, res) => {
     try {
-        let { gameId } = req.body
+        let { followerid, userid } = { followerid: req.token.userid, userid: req.params.userid } // userid indicates user to follow\
 
-        await gameDataService(gameId);
-        await gameMoveService(gameId);
-        res.status(200).json( { status: "ok", msg: ""} )
+        await userFollowService(followerid, userid);
+
+        res.status(200).json({ status: "ok" });
     } catch(err) {
         console.log(err);
-        res.status(err.getHttpCode()).json({status: "error", msg: ""})
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
     }
 }
 
+let handleUserUnfollow = async (req, res) => {
+    try {
+        let { followerid, userid } = { followerid: req.token.userid, userid: req.params.userid } // userid indicates user to follow\
 
-module.exports = { takeUserData, takeGameData }
+        await userUnfollowService(followerid, userid);
+
+        res.status(200).json({ status: "ok" });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+module.exports = { handleGetUserData, handleUserFollow, handleUserUnfollow }

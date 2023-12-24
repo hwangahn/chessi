@@ -1,30 +1,19 @@
-# Get all users
-**URL** : `/api/admin/all-user`
+# User find game
+**URL** : `/api/find-game`
 
-**Method** : `GET`
+**Method** : `POST`
 
 **Auth required** : YES
 
 ## Success responses
-**Condition** :  User list retrieved.
+**Condition** :  Game found.
 
 **Code** : `200 Success`
 
-**Content** :
+**Content example** :
 ```json
 {
-    "status": "ok",
-    "msg": "Done",
-    "user": [
-        {
-          "userid": 1,
-          "username": "something",
-          "rating": 1500
-        },
-        {
-          "...": "same format"
-        }
-    ]
+    "status": "ok"
 }
 ```
 
@@ -63,7 +52,7 @@
 
 ### Or
 
-**Condition** :  Permission denied.
+**Condition** :  Failed to verify session.
 
 **Code** : `401 Unauthorized`
 
@@ -71,6 +60,20 @@
 ```json
 {
     "status": "error",
-    "msg": "Not admin"
+    "msg": "Cannot verify session"
+}
+```
+
+### Or
+
+**Condition** : Failed to find game.
+
+**Code** : `403 Forbidden`
+
+**Content** :
+```json
+{
+    "status": "error",
+    "msg": "Cannot find game. Try again later"
 }
 ```
