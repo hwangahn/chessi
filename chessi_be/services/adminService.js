@@ -2,12 +2,12 @@ const bcrypt = require('bcrypt')
 const { user } = require('../models/user')
 const { game } = require('../models/game')
 const { httpError } = require('../error/httpError')
+const { email } = require('../models/email')
+
 
 let getAllUserDataService = async () => {
     // get all user id, name, rating from database
-    let data = await user.findAll({
-        attributes: ['userid', 'username', 'rating']
-    })
+    let data = await user.findAll()
 
     return {data}
 }
@@ -28,22 +28,28 @@ let getAdminAccountService = async (userid) => {
 
 }
 
-let putAdminAccountService = async (username, password) => {
+let putAdminAccountService = async (username, password, _email ) => {
     let usersFound = await user.findOne({ where: { username: username }});
 
     if (usersFound) {
-        throw (new httpError(403, "Username and/or email already used"));
+        throw (new httpError(403, "Username already used"));
     }
 
     let hashedPassword = await bcrypt.hash(password, 10);
 
-    await user.create({
-        userid: 0,
+    let newAdmin =  await user.create({
         username: username,
         password: hashedPassword,
         isAdmin: true,
         rating: -1
     });
+
+    await email.create({
+        userid: newAdmin.userid,
+        email: _email,
+        verificationToken: -1,
+        verificationStatus: true
+    })
 
     console.log("new admin added");
 }
@@ -53,10 +59,10 @@ let deleteAdminAccountService = async (userid) => {
     let usersFound = await user.findOne({ where: { userid: userid }});
 
     if (!usersFound) {
-        throw (new httpError(403, "Cannot find admin"));
+        throw (new httpError(404, "Cannot find admin"));
     }
 
-    await User.destroy({
+    await user.destroy({
         where: {
           userid: userid
         }
@@ -67,7 +73,7 @@ let deleteAdminAccountService = async (userid) => {
 let getAllAdminDataService = async () => {
     let data = await user.findAll({
         where: {
-            isAdmin: 1
+            isAdmin: true 
         },
         attributes: ['userid', 'username', 'rating']
     })
@@ -90,4 +96,4 @@ let getAllAdminDataService = async () => {
 // }
 
 
-module.exports = { getAllUserDataService , getAllGameDataService, getAdminAccountService, putAdminAccountService, deleteAdminAccountService , getAllAdminDataService } 
+module.exports = { getAllUserDataService, getAdminAccountService, putAdminAccountService, deleteAdminAccountService , getAllAdminDataService } 

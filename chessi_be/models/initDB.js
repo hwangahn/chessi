@@ -155,19 +155,26 @@ let create = async () => {
 
         await dummyConnection.end();
 
-        // await drop();
+        // await drop();    
         
         await create();
 
         let hashedPassword = await bcrypt.hash("Admin123", 10);
         let usersFound = await user.findOne({ where: { username: "admin" }});
         if (!usersFound) {
-            await user.create({
+            let admin = await user.create({
                 userid: 0,
                 username: "admin",
                 password: hashedPassword,
                 isAdmin: true,
                 rating: -1
+            })
+
+            await email.create({
+                userid: admin.userid,
+                email: "xortaa2003@gmail.com",
+                verificationToken: -1,
+                verificationStatus: true
             })
         }
     } catch(err) {
