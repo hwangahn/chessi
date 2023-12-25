@@ -9,7 +9,7 @@ import Signup from './pages/signup';
 import Game from './pages/game';
 import Header from './pages/header';
 import APIdocs from './pages/api-docs';
-import ForgotPassword from './pages/forgot-password';
+import ForgotPassword from './pages/forgotPassword';
 import History from './pages/History';
 import './pages/TrangChu.css';
 import FriendList from './pages/FriendList';
