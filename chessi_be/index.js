@@ -32,7 +32,7 @@ app.use('/', require('./APIs/lobbyAPI'));
 
 socketInstance.get().on("connection", (socket) => {
     require('./socketEventListeners/socketStatusListener')(socketInstance.get(), socket);
-    require('./socketEventListeners/socketGameListener')(socketInstance.get(), socket);
+    require('./socketEventListeners/socketRoomListener')(socketInstance.get(), socket);
 });
 
 server.listen(port, () => {

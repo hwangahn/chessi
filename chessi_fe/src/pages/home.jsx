@@ -6,6 +6,7 @@ import { AuthContext } from "../contexts/auth"
 import { useContext, useEffect, useState } from "react"
 import Verticalmenu from './verticalmenu';
 import UseGetGame from '../utils/useGetGame';
+import UseGetLobby from '../utils/useGetLobby';
 
 export default function Home() {
   let navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function Home() {
   let [isFindingGame, setIsFindingGame] = useState(false);
 
   UseGetGame({accessToken});
+  UseGetLobby({accessToken});
 
   useEffect(() => {
     socket.on("cannot find game", () => {
@@ -79,6 +81,32 @@ export default function Home() {
     }
   }
 
+  const handleCreateLobby = async () => {
+    if (socket.connected) {
+      try {
+        let rawData = await fetch('/api/lobby', { // request create lobby
+          method: "post",
+          headers: {
+            'authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json',
+          }
+        });
+
+        let data = await rawData.json();
+
+        if (data.status !== "ok") {
+          message.error(data.msg);
+        } else {
+          navigate(`/lobby/${data.lobbyid}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      message.error("Cannot connect to server");
+    }
+  }
+
   let handleTestDisconnect = () => {
     if (socket.io.engine) {
       // close the low-level connection and trigger a reconnection
@@ -112,15 +140,15 @@ export default function Home() {
               <div className="title" style={title}>So tài cờ vua</div>
               <div className="game-play" style={{display: "flex", justifyContent: "space-between"}}>
                 <div className="gp1">
-                  <div id="gm1" className="game-mode">
+                  <div id="gm1" className="game-mode" onClick={handleFindGame}>
                     {!isFindingGame ?
-                    <a onClick={handleFindGame}>Chơi với người</a>
+                    <a>Chơi với người</a>
                     : 
-                    <a onClick={handleFindGame}>Cancel</a>
+                    <a>Cancel</a>
                     }
                   </div>
-                  <div id="gm2" className="game-mode">
-                    <Link to ="/new">Chơi với bạn</Link>
+                  <div id="gm2" className="game-mode" onClick={handleCreateLobby}>
+                    <a>Chơi với bạn</a>
                   </div>
                 </div>
                 <div className="gp2">

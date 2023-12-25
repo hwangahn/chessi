@@ -1072,6 +1072,24 @@
               }
             }
           },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
+              }
+            }
+          },
           "500": {
             "description": "Server error"
           }
@@ -1113,15 +1131,6 @@
               "application/json": {
                 "status": "error",
                 "msg": "Session expired. Please log in again"
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "msg": "Cannot find game. Try again later"
               }
             }
           },
@@ -1303,12 +1312,21 @@
               }
             }
           },
-          "409": {
+          "409 1": {
             "description": "Conflict",
             "examples": {
               "application/json": {
                 "status": "error",
                 "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
               }
             }
           },
@@ -1347,7 +1365,27 @@
             "description": "Success",
             "examples": {
               "application/json": {
-                "status": "ok"
+                "status": "ok",
+                "creator": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "guest": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "white": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "black": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                }
               }
             }
           },
@@ -1366,15 +1404,6 @@
               "application/json": {
                 "status": "error",
                 "msg": "Session expired. Please log in again"
-              }
-            }
-          },
-          "401 3": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "msg": "Not admin"
               }
             }
           },
@@ -1401,7 +1430,25 @@
             "examples": {
               "application/json": {
                 "status": "error",
-                "msg": "Cannot find admin"
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
               }
             }
           },
@@ -1586,6 +1633,15 @@
               }
             }
           },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
           "500": {
             "description": "Server error"
           }
@@ -1644,12 +1700,30 @@
               }
             }
           },
-          "403": {
+          "403 1": {
             "description": "Forbidden",
             "examples": {
               "application/json": {
                 "status": "error",
                 "msg": "You are not the lobby creator"
+              }
+            }
+          },
+          "403 2": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not enough player"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
               }
             }
           },

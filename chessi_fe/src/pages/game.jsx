@@ -7,6 +7,7 @@ import socket from "../utils/socket";
 import { AuthContext } from "../contexts/auth";
 import { GameContent, GameContentContext } from "../contexts/gameContent";
 import Move from "../components/move";
+import Chat from "../components/chat";
 
 function GameInfo() {
   let { profile } = useContext(AuthContext);
@@ -157,58 +158,60 @@ function MoveHistory() {
   )
 }
 
-function Chat() {
-  let { profile } = useContext(AuthContext);
+// function Chat() {
+//   let { profile } = useContext(AuthContext);
 
-  let [chatHistory, setChatHistory] = useState(new Array);
-  let [message, setMessage] = useState("");
+//   let [chatHistory, setChatHistory] = useState(new Array);
+//   let [message, setMessage] = useState("");
 
-  let lastMessage = useRef(null);
+//   let lastMessage = useRef(null);
 
-  let param = useParams();
+//   let param = useParams();
 
-  useEffect(() => {
-    socket.on("chat message", (sender, message) => {
-      chatHistory.push({ sender: sender, message: message });
-      let newChatHistory = chatHistory.map(Element => { return Element });
-      setChatHistory(prev => newChatHistory);
-    });
+//   useEffect(() => {
+//     socket.on("chat message", (sender, message) => {
+//       chatHistory.push({ sender: sender, message: message });
+//       let newChatHistory = chatHistory.map(Element => { return Element });
+//       setChatHistory(prev => newChatHistory);
+//     });
 
-    return () => {
-      socket.off("chat message");
-    }
-  }, []);
+//     return () => {
+//       socket.off("chat message");
+//     }
+//   }, []);
 
-  useEffect(() => {
-    lastMessage.current.scrollIntoView({behavior: "smooth", block: "nearest"});
-  });
+//   useEffect(() => {
+//     lastMessage.current.scrollIntoView({behavior: "smooth", block: "nearest"});
+//   });
 
-  let handleSendChat = (e) => {
-    e.preventDefault();
-    if (message !== "") {
-      socket.emit("send message", param.roomid, profile.username, message);
-      setMessage(prev => "");
-    }
-  }
+//   let handleSendChat = (e) => {
+//     e.preventDefault();
+//     if (message !== "") {
+//       socket.emit("send message", param.roomid, profile.username, message);
+//       setMessage(prev => "");
+//     }
+//   }
 
-  return (
-    <div id="chat" style={{backgroundColor: "#1E1D2F", width: "92%", height: "calc(60vw * 0.5)", padding: "10px 0px"}}>
-      <div id="chat-message" style={{width: "99%", marginLeft: "auto", height: "calc(100% - 67px)", overflowY: "scroll"}}>
-        {chatHistory.map(Element => {
-          return <p><b>{Element.sender}</b>: {Element.message}</p>
-        })}
-        <div ref={lastMessage} style={{height: "0px"}}></div>
-      </div>
-      <div id="message-input" style={{width: "92%", height: "fit-content", marginLeft: "1vw"}}>
-        <TextArea id="message-input" placeholder="Enter your message..." value={message} autoSize={{ minRows: 1, maxRows: 3}} 
-        style={{width: "100%"}} onChange={(e) => {setMessage(e.target.value)}} onPressEnter={handleSendChat} />
-        <Button id="submit-message" type="primary" style={{width: "100%"}} onClick={handleSendChat}>Send</Button>
-      </div>
-    </div>
-  )
-}
+//   return (
+//     <div id="chat" style={{backgroundColor: "#1E1D2F", width: "92%", height: "calc(60vw * 0.5)", padding: "10px 0px"}}>
+//       <div id="chat-message" style={{width: "99%", marginLeft: "auto", height: "calc(100% - 67px)", overflowY: "scroll"}}>
+//         {chatHistory.map(Element => {
+//           return <p><b>{Element.sender}</b>: {Element.message}</p>
+//         })}
+//         <div ref={lastMessage} style={{height: "0px"}}></div>
+//       </div>
+//       <div id="message-input" style={{width: "92%", height: "fit-content", marginLeft: "1vw"}}>
+//         <TextArea id="message-input" placeholder="Enter your message..." value={message} autoSize={{ minRows: 1, maxRows: 3}} 
+//         style={{width: "100%"}} onChange={(e) => {setMessage(e.target.value)}} onPressEnter={handleSendChat} />
+//         <Button id="submit-message" type="primary" style={{width: "100%"}} onClick={handleSendChat}>Send</Button>
+//       </div>
+//     </div>
+//   )
+// }
 
 export default function Game() {
+
+  let params = useParams();
 
   const leftbar = {
     float:"left",
@@ -290,7 +293,7 @@ const gameButton = {
         </div>
       </div>
       <div className="lb2" style={{color: "#BEC1DC"}}>
-        <Chat />
+        <Chat roomid={params.roomid} />
       </div>
     </div>
       <div id="game-board" style={{float: "left", width: "42%"}}>

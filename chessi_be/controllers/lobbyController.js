@@ -20,9 +20,9 @@ let handleJoinLobby = (req, res) => {
     try {
         let { userid, lobbyid } = { userid: req.token.userid, lobbyid: req.params.lobbyid }
 
-        joinLobbyService(userid, lobbyid);
+        let { creator, guest, white, black, timeLeft } = joinLobbyService(userid, lobbyid);
 
-        res.status(200).json({ status: "ok" });
+        res.status(200).json({ status: "ok", creator: creator, guest: guest, white: white, black: black, timeLeft: timeLeft });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {

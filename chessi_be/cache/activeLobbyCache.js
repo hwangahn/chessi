@@ -14,7 +14,7 @@ let activeLobbyCache = (function() {
     }
 
     let filterUserByuserid = (userid) => { // called when an user logout or lost connection to remove that user from lobby if in
-        let { inLobby, lobbyid } = checkUserInLobby(userid);
+        let { inLobby, lobbyid } = checkUserInLobbyByuserid(userid);
 
         if (inLobby) {
             userLobby = findLobbyBylobbyid(lobbyid);
@@ -22,9 +22,18 @@ let activeLobbyCache = (function() {
         }
     }
 
-    let checkUserInLobby = (userid) => { // check whether user is in an active lobby and return lobbyid
+    let filterUserBysocketid = (socketid) => {
         for (let i = 0; i < lobbyList.length; i++) {
-            if (lobbyList[i].isUserInLobby(userid)) {
+            if (lobbyList[i].isUserInLobbyBysocketid(socketid)) {
+                return { inLobby: true, lobbyid: lobbyList[i].lobbyid };
+            }
+        }
+        return { inLobby: false, lobbyid: null };
+    }
+
+    let checkUserInLobbyByuserid = (userid) => { // check whether user is in an active lobby and return lobbyid
+        for (let i = 0; i < lobbyList.length; i++) {
+            if (lobbyList[i].isUserInLobbyByuserid(userid)) {
                 return { inLobby: true, lobbyid: lobbyList[i].lobbyid };
             }
         }
@@ -34,12 +43,12 @@ let activeLobbyCache = (function() {
     let filterLobbyTimeout = () => { // remove lobbies that is over 
         let lobbiesTimeout = new Array; 
         lobbyList = lobbyList.filter(Element => {
-            let isTimeout = Element.isTimeout();
+            let isTimeLeft = Element.isTimeLeft();
 
-            if (isTimeout) {
+            if (!isTimeLeft) {
                 lobbiesTimeout.push(Element);
             }
-            return !isTimeout;
+            return isTimeLeft;
         });
 
         return { lobbiesTimeout: lobbiesTimeout, lobbiesActive: lobbyList };
@@ -59,7 +68,7 @@ let activeLobbyCache = (function() {
         return { lobbiesStarted: lobbiesStarted, lobbiesActive: lobbyList };
     }
 
-    return { addLobby, findLobbyBylobbyid, filterUserByuserid, filterLobbyBylobbyid, checkUserInLobby, filterLobbyTimeout, filterLobbyStarted }
+    return { addLobby, findLobbyBylobbyid, filterUserByuserid, filterUserBysocketid, filterLobbyBylobbyid, checkUserInLobbyByuserid, filterLobbyTimeout, filterLobbyStarted }
 })();
 
 module.exports = { activeLobbyCache }
