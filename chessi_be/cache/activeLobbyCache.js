@@ -23,17 +23,26 @@ let activeLobbyCache = (function() {
     }
 
     let filterUserBysocketid = (socketid) => {
+        let { inLobby, lobbyid } = checkUserInLobbyBysocketid(socketid);
+
+        if (inLobby) {
+            userLobby = findLobbyBylobbyid(lobbyid);
+            userLobby.filterUserBysocketid(socketid);
+        }
+    }
+
+    let checkUserInLobbyByuserid = (userid) => { // check whether user is in an active lobby by userid and return lobbyid
         for (let i = 0; i < lobbyList.length; i++) {
-            if (lobbyList[i].isUserInLobbyBysocketid(socketid)) {
+            if (lobbyList[i].isUserInLobbyByuserid(userid)) {
                 return { inLobby: true, lobbyid: lobbyList[i].lobbyid };
             }
         }
         return { inLobby: false, lobbyid: null };
     }
 
-    let checkUserInLobbyByuserid = (userid) => { // check whether user is in an active lobby and return lobbyid
+    let checkUserInLobbyBysocketid = (socketid) => { // check whether user is in an active lobby by socketid and return lobbyid
         for (let i = 0; i < lobbyList.length; i++) {
-            if (lobbyList[i].isUserInLobbyByuserid(userid)) {
+            if (lobbyList[i].isUserInLobbyBysocketid(socketid)) {
                 return { inLobby: true, lobbyid: lobbyList[i].lobbyid };
             }
         }
