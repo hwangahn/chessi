@@ -1,7 +1,18 @@
-import {Link} from 'react-router-dom';
 import './TrangChu.css';
+import { Link } from 'react-router-dom';
+import { AuthContext } from "../contexts/auth"
+import { useContext } from "react"
 
-export default function verticalmenu(){
+export default function verticalmenuAdmin(){
+
+    let { useLogout } = useContext(AuthContext);
+
+    let handleLogout = async () => {
+        let { status, msg } = await useLogout();
+    
+        (status === "ok") ? message.success(msg) : message.error(msg);
+      }
+
     const leftbar = {display:"inline", float:"left", width: "14.1vw", height: "45vw", marginTop: "0px",
     borderRight: "2px solid #2C2B4D"}
 
@@ -14,7 +25,7 @@ export default function verticalmenu(){
         border: "none",
         borderRadius: "2.5vw",
         marginLeft: "15%",
-        marginTop: "2vw",
+        marginTop: "10vw",
       }
 
     return(
@@ -23,40 +34,28 @@ export default function verticalmenu(){
             <ul className="single-vertical-menu">
                 <li>
                     <img src="choi.png" alt=""/>
-                    <Link to ="/">Chơi</Link>
+                    <Link to ="/admin">All user</Link>
                 </li> 
                 <li>
                     <img src="choi.png" alt=""/>
-                    <Link to ="/new">Câu đố</Link>
+                    <Link to ="/admin/active-User">Active user</Link>
                 </li>
                 <li>
                     <img src="choi.png" alt=""/>
-                    <Link to ="/new">Theo dõi</Link>
+                    <Link to ="/admin/all-Admin">All admin</Link>
                 </li>
                 <li>
                     <img src="choi.png" alt=""/>
-                    <Link to ="/friendlist">Bạn bè</Link>
+                    <Link to ="/admin/all-Game">All game</Link>
                 </li>
                 <li>
                     <img src="choi.png" alt=""/>
-                    <Link to ="/history">Lịch sử đấu</Link>
-                </li>
-                <li>
-                    <img src="choi.png" alt=""/>
-                    <Link to ="/new">Diễn đàn</Link>
-                </li>
-                <li>
-                    <img src="choi.png" alt=""/>
-                    <Link to ="/ranking">Bảng xếp hạng</Link>
-                </li>
-                <li>
-                    <img src="choi.png" alt=""/>
-                    <Link to ="/new">Premium</Link>
+                    <Link to ="/admin/diendan">Diễn đàn</Link>
                 </li>		
             </ul>	
             <div style={logoutButton}>
                 <img src="logout-button.png" alt="" style={{float: "left", marginLeft: "15%", marginTop : "0.75vw", width: "1.6vw"}}/>
-                <span style={{color:"#FFFFFF", float: "left", marginLeft: "10%", marginTop : "0.85vw", fontSize: "1.1vw"}}>Log out</span>
+                <span onClick={handleLogout} style={{color:"#FFFFFF", float: "left", marginLeft: "10%", marginTop : "0.85vw", fontSize: "1.1vw"}}>Log out</span>
             </div>	
         </div>
         </>

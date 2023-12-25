@@ -22,23 +22,17 @@ body{
     border-bottom: 2px solid #2C2B4D;
 }
 
-.logo{
-    align-items: center;
-    margin-left: 4.75vw;
-    padding-top: 20px;
-    padding-right: 4.8vw;
+.home{
     border-right: 2px solid #2C2B4D;
-    padding-bottom: 20px;
-    width: 9.35vw;
 }
 
-.home{
-    font-size: 24px;
-    margin: 14px 30px 0px 20px;
-}
-.home a{
-    color: #BEC1DC;
-    text-decoration: none;
+.logo{
+    align-items: center;
+    margin-left: 4.65vw;
+    padding-top: 20px;
+    padding-right: 4.65vw;
+    padding-bottom: 10px;
+    width: 9.35vw;
 }
 
 .right_item{
@@ -54,10 +48,9 @@ body{
 
 .sreachbox{
     background: #B0ABAB;
-    width: 400px;
+    width: 600px;
     height: 35px;
-    margin-right: 33.5vw;
-    margin-top: 10px;
+    margin: 11px 10vw 0vw 20px;
     position: relative;
     border-radius: 10px;
 }
@@ -72,13 +65,13 @@ body{
 }
 
 ul.single-vertical-menu  {
-	padding:0px;
-    padding-top: 0.7vw;
+	padding: 0px;
+    padding-top: 1vw;
 
 }
 ul.single-vertical-menu  li {
 	left:0px;
-	height: 4.7vw;
+	height: 5.8vw;
 	padding:0px ;  
     margin:0px;        
 	list-style:none;
@@ -88,17 +81,17 @@ ul.single-vertical-menu  li > a {
 	text-decoration:none;
 	cursor: pointer;
 	position:relative;
-    font-size: 1.4vw;
-    top: 0.7vw;
-    left: 2.4vw;
+    font-size: 1.5vw;
+    top: 0.85vw;
+    left: 1.5vw;
 	color: #BEC1DC;
 }
 
 ul.single-vertical-menu  li > img {
     position:relative;
-	width: 1.9vw;
+	width: 1.95vw;
 	top: 1.2vw;
-	left: 1.7vw;
+	left: 1vw;
 }
 
 ul.single-vertical-menu  li > a:hover {
@@ -109,12 +102,13 @@ ul.single-vertical-menu  li > a:hover {
     position: relative;
     justify-content: space-between;
     top: 8vw;
+    left: 1.5vw;
 }
 
 .gp2{
     position: relative;
     top: 8vw;
-    left: 4vw;
+    left: 5vw;
 }
 
 #gm2, #gm4{
@@ -124,19 +118,30 @@ ul.single-vertical-menu  li > a:hover {
 
 .game-mode{
     background-color: #1E1D2F;
-    width: 21vw;
+    width: 20vw;
+    color:#B0ABAB;
     padding: 3.4vw 0vw;
     text-align: center;
+    font-size: 1.6vw;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
 }
 
 .game-mode a{
     text-decoration:none;
     color:#B0ABAB;
-    font-size: 1.6vw;
-    font-weight: bold;
 }
-.game-mode a:hover{
-    color: red;
+
+.game-mode:hover, .game-mode:focus, .game-mode:active{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
 }
 
 
