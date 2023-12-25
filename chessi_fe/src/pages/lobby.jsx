@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/auth';
-import Verticalmenu from './verticalmenu';
+import VerticalmenuUser from './verticalmenuUser';
 import { message } from 'antd';
 import Chat from '../components/chat';
 import socket from '../utils/socket';
@@ -190,7 +190,7 @@ export default function Lobby() {
     return (
         <div>
             <div id="leftbar" style={{ float: "left" }}>
-                <Verticalmenu />
+                <VerticalmenuUser />
             </div>
             <div style={{ float: "left", width: "20%", paddingLeft: "15px" }}>
                 <Chat roomid={params.roomid} />

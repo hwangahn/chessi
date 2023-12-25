@@ -148,8 +148,8 @@ export default function Home() {
                       <div className="game-mode" onClick={handleFindGame}>Cancel</div>
                     }
                   </div>
-                  <div id="gm2" className="game-mode">
-                    <Link to ="/new">Chơi với bạn</Link>
+                  <div id="gm2" className="game-mode" onClick={handleCreateLobby}>
+                    <p>Chơi với bạn</p>
                   </div>
                 </div>
                 <div className="gp2">
