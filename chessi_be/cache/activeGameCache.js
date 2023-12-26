@@ -29,10 +29,10 @@ let activeGameCache = (function() {
             return !isOver;
         });
 
-        return {gamesOver: gamesOver, gamesActive: gameList};
+        return { gamesOver: gamesOver, gamesActive: gameList };
     }
 
-    return {addGame, findGameBygameid, checkUserInGame, filterGameOver }
+    return { addGame, findGameBygameid, checkUserInGame, filterGameOver }
 })();
 
 module.exports = { activeGameCache }

@@ -1,5 +1,5 @@
 # Create admin account
-**URL** : `/admin`
+**URL** : `/api/admin`
 
 **Method** : `PUT`
 
@@ -43,7 +43,7 @@
 
 **Condition** :  User not logged in and Admin account is not created.
 
-**Code** : `401 1 Unauthorized`
+**Code** : `401 Unauthorized`
 
 **Content** :
 ```json
@@ -57,7 +57,7 @@
 
 **Condition** :  Login session expired and Admin account is not created.
 
-**Code** : `401 2 Unauthorized`
+**Code** : `401 Unauthorized`
 
 **Content** :
 ```json
@@ -71,7 +71,7 @@
 
 **Condition** :  Permission denied and Admin accoutn is not created.
 
-**Code** : `401 3 Unauthorized`
+**Code** : `401 Unauthorized`
 
 **Content** :
 ```json
