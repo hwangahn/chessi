@@ -863,6 +863,74 @@
         }
       }
     },
+    "/change-password": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Get user's current active lobby",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "password": {
+                      "type": "string",
+                      "description": "The username of the user"
+                    }
+                  }
+                }
+              },
+              "required": ["password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Password changed"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/user/{userid}": {
       "get": {
         "tags": ["User"],
@@ -925,7 +993,7 @@
         }
       }
     },
-    "/user/follow/{userid}": {
+    "/user/{userid}/follow": {
       "post": {
         "tags": ["User"],
         "summary": "Follow other user",
