@@ -15,8 +15,10 @@ const bcrypt = require('bcrypt');
 
 let DB_KEY = process.env.DB_KEY;
 
-let dummyConnection = mysql.createConnection(DB_KEY.slice(0, - 3)); // connect to mysql with the url string except the last 3 letters, which is the schema/database name
-let dbName = DB_KEY.substring(DB_KEY.length - 3); // extract the database name
+let dbName = DB_KEY.split('/')[DB_KEY.split('/').length - 1];
+let dbURL = DB_KEY.slice(0, -dbName.length);
+
+let dummyConnection = mysql.createConnection(dbURL); // connect to mysql with the url string
 let connection = new Sequelize(DB_KEY);
 
 connection.authenticate()
