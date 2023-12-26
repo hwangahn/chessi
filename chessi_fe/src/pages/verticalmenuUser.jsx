@@ -23,18 +23,6 @@ export default function verticalmenuUser(){
     const leftbar = {display:"inline", float:"left", width: "14.1vw", height: "45vw", marginTop: "0px",
     borderRight: "2px solid #2C2B4D"}
 
-
-    const logoutButton = {
-        backgroundColor: "#1E1D2F",
-        color: "#232237",
-        width: "70%",
-        height: "3vw",
-        border: "none",
-        borderRadius: "2.5vw",
-        marginLeft: "15%",
-        marginTop: "2vw",
-      }
-
     return(
         <>
         <div id="leftbar" style={leftbar}>
@@ -58,13 +46,9 @@ export default function verticalmenuUser(){
                 <li>
                     <img src="ranking.png" alt=""/>
                     <Link to ="/ranking">Bảng xếp hạng</Link>
-                </li>
-                <li>
-                    <img src="premium.png" alt=""/>
-                    <Link to ="/new">Premium</Link>
-                </li>		
+                </li>	
             </ul>	
-            <div style={logoutButton}>
+            <div className="logoutButton">
                 <img src="logout-button.png" alt="" style={{float: "left", marginLeft: "15%", marginTop : "0.75vw", width: "1.6vw"}}/>
                 <span onClick={handleLogout} style={{color:"#FFFFFF", float: "left", marginLeft: "10%", marginTop : "0.85vw", fontSize: "1.1vw"}}>Log out</span>
             </div>	

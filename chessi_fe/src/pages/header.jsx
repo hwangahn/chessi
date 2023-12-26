@@ -1,8 +1,16 @@
 import {Link} from 'react-router-dom';
 import './TrangChu.css';
 import { Input } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import { AuthContext } from "../contexts/auth"
+import { useContext } from "react"
 
 export default function header() {
+    let { accessToken, profile } = useContext(AuthContext);
+
+    const information = {color:"#B0ABAB",fontSize: "1.6vw", fontWeight: "bold", cursor: "pointer"}
+
     return(
         <> 
         <div className="header">
@@ -13,9 +21,19 @@ export default function header() {
                 <Input type="text" className="sreachbox_input" placeholder="Tìm kiếm..." />
             </div>
             <div className="right_item">
-                <img className="icon" src="message.png" alt=""/>
-                <img className="icon" src="notice.png" alt=""/>
-                <img style={{width: "72px", height: "44px"}} src="information.png" alt=""/>
+                {
+                    accessToken ?
+                    <div style={information}>
+                        <UserOutlined style={{marginRight: "5px"}} />
+                        {profile.username}
+                    </div> :
+                    <>
+                    <div>
+                        <Link to={"/login"}><Button type='primary' style={{marginRight: "10px"}}>Login</Button></Link>
+                        <Link to={"/signup"}><Button>Signup</Button></Link>
+                    </div>
+                    </>
+                }
             </div>
         </div>
         </>

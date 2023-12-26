@@ -10,6 +10,8 @@ import UseGetLobby from '../utils/useGetLobby';
 
 
 export default function Home() {
+  const [popup, setPop] = useState(false);
+
   let navigate = useNavigate();
 
   let { useLogout, accessToken, profile } = useContext(AuthContext);
@@ -35,6 +37,7 @@ export default function Home() {
       socket.off("game found");
     }
   }, []);
+
 
   let handleLogout = async () => {
     let { status, msg } = await useLogout();
@@ -116,6 +119,90 @@ export default function Home() {
     }
   }
 
+  let handleClickOpen = () => {
+    setPop(!popup);
+  }
+
+  function Gallery(){
+    const gallery = {
+      backgroundColor: "rgba(0, 0, 0, 0.6)",
+      position: "absolute",
+      height: "92.2vh",
+      width: "100vw",
+      zIndex: "1"
+    }
+
+    const findGameInner = {
+      width: "500px",
+      position: "relative",
+      top: "30%",
+      margin: "auto",
+      background: "white",
+    }
+
+    const findGameHeader = {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "10px",
+      background: "#242337",
+      color: "white"
+    }
+
+    const findGameBody = {
+      paddingTop: "30px",
+      textAlign: "center"
+    }
+
+    const findGameBodyInput = {
+      width: "100%",
+      height: "40px",
+      fontSize: "25px",
+      textAlign: "center",
+      border: "none",
+      outline: "none"
+    }
+
+    const findGameFooter = {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "20px",
+      textAlign: "right"
+    }
+
+    const findGameFooterButton = {
+      padding: "10px 100px",
+      color: "white",
+      background: "#242337",
+      border: "none",
+      outline: "none",
+      borderRadius: "5px",
+      cursor: "pointer"
+    }
+
+    return(
+      <>
+        {popup?
+          <div style={gallery}>
+              <div style={findGameInner}>
+                  <div style={findGameHeader}>
+                      <p>Find Game</p>
+                      <img src="x-regular-24.png" onClick={handleClickOpen} style = {{cursor: "pointer"}}/>
+                  </div>
+                  <div style={findGameBody}>
+                      <input style={findGameBodyInput} type="text" id="roomID" placeholder="roomID" />
+                  </div>
+                  <div style={findGameFooter}>
+                      <button style={findGameFooterButton} onClick={handleClickOpen}>Find Game</button>
+                  </div>
+              </div>
+          </div>
+        :""}
+      </>
+    );
+  } 
+
   const introduce = {marginLeft: "212px", padding: "5px 0px", color:"#B0ABAB", textAlign: "center",
   borderBottom: "2px solid #2C2B4D", fontSize: "1.6vw", fontWeight: "bold"}
 
@@ -126,6 +213,7 @@ export default function Home() {
     <div>
       {accessToken ? 
         <>
+          <Gallery />
           <VerticalmenuUser />
           <div className="introduce" style={introduce}>
             👋Hello {profile.username}! <br/>
@@ -145,26 +233,20 @@ export default function Home() {
                     : 
                     <div id="gm1" className="game-mode" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
                   }
-                  <div id="gm2" className="game-mode" onClick={handleCreateLobby}>
-                    Chơi với bạn
-                  </div>
+                  <div id="gm2" className="game-mode" onClick={handleClickOpen}>Tìm Phòng</div>
                 </div>
                 <div className="gp2">
                   <div id="gm3" className="game-mode">
                     <Link to ="/new">Chơi với máy</Link>
                   </div>
-                  <div id="gm4" className="game-mode">
-                    <Link to ="/new">Xem lại trận đấu</Link>
+                  <div id="gm4" className="game-mode" onClick={handleCreateLobby}>
+                    Tạo phòng
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </> : 
-        <>
-          <Link to={"/login"}><Button type='primary' style={{marginRight: "10px"}}>Login</Button></Link>
-          <Link to={"/signup"}><Button>Signup</Button></Link>
-        </>
+        </> : ""
       }
     </div>
   )}
