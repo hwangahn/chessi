@@ -1,4 +1,4 @@
-const { getAllUserDataService, getAllGameDataService, getAdminAccountService, deleteAdminAccountService, putAdminAccountService } = require('../services/adminService')
+const { getAllUserDataService, getAllAdminDataService, getAdminAccountService, deleteAdminAccountService, putAdminAccountService } = require('../services/adminService')
 const { checkHttpError } = require('../utils/checkError');
 
 let handleGetAllUserData = async (req, res) => {
