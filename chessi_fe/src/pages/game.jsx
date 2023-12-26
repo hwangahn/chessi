@@ -323,8 +323,7 @@ export default function Game() {
     <GameContent>
       <div style={leftbar}>
         <div className="lb1">
-          <div style={gameInfor}>
-          </div>
+          <div style={gameInfor}></div>
         </div>
         <div className="lb2" style={{color: "#BEC1DC"}}>
           <Chat />

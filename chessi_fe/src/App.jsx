@@ -19,7 +19,6 @@ import AdminAllUser from './pages/adminAllUser';
 import AdminActiveUser from './pages/adminActiveUser';
 import GameHistory from './pages/gameHistory';
 
-
 //test
 export default function App() {
   let { useSilentLogin } = useContext(AuthContext);
