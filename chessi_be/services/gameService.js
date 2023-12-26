@@ -1,6 +1,7 @@
 const { activeGameCache } = require('../cache/activeGameCache');
 const { matchMakingCache } = require('../cache/matchmakingCache');
 const { userOnlineCache } = require('../cache/userOnlineCache');
+const { activeLobbyCache } = require('../cache/activeLobbyCache');
 const { httpError } = require('../error/httpError');
 
 let findGameService = async ( userid ) => {
@@ -10,9 +11,21 @@ let findGameService = async ( userid ) => {
         throw new httpError(403, "Cannot find game. Try again later");
     }
 
-    console.log(`user ${userid} finding match`);
-    
+    let isUserInGame = activeGameCache.checkUserInGame(userid).inGame; // check if user in game
+
+    if (isUserInGame) {
+        throw (new httpError(409, "You are already in a game"));
+    }
+
+    let isUserInLobby = activeLobbyCache.checkUserInLobbyByuserid(userid).inLobby; // check if user in lobby
+
+    if (isUserInLobby) {
+        throw (new httpError(409, "You are already in a lobby"));
+    }
+
     matchMakingCache.addUser(userFound); // add user to match making queue
+    
+    console.log(`user ${userid} finding match`);
 }
 
 let stopFindGameService = async ( userid ) => {

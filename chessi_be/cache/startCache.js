@@ -9,6 +9,7 @@ const { socketInstance } = require('../socketInstance');
 const { userOnlineCache } = require('./userOnlineCache');
 const { matchMakingCache } = require('./matchmakingCache');
 const { activeGameCache } = require('./activeGameCache');
+const { activeLobbyCache } = require('./activeLobbyCache');
 const { activeRatingChange } = require('./ratingCache');
 const { activeGame } = require('./gameCache');
 
@@ -68,11 +69,60 @@ setInterval(() => { // game cache
         await user.update({ rating: Element.black.rating }, {
             where: { userid: Element.black.userid }
         });
+
+        console.log(`game ${Element.gameid} ended`);
     });
 
     gamesActive.forEach(Element => {
-        socketInstance.get().to(Element.gameid).emit("time left", Element.getTimeLeft().turn, Element.getTimeLeft().timeLeft); // notify room of time left
+        socketInstance.get().to(Element.gameid).emit("time left", Element.getTimeLeft().turn, Element.getTimeLeft().timeLeft); // notify room of time left and turn
     });
+
+}, 1000);
+
+setInterval(() => { // lobby cache
+    let { lobbiesTimeout } = activeLobbyCache.filterLobbyTimeout();
+    let { lobbiesStarted, lobbiesActive } = activeLobbyCache.filterLobbyStarted();
+
+    lobbiesStarted.forEach((Element, index) => { // actions on lobby started
+        let gameid = `${Date.now()}10${index}`
+
+        activeGameCache.addGame(new activeGame(gameid, Element.white, Element.black));
+
+        // update side history in cache
+        Element.white.sideHistory.push("white");
+        Element.black.sideHistory.push("black");
+
+        // notify lobby of game start
+        socketInstance.get().to(Element.lobbyid).emit("game started", gameid);
+
+        // check if users already exist in rating change cache
+        let isBlackInRatingCache = activeRatingChange.findUserByuserid(Element.black.userid);
+        let isWhiteInRatingCache = activeRatingChange.findUserByuserid(Element.white.userid); 
+
+        if (!isBlackInRatingCache) { // if not, add to cache
+            activeRatingChange.addUser(Element.black);
+        };
+
+        if (!isWhiteInRatingCache) { // if not, add to cache
+            activeRatingChange.addUser(Element.white);
+        }
+
+        console.log(`game ${gameid} started from lobby ${Element.lobbyid}`);
+    });
+
+    lobbiesTimeout.forEach(Element => {
+        socketInstance.get().to(Element.lobbyid).emit("time out");
+
+        console.log(`lobby ${Element.lobbyid} timed out`)
+    });
+
+    lobbiesActive.forEach(Element => {
+        socketInstance.get().to(Element.lobbyid).emit("lobby state", Element.getState().creator, 
+                                                                    Element.getState().guest, 
+                                                                    Element.getState().white,
+                                                                    Element.getState().black,
+                                                                    Element.getState().timeLeft)
+    })
 
 }, 1000);
 
@@ -84,7 +134,6 @@ setInterval(() => { // match making cache
     });
 
     games.forEach((Element, index) => {
-
         let gameid = `${Date.now()}${index}`;
         activeGameCache.addGame(new activeGame(gameid, Element.white, Element.black));
 
@@ -96,7 +145,7 @@ setInterval(() => { // match making cache
         socketInstance.get().to(Element.white.socketid).emit("game found", gameid);
         socketInstance.get().to(Element.black.socketid).emit("game found", gameid);
         
-         // check if users already exist in rating change cache
+        // check if users already exist in rating change cache
         let isBlackInRatingCache = activeRatingChange.findUserByuserid(Element.black.userid);
         let isWhiteInRatingCache = activeRatingChange.findUserByuserid(Element.white.userid); 
 
@@ -107,6 +156,8 @@ setInterval(() => { // match making cache
         if (!isWhiteInRatingCache) { // if not, add to cache
             activeRatingChange.addUser(Element.white);
         }
+
+        console.log(`game ${gameid} started with player ${Element.white.userid} and ${Element.black.userid}`);
     });
 
 }, 5000);

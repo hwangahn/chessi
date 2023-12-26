@@ -1,9 +1,12 @@
+import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
 import './TrangChu.css';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../contexts/auth"
 import { useContext } from "react"
 
 export default function verticalmenuUser(){
+    let navigate = useNavigate();
 
     let { useLogout } = useContext(AuthContext);
 
@@ -11,6 +14,10 @@ export default function verticalmenuUser(){
         let { status, msg } = await useLogout();
     
         (status === "ok") ? message.success(msg) : message.error(msg);
+
+        if (status === "ok") {
+            navigate('/');
+        }
       }
 
     const leftbar = {display:"inline", float:"left", width: "14.1vw", height: "45vw", marginTop: "0px",
