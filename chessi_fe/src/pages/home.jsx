@@ -126,8 +126,7 @@ export default function Home() {
     <div>
       {accessToken ? 
         <>
-            <VerticalmenuUser />
-
+          <VerticalmenuUser />
           <div className="introduce" style={introduce}>
             👋Hello {profile.username}! <br/>
             Let's play a game.
@@ -141,15 +140,13 @@ export default function Home() {
               <div className="title" style={title}>So tài cờ vua</div>
               <div className="game-play" style={{display: "flex", justifyContent: "space-between"}}>
                 <div className="gp1">
-                  <div id="gm1" className="game-mode">
-                    {!isFindingGame ?
-                      <div id="gm1" className="game-mode" onClick={handleFindGame}>Chơi với người</div>
-                      : 
-                      <div className="game-mode" onClick={handleFindGame}>Cancel</div>
-                    }
-                  </div>
+                  {!isFindingGame ?
+                    <div id="gm1" className="game-mode" onClick={handleFindGame}>Chơi với người</div>
+                    : 
+                    <div id="gm1" className="game-mode" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
+                  }
                   <div id="gm2" className="game-mode" onClick={handleCreateLobby}>
-                    <p>Chơi với bạn</p>
+                    Chơi với bạn
                   </div>
                 </div>
                 <div className="gp2">

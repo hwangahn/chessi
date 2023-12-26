@@ -317,16 +317,11 @@ export default function Game() {
 
   return (
     <GameContent>
-    <div style={leftbar}>
-      <div className="lb1">
-        <div style={gameInfor}>
-          <GameInfo />
+      <div style={leftbar}>
+        <div className="lb2" style={{color: "#BEC1DC"}}>
+          <Chat roomid={params.roomid} />
         </div>
       </div>
-      <div className="lb2" style={{color: "#BEC1DC"}}>
-        <Chat roomid={params.roomid} />
-      </div>
-    </div>
       <div id="game-board" style={{float: "left", width: "42%"}}>
           <Board />
       </div>
