@@ -15,7 +15,10 @@ import './pages/TrangChu.css';
 import FriendList from './pages/FriendList';
 import Ranking from './pages/Ranking';
 import ProtectedRoute from './components/protectedRoute';
-import Admin from './pages/admin';
+import AdminAllUser from './pages/adminAllUser';
+import AdminActiveUser from './pages/adminActiveUser';
+import Lobby from './pages/lobby';
+import GameHistory from './pages/gameHistory';
 
 //test
 export default function App() {
@@ -53,12 +56,16 @@ export default function App() {
           <Route path='/login' Component={Login}></Route>
           <Route path='/signup' Component={Signup}></Route>
           <Route path='/game/:roomid' Component={Game}></Route>
+          <Route path='/gamehistory' Component={GameHistory}></Route>
+          <Route path='/lobby/:lobbyid' Component={Lobby}></Route>
           <Route path='/docs' Component={APIdocs}></Route>
           <Route path='/history' Component={History}></Route>
           <Route path='/friendlist' Component={FriendList}></Route>
           <Route path='/ranking' Component={Ranking}></Route>
+          <Route path='/admin' Component={AdminAllUser}></Route>
+          <Route path='/admin/active-user' Component={AdminActiveUser}></Route>
           <Route Component={ProtectedRoute}> 
-            <Route path='/admin' Component={Admin} />
+ 
           </Route>
           <Route path='/forgot-password' Component={ForgotPassword}></Route>
          </Routes>

@@ -6,9 +6,10 @@ const { gameUser } = require('../models/gameUser');
 const { game } = require('../models/game');
 const { activeUser } = require('../cache/userCache');
 const { userOnlineCache } = require('../cache/userOnlineCache');
+const { matchMakingCache } = require('../cache/matchmakingCache');
+const { activeLobbyCache } = require('../cache/activeLobbyCache');
 const { httpError } = require('../error/httpError');
 const jwt = require('jsonwebtoken');
-const { matchMakingCache } = require('../cache/matchmakingCache');
 require('dotenv').config();
 
 let accessTokenLifetime = '1d';
@@ -52,7 +53,6 @@ let verifyEmailService = async (token) => {
 }
 
 let loginService = async (username, password, socketid) => {
-
     let userFound = await user.findOne({ 
         where: { username: username },
         attributes: ["username", "password", "userid", "rating", "isAdmin"],
@@ -144,6 +144,7 @@ let silentLoginService = async (userid, socketid) => {
 let logoutService = async (userid) => {
     userOnlineCache.filterUserByuserid(userid); // remove user from online user list
     matchMakingCache.filterUserByuserid(userid); // remove user from match making queue if in
+    activeLobbyCache.filterUserByuserid(userid); // remove user from lobby if in
 }
 
 let resetPasswordService = async (username, _email) => {
