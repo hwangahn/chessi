@@ -50,7 +50,9 @@ class activeLobby {
             if (this.guest === null) { // no one else in room
                 this.timeLeft = 0; // timeout the room so it can be removed
             } else {
-                this.creator = this.guest; // make guest the new creator
+                // made guest lobby creator
+                this.creator = this.guest; 
+                this.guest = null;            
             }
         } else if (this.guest?.socketid === socketid) {
             this.guest = null;
@@ -86,7 +88,7 @@ class activeLobby {
     }
 
     start() {
-        if (this.guest) { // has 2 players
+        if (this.creator && this.guest) { // has 2 players
             this.isStarted = true;
         }
 
