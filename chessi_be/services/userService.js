@@ -29,12 +29,8 @@ let getUserDataService = async (userid) => {
     });
 
     let gameUserInfo = await gameUser.findAll({ // get info of games user played
-        where: { 
-            [Op.or]: conditions
-        }, 
-        include: {
-            model: user
-        },
+        where: { [Op.or]: conditions }, 
+        include: { model: user },
         order: [['gameid', 'DESC']]
     });
 
@@ -112,13 +108,40 @@ let userUnfollowService = async (followerid, userid) => {
     });
 
     if (!isFollowing) {
-        throw (new httpError(409, "You are not following this player")); // throw error
+        throw (new httpError(409, "You are not following this player"));
     }
 
-    await isFollowing.destroy();
+    await isFollowing.destroy(); // delete record
 
     console.log(`user ${followerid} unfollowed user ${userid}`);
 
 }
 
-module.exports = { getUserDataService, userFollowService, userUnfollowService }
+let getUserFollowingService = async (userid) => {
+    let userFound = await user.findOne({ where: { userid: userid } }); // check uhether user exists
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user")); // if not, throw error
+    }
+    
+    let userFollowingid = await userFollow.findAll({
+        where: { followerid: userid },
+        attributes: ["userid"] 
+    });
+
+    let conditions = userFollowingid.map(Element => { // building condition array for Sequelize query
+        return { userid: Element.userid }
+    });
+
+    let userFollowingInfo = await user.findAll({ // get info of users user following
+        where: { [Op.or]: conditions }
+    });
+
+    userFollowingInfo = userFollowingInfo.map(Element => {
+        return { userid: Element.userid, username: Element.username, rating: Element.rating } // map to reduce return size
+    });
+
+    return userFollowingInfo;
+}
+
+module.exports = { getUserDataService, userFollowService, userUnfollowService, getUserFollowingService }

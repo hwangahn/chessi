@@ -5,6 +5,7 @@ const { gameUser } = require('../models/gameUser')
 const { httpError } = require('../error/httpError')
 const { email } = require('../models/email')
 const { Op } = require('sequelize')
+const { userOnlineCache } = require('../cache/userOnlineCache')
 
 
 let getAllUserDataService = async () => {
@@ -134,5 +135,14 @@ let getAllGameDataService = async () => {
     return normalizedGameHistory;
 }
 
+let getActiveUserService = () => {
+    let activeUser = userOnlineCache.getAllUser();
 
-module.exports = { getAllUserDataService, getAdminAccountService, putAdminAccountService, deleteAdminAccountService , getAllAdminDataService, getAllGameDataService } 
+    activeUser = activeUser.map(Element => {
+        return { userid: Element.userid, username: Element.username, rating: Element.rating }; // map to reduce the size of return data
+    })
+    
+    return activeUser;
+}
+
+module.exports = { getAllUserDataService, getAdminAccountService, putAdminAccountService, deleteAdminAccountService , getAllAdminDataService, getAllGameDataService, getActiveUserService } 

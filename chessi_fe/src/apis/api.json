@@ -59,16 +59,21 @@
             "schema": {
               "type": "object",
               "properties": {
-                "username": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string",
-                  "description": "The email of the admin",
-                  "default": "john@example.com"
+                "data": {
+                  "type": "object", 
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "The email of the admin",
+                      "default": "john@example.com"
+                    }
+                  }
                 }
               },
               "required": ["username", "password"]
@@ -982,6 +987,72 @@
               }
             }
           },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/following": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all user's following",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "following": [
+                  {
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  { "...": "same format" }
+                ]
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          
           "404": {
             "description": "Not found",
             "examples": {
