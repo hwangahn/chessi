@@ -54,7 +54,7 @@ export default function App() {
           <Route path='/signup' Component={Signup}></Route>
           <Route path='/game/:roomid' Component={Game}></Route>
           <Route path='/docs' Component={APIdocs}></Route>
-          <Route path='/history' Component={History}></Route>
+          <Route path='/history/:userid' Component={History}></Route>
           <Route path='/friendlist' Component={FriendList}></Route>
           <Route path='/ranking' Component={Ranking}></Route>
           <Route Component={ProtectedRoute}> 

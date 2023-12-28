@@ -23,7 +23,7 @@ let gameUser = connection.define('gameUser', {
         allowNull: false
     }
 }, {
-    tableName: "gameUser",
+    tableName: "gameuser",
     timestamps: false,
     createdAt: false,
     updatedAt: false

@@ -1,7 +1,13 @@
 import {Link} from 'react-router-dom';
 import './TrangChu.css';
-
+import { useState, useEffect,useContext } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from "../contexts/auth"
+import {message} from 'antd';
 export default function verticalmenu(){
+    let navigate = useNavigate();
+
+    let { profile } = useContext(AuthContext);
     const leftbar = {display:"inline", float:"left", width: "14.1vw", height: "45vw", marginTop: "0px",
     borderRight: "2px solid #2C2B4D"}
 
@@ -16,7 +22,7 @@ export default function verticalmenu(){
         marginLeft: "15%",
         marginTop: "2vw",
       }
-
+      const userId= profile.userid;
     return(
         <>
         <div id="leftbar" style={leftbar}>
@@ -39,7 +45,7 @@ export default function verticalmenu(){
                 </li>
                 <li>
                     <img src="choi.png" alt=""/>
-                    <Link to ="/history">Lịch sử đấu</Link>
+                    <Link to ={`/history/${userId}`} > Lịch sử đấu</Link>
                 </li>
                 <li>
                     <img src="choi.png" alt=""/>

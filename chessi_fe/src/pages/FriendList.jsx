@@ -32,7 +32,7 @@ export default function FriendList() {
                         </div>
                     </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
                     </Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
@@ -44,7 +44,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
                     </Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
@@ -56,7 +56,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
                     </Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
@@ -68,7 +68,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
                     </Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
@@ -80,7 +80,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
                     </Button>
                 </li>
 
@@ -93,21 +93,11 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
                     </Button>
                 </li>
             </ul>
-
         </div>
-        <div className="table2">
-
-            <div className="author">
-
-                <h2 className="title">Trận đấu đang diễn ra</h2>
-                <p className="description">Không có trận đấu nào đang diễn ra</p>
-            </div>
-        </div>
-
     </div>
     </>
 );
