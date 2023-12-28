@@ -30,6 +30,10 @@
     {
       "name": "Discussion",
       "description": "Post and comment API"
+    },
+    {
+      "name": "Search",
+      "description": "Search API"
     }
   ],
   "schemes": ["http"],
@@ -1161,7 +1165,7 @@
         }
       }
     },
-    "/find-game": {
+    "/game/find-game": {
       "post": {
         "tags": ["Game"],
         "summary": "User find game",
@@ -1278,7 +1282,7 @@
         }
       }
     },
-    "/game-info/{gameid}": {
+    "/game/{gameid}": {
       "get": {
         "tags": ["Game"],
         "summary": "Get game info",
@@ -1348,7 +1352,7 @@
         }
       }
     },
-    "/user-active-game": {
+    "/game/user-active-game": {
       "get": {
         "tags": ["Game"],
         "summary": "Get user's current active game",
@@ -1862,6 +1866,60 @@
               "application/json": {
                 "status": "error",
                 "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/search?keyword={keyword}&type={type}": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "Search for items",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyword",
+            "required": "true",
+            "type": "string",
+            "description": "Keyword to search for"
+          },
+          {
+            "in": "path",
+            "name": "type",
+            "required": "true",
+            "type": "string",
+            "description": "Type of search. Can only be user or post"
+          }
+        ],
+        "responses": {
+          "200 1": {
+            "description": "Success for user query",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "result": [
+                  {
+                    "userid": 8,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "200 2": {
+            "description": "Success for post query",
+            "examples": {
+              "application/json": {
+                "status": "ok"
               }
             }
           },

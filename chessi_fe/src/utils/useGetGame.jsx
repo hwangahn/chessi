@@ -8,7 +8,7 @@ export default async function UseGetGame({accessToken}) { // get user's active g
     useEffect(() => {
         (async function() {
             if (accessToken) {
-                let rawData = await fetch('/api/user-active-game', {
+                let rawData = await fetch('/api/game/user-active-game', {
                     method: 'get',
                     headers: {
                         'authorization': 'Bearer ' + accessToken,

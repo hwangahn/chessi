@@ -1,4 +1,4 @@
-const { getAllUserDataService, getAllGameDataService, getAdminAccountService, deleteAdminAccountService, putAdminAccountService } = require('../services/adminService')
+const { getAllUserDataService, getAllGameDataService, getAdminAccountService, deleteAdminAccountService, putAdminAccountService, getAllAdminDataService } = require('../services/adminService')
 const { checkHttpError } = require('../utils/checkError');
 
 let handleGetAllUserData = async (req, res) => {
@@ -16,9 +16,9 @@ let handleGetAllUserData = async (req, res) => {
 
 let handleGetAdminAccount = async (req, res) => {
     try {
-        let userid = req.body.data;
+        let adminid = req.params.adminid;
 
-        let data = await getAdminAccountService(userid);
+        let data = await getAdminAccountService(adminid);
 
         res.status(200).json({status: "ok", data: data});
     } catch(err) {
@@ -81,7 +81,7 @@ let handleGetAllGameData = async (req, res) => {
 
         let data = await getAllGameDataService();
 
-        res.status(200).json({status: "ok",msg: "done", data:data})
+        res.status(200).json({status: "ok",msg: "done", data: data})
         
     } catch(err) {
         console.log(err)
@@ -90,4 +90,5 @@ let handleGetAllGameData = async (req, res) => {
         }
     }
 }
+
 module.exports = { handleDeleteAdminAccount, handleGetAdminAccount, handleGetAllGameData, handleGetAllUserData, handlePutAdminAccount, handleGetAllAdminData }
