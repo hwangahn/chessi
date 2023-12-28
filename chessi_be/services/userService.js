@@ -144,4 +144,19 @@ let getUserFollowingService = async (userid) => {
     return userFollowingInfo;
 }
 
-module.exports = { getUserDataService, userFollowService, userUnfollowService, getUserFollowingService }
+let getLeaderboardService = async () => {
+
+    // get 10 highest rated players
+    let leaderboard = await user.findAll({
+        order: [["rating", "DESC"]],
+        limit: 10
+    });
+
+    leaderboard = leaderboard.map(Element => {
+        return { userid: Element.userid, username: Element.username, rating: Element.rating } // map to reduce return size
+    });
+
+    return leaderboard
+}
+
+module.exports = { getUserDataService, userFollowService, userUnfollowService, getUserFollowingService, getLeaderboardService }

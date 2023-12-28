@@ -1002,6 +1002,34 @@
         }
       }
     },
+    "/user/leaderboard": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all user's following",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "leaderboard": [
+                  {
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  { "...": "same format" }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/user/following": {
       "get": {
         "tags": ["User"],

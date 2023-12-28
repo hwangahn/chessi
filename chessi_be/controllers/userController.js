@@ -1,4 +1,4 @@
-const { getUserDataService, userFollowService, userUnfollowService, getUserFollowingService } = require('../services/userService')
+const { getUserDataService, userFollowService, userUnfollowService, getUserFollowingService, getLeaderboardService } = require('../services/userService')
 const { checkHttpError } = require('../utils/checkError')
 
 let handleGetUserData = async (req, res) => {
@@ -61,4 +61,17 @@ let handleGetUserFollowing = async (req, res) => {
     }
 }
 
-module.exports = { handleGetUserData, handleUserFollow, handleUserUnfollow, handleGetUserFollowing }
+let handleGetLeaderboard = async (req, res) => {
+    try {        
+        let leaderboard = await getLeaderboardService();
+
+        res.status(200).json({ status: "ok", leaderboard: leaderboard });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+module.exports = { handleGetUserData, handleUserFollow, handleUserUnfollow, handleGetUserFollowing, handleGetLeaderboard }
