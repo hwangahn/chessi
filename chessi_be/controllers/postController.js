@@ -1,8 +1,13 @@
+const { postService, postCommentService, getPost } = require('../services/postService');
 const { checkHttpError } = require('../utils/checkError');
 
-let handlePostDiscussion = async (req, res) => {
+let handlePost = async (req, res) => {
     try {
-        
+        let { userid, post } = { userid: req.token.userid, post: req.body.post };
+
+        await postService(userid, post);
+
+        res.status(200).json({ status: "ok" });
     } catch(err) {
         console.log(err)
         if(checkHttpError(err)) {
@@ -13,7 +18,11 @@ let handlePostDiscussion = async (req, res) => {
 
 let handlePostComment = async (req, res) => {
     try {
-        
+        let { userid, postid, comment } = { userid: req.token.userid, postid: req.params.postid, comment: req.body.comment }
+
+        await postCommentService(userid, postid, comment);
+
+        res.status(200).json({ status: "ok" });
     } catch(err) {
         console.log(err)
         if(checkHttpError(err)) {
@@ -22,9 +31,13 @@ let handlePostComment = async (req, res) => {
     }
 }
 
-let handleGetDiscussion = async (req, res) => {
+let handleGetPost = async (req, res) => {
     try {
+        let postid = req.params.postid;
         
+        let { authorName, authorid, post, comments } = await getPost(postid);
+
+        res.status(200).json({ status: "ok", authorName: authorName, authorid: authorid, post: post, comments: comments });
     } catch(err) {
         console.log(err)
         if(checkHttpError(err)) {
@@ -33,4 +46,4 @@ let handleGetDiscussion = async (req, res) => {
     }
 }
 
-module.exports = { handlePostDiscussion, handlePostComment, handleGetDiscussion }
+module.exports = { handlePost, handlePostComment, handleGetPost }

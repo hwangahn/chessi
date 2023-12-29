@@ -28,7 +28,7 @@
       "description": "Lobby API. Used when playing with friend to create match"
     },
     {
-      "name": "Discussion",
+      "name": "Post",
       "description": "Post and comment API"
     },
     {
@@ -1965,6 +1965,211 @@
               "application/json": {
                 "status": "error",
                 "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/post": {
+      "post": {
+        "tags": ["Post"],
+        "summary": "Create post",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ACCESS_TOKEN_HERE"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "post": {
+                  "type": "string"
+                }
+              },
+              "required": ["post"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/post/{postid}/comment": {
+      "post": {
+        "tags": ["Post"],
+        "summary": "Comment on post",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ACCESS_TOKEN_HERE"
+          },
+          {
+            "in": "path",
+            "name": "postid",
+            "required": "true",
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "comment": {
+                  "type": "string"
+                }
+              },
+              "required": ["post"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "404 1": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "404 2": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find post"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/post/{postid}": {
+      "get": {
+        "tags": ["Post"],
+        "summary": "Get post and comment",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postid",
+            "required": "true",
+            "type": "integer" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "authorName": "something",
+                "authorid": 1,
+                "post": "string",
+                "comments": [
+                  {
+                    "comment": "string",
+                    "authorName": "something",
+                    "authorid": 1
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find post"
               }
             }
           },
