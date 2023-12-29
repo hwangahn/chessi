@@ -4,10 +4,14 @@ import { Affix, Input } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { AuthContext } from "../contexts/auth"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 export default function header() {
     let { accessToken, profile } = useContext(AuthContext);
+    const [keyword, setKeyword] = useState("");
+    const handleKeywordChange = (e) => {
+        setKeyword(e.target.value);
+    };
 
     const information = {color:"#B0ABAB",fontSize: "1.6vw", fontWeight: "bold", cursor: "pointer"}
 
@@ -17,8 +21,19 @@ export default function header() {
             <div className="home">
                 <Link to={"/"}><img className="logo" src="../../public/Chessi.png" alt=""/></Link>
             </div>
-            <div className="sreachbox">
-                <Input type="text" className="sreachbox_input" placeholder="Tìm kiếm..." />
+            <div >
+            <Input.Search 
+                        type="text"
+                        className="sreachbox"
+                        placeholder="Tìm kiếm..."
+                        value={keyword}
+                        onChange={handleKeywordChange}
+                        onSearch={() => {
+                            if (keyword) {
+                                window.location.href = `/search?keyword=${keyword}&type=user`;
+                            }
+                        }}
+                    />
             </div>
             <div className="right_item">
                 {

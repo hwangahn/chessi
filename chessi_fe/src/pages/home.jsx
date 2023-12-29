@@ -207,7 +207,7 @@ export default function Home() {
   borderBottom: "2px solid #2C2B4D", fontSize: "1.6vw", fontWeight: "bold"}
 
   const title = {position: "relative", color: "#00ace3", fontWeight: "bold", fontSize: "3vw",
-  top:"5vw", left: "15vw", width: "19vw"}
+  top:"5vw", left: "18vw", width: "19vw"}
 
   return (
     <div>
@@ -225,22 +225,22 @@ export default function Home() {
               <Chessboard id={0} arePiecesDraggable={false} />              
             </div>
             <div className="play">
-              <div className="title" style={title}>So tài cờ vua</div>
+              <div className="title" style={title}>Chessi</div>
               <div className="game-play" style={{display: "flex", justifyContent: "space-between"}}>
                 <div className="gp1">
                   {!isFindingGame ?
-                    <div id="gm1" className="game-btn" onClick={handleFindGame}>Chơi với người</div>
+                    <div id="gm1" className="game-btn" onClick={handleFindGame}>Quick play</div>
                     : 
                     <div id="gm1" className="game-btn" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
                   }
-                  <div id="gm2" className="game-btn" onClick={handleClickOpen}>Tìm Phòng</div>
+                  <div id="gm2" className="game-btn" onClick={handleClickOpen}>Join lobby</div>
                 </div>
                 <div className="gp2">
                   <div id="gm3" className="game-btn">
-                    <Link to ="/new">Chơi với máy</Link>
+                    <Link to ="/new">Play with computer</Link>
                   </div>
                   <div id="gm4" className="game-btn" onClick={handleCreateLobby}>
-                    Tạo phòng
+                    Create lobby
                   </div>
                 </div>
               </div>
