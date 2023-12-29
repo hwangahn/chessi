@@ -97,7 +97,7 @@ function MoveHistory() {
   }
 
   return (
-    <div style={{width: "100%", height: "calc(17vw)", marginBottom: "calc(40vw * 0.05)", overflowY: "scroll"}}>
+    <div style={{width: "100%", height: "calc(17vw)", marginBottom: "calc(40vw * 0.05)", overflowY: "auto"}}>
       {moveByPair.map((Element, index) => {
         return <Move movePair={Element} moveOrder={index}/>
       })}
@@ -195,7 +195,8 @@ const playerTimer = {
     backgroundColor: "#1E1D2F",
     width: "6.5vw",
     height: "2.4vw",
-    textAlign: "center"
+    textAlign: "center",
+    borderRadius: "15px"
 }
 
 const gameComponent = {

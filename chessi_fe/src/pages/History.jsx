@@ -8,7 +8,9 @@ import {
     Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
 
 } from "reactstrap";
-import VerticalmenuUser from './verticalmenuUser';
+
+import VerticalmenuUser from '../components/verticalmenuUser';
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import {message} from 'antd';
@@ -33,6 +35,7 @@ import {
     Tooltip,
     Legend
   );
+
 
 export default function History() {
 

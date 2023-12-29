@@ -4,7 +4,7 @@
     margin: 0;
 }
 
-a, h1, h2, h3, h4, h5, h6, p {
+a, h1, h2, h3, h4, h5, h6 {
     color: white;
 }
 
@@ -20,6 +20,7 @@ body{
     position: relative;
     background-color: #242337;
     border-bottom: 2px solid #2C2B4D;
+    margin-top: -8px;
 }
 
 .home{
@@ -115,7 +116,7 @@ ul.single-vertical-menu  li > a:hover {
     top: 3.4vw;
 }
 
-.game-mode{
+.game-btn{
     background-color: #1E1D2F;
     width: 20vw;
     color:#B0ABAB;
@@ -132,12 +133,12 @@ ul.single-vertical-menu  li > a:hover {
     transition-property: box-shadow, transform;
 }
 
-.game-mode a{
+.game-btn a{
     text-decoration:none;
     color:#B0ABAB;
 }
 
-.game-mode:hover, .game-mode:focus, .game-mode:active{
+.game-btn:hover, .game-btn:focus, .game-btn:active{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     -webkit-transform: scale(1.03);
     transform: scale(1.03);
@@ -165,5 +166,3 @@ ul.single-vertical-menu  li > a:hover {
     -webkit-transform: scale(1.03);
     transform: scale(1.03);
 }
-
-
