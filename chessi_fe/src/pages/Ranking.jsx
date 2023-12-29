@@ -1,5 +1,6 @@
 import React from "react";
 import view from './view.module.css';
+import { UserOutlined } from '@ant-design/icons';
 import {NavLink, Link, useLocation} from "react-router-dom";
 // reactstrap components
 import {
@@ -8,7 +9,7 @@ import {
 
 } from "reactstrap";
 import styles from './view.module.css';
-import VerticalmenuUser from './verticalmenuUser';
+import VerticalmenuUser from '../components/verticalmenuUser';
 export default function Ranking() {
     return (
         <>
@@ -42,9 +43,8 @@ export default function Ranking() {
                     <tr>
                         <td className={view.Stt}>1</td>
                         <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
+                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center", marginLeft: "0.5vw" }}>
+                            <UserOutlined style={{marginRight: "0.3vw"}} />
                                 <p style={{ marginLeft: "5px" }}>Dat 09</p>
                             </Link>
                         </td>
@@ -56,9 +56,8 @@ export default function Ranking() {
                     <tr>
                         <td className={view.Stt}>2</td>
                         <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
+                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center", marginLeft: "0.5vw" }}>
+                            <UserOutlined style={{marginRight: "0.3vw"}} />
                                 <p style={{ marginLeft: "5px" }}>Dat 09</p>
                             </Link>
                         </td>
@@ -71,9 +70,8 @@ export default function Ranking() {
                     <tr>
                         <td className={view.Stt}>3</td>
                         <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
+                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center", marginLeft: "0.5vw" }}>
+                            <UserOutlined style={{marginRight: "0.3vw"}} />
                                 <p style={{ marginLeft: "5px" }}>Dat 09</p>
                             </Link>
                         </td>
@@ -87,9 +85,8 @@ export default function Ranking() {
                     <tr>
                         <td className={view.Stt}>4</td>
                         <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
+                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center", marginLeft: "0.5vw" }}>
+                            <UserOutlined style={{marginRight: "0.3vw"}} />
                                 <p style={{ marginLeft: "5px" }}>Dat 09</p>
                             </Link>
                         </td>
@@ -102,9 +99,8 @@ export default function Ranking() {
                     <tr>
                         <td className={view.Stt}>5</td>
                         <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
+                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center", marginLeft: "0.5vw" }}>
+                            <UserOutlined style={{marginRight: "0.3vw"}} />
                                 <p style={{ marginLeft: "5px" }}>Dat 09</p>
                             </Link>
                         </td>
@@ -118,9 +114,8 @@ export default function Ranking() {
                     <tr>
                         <td className={view.Stt}>6</td>
                         <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
+                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center", marginLeft: "0.5vw" }}>
+                            <UserOutlined style={{marginRight: "0.3vw"}} />
                                 <p style={{ marginLeft: "5px" }}>Dat 09</p>
                             </Link>
                         </td>

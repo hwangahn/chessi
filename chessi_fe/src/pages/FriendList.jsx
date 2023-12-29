@@ -1,4 +1,5 @@
 import React from "react";
+import { Affix } from 'antd';
 import {NavLink, Link, useLocation} from "react-router-dom";
 // reactstrap components
 import {
@@ -6,7 +7,7 @@ import {
 
 } from "reactstrap";
 import view from './view.module.css';
-import VerticalmenuUser from './verticalmenuUser';
+import VerticalmenuUser from '../components/verticalmenuUser';
 
 export default function FriendList() {
     return (

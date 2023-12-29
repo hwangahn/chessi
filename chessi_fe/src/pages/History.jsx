@@ -6,7 +6,7 @@ import {
     Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
 
 } from "reactstrap";
-import VerticalmenuUser from './verticalmenuUser';
+import VerticalmenuUser from '../components/verticalmenuUser';
 
 export default function History() {
     return (

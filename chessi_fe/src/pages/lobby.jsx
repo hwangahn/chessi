@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CrownOutlined } from '@ant-design/icons';
 import { AuthContext } from '../contexts/auth';
-import VerticalmenuUser from './verticalmenuUser';
+import VerticalmenuUser from '../components/verticalmenuUser';
 import { message } from 'antd';
 import Chat from '../components/chat';
 import socket from '../utils/socket';
@@ -111,9 +112,9 @@ function Info() {
             <div style={{float: "left", width: "20%", height: "80%", textAlign: "center", paddingTop: "10px"}}>
                 <h2 style={{color: "white"}}>{timeLeft}</h2>
                 <div style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}>
-                    <div className='game-mode' style={{width: "100%", height: "100px", marginTop: "10px"}} onClick={handleSwitchSide}><a>Switch side</a></div>
-                    <div className='game-mode' style={{width: "100%", height: "100px", marginTop: "10px"}} onClick={handleStart}><a>Start</a></div>
-                    <div className='game-mode' style={{width: "100%", height: "100px", marginTop: "10px", backgroundColor: "#bf2c3b"}} onClick={handleExit}><a>Exit lobby</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "80px", paddingTop: "27px", marginTop: "30px"}} onClick={handleSwitchSide}><a>Switch side</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "80px", paddingTop: "27px", marginTop: "30px"}} onClick={handleStart}><a>Start</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "80px", paddingTop: "27px", marginTop: "30px", backgroundColor: "#bf2c3b"}} onClick={handleExit}><a>Exit lobby</a></div>
                 </div>
             </div>
             <div style={{float: "right", width: "40%", height: "80%"}}>
@@ -130,10 +131,10 @@ function White({ username, rating, isCreator }) {
     return (
         <div style={{width: "100%", height: "500px", backgroundColor: "#1E1D2F", textAlign: "center", paddingTop: "10px"}}>
             <h1>White</h1>
-            <div style={{ display: "block", width: "20%" }}>
+            <div style={{ color:"white",fontSize: "1.6vw" }}>
                 {isCreator ?
-                <img src='lobby-creator-crown.png' /> :
-                <></>}
+                <CrownOutlined /> :
+                <br></br>}
             </div>
             <div style={{ display: "block", textAlign: "center" }}>
                 {username ? <h2>{username}</h2> : <></>}
@@ -147,10 +148,10 @@ function Black({ username, rating, isCreator }) {
     return (
         <div style={{width: "100%", height: "500px", backgroundColor: "#1E1D2F", textAlign: "center", paddingTop: "10px"}}>
             <h1>Black</h1>
-            <div style={{ display: "block", width: "20%" }}>
+            <div style={{ color:"white",fontSize: "1.6vw" }}>
                 {isCreator ?
-                <img src='lobby-creator-crown.png' /> :
-                <></>}
+                <CrownOutlined /> :
+                <br></br>}
             </div>
             <div style={{ display: "block", textAlign: "center" }}>
                 {username ? <h2>{username}</h2> : <></>}
@@ -192,10 +193,10 @@ export default function Lobby() {
             <div id="leftbar" style={{ float: "left" }}>
                 <VerticalmenuUser />
             </div>
-            <div style={{ float: "left", width: "20%", paddingLeft: "15px" }}>
+            <div style={{ float: "left", width: "21%", marginLeft:"15.5vw", marginTop: "1.5%" }}>
                 <Chat roomid={params.roomid} />
             </div>
-            <div style={{ float: "right", width: "65%", height: "100%", paddingRight: "5%" }}>
+            <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%" }}>
                 <Info />
             </div>
         </div>

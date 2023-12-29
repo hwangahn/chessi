@@ -4,7 +4,7 @@ import { Chessboard } from 'react-chessboard';
 import socket from '../utils/socket';
 import { AuthContext } from "../contexts/auth"
 import { useContext, useEffect, useState } from "react"
-import VerticalmenuUser from './verticalmenuUser';
+import VerticalmenuUser from '../components/verticalmenuUser';
 import UseGetGame from '../utils/useGetGame';
 import UseGetLobby from '../utils/useGetLobby';
 
@@ -127,7 +127,7 @@ export default function Home() {
     const gallery = {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
       position: "absolute",
-      height: "92.2vh",
+      height: "92vh",
       width: "100vw",
       zIndex: "1"
     }
@@ -220,7 +220,7 @@ export default function Home() {
             Let's play a game.
           </div>
 
-          <div className="game-screen" style={{display: "flex",padding: "0px",margin: "0px"}}>
+          <div className="game-screen" style={{display: "flex",padding: "0px",margin: "0px", marginLeft:"14.1vw"}}>
             <div className="board" style={{width: "46%"}}>
               <Chessboard id={0} arePiecesDraggable={false} />              
             </div>
@@ -229,17 +229,17 @@ export default function Home() {
               <div className="game-play" style={{display: "flex", justifyContent: "space-between"}}>
                 <div className="gp1">
                   {!isFindingGame ?
-                    <div id="gm1" className="game-mode" onClick={handleFindGame}>Chơi với người</div>
+                    <div id="gm1" className="game-btn" onClick={handleFindGame}>Chơi với người</div>
                     : 
-                    <div id="gm1" className="game-mode" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
+                    <div id="gm1" className="game-btn" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
                   }
-                  <div id="gm2" className="game-mode" onClick={handleClickOpen}>Tìm Phòng</div>
+                  <div id="gm2" className="game-btn" onClick={handleClickOpen}>Tìm Phòng</div>
                 </div>
                 <div className="gp2">
-                  <div id="gm3" className="game-mode">
+                  <div id="gm3" className="game-btn">
                     <Link to ="/new">Chơi với máy</Link>
                   </div>
-                  <div id="gm4" className="game-mode" onClick={handleCreateLobby}>
+                  <div id="gm4" className="game-btn" onClick={handleCreateLobby}>
                     Tạo phòng
                   </div>
                 </div>
