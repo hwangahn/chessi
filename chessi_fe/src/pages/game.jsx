@@ -42,7 +42,17 @@ function GameInfo() {
         setTimeLeft(data.gameInfo.timeLeft);
         setTurn(data.gameInfo.turn);
         setOnMove(data.gameInfo.history.length - 1);
-        setSide(data.gameInfo.white.username === profile.username ? "white" : "black");
+        if (profile) { 
+          if (data.gameInfo.white.username === profile.username) {
+            setSide("white");
+          } else if (data.gameInfo.black.username === profile.username) {
+            setSide("black");
+          } else {
+            setSide("spectator");
+          }
+        } else {
+          setSide("spectator");
+        }
       } else {
         message.error(data.msg);
         navigate('/'); // return to main page

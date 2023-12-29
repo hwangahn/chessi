@@ -19,7 +19,7 @@ export default function Ranking() {
         <div className={view.content}>
             
             <div className={view.title}>
-                <h1 style={{textAlign:"center"}}>Bảng xếp hạng</h1>
+                <h1 >Bảng xếp hạng</h1>
             </div>
             <div className={view.ranking_table} >
 

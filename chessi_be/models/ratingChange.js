@@ -13,7 +13,7 @@ let ratingChange = connection.define('ratingChange', {
         allowNull: false
     }
 }, {
-    tableName: "ratingChange",
+    tableName: "ratingchange",
     timestamps: true,
     createdAt: "timestamp",
     updatedAt: false

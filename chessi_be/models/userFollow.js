@@ -15,7 +15,7 @@ let userFollow = connection.define('userFollow', {
         allowNull: false,
     }
 }, {
-    tableName: "userFollow",
+    tableName: "userfollow",
     timestamps: false,
     createdAt: false,
     updatedAt: false
