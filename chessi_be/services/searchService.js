@@ -1,11 +1,10 @@
 const { user } = require('../models/user');
 const { post } = require('../models/post');
-const { literal } = require('sequelize')
+const { Op } = require('sequelize')
 
 let searchUserService = async (keyword) => {
     let data = await user.findAll({
-        // take the string inside the function and paste it directly in the where statement in the query
-        where: literal(`LOWER(username) = '${keyword}'`), 
+        where: { username: { [Op.like]: `%${keyword}%` }},
         attributes: ["userid", "username", "rating"]
     })
 
@@ -13,9 +12,18 @@ let searchUserService = async (keyword) => {
 }
 
 let searchPostService = async (keyword) => {
-    let data = await user.findAll({
-        
+    let data = await post.findAll({
+        where: { post: { [Op.like]: `%${keyword}%` }},
+        attributes: ["postid", "authorid", "post", "timestamp"],
+        include: {
+            model: user,
+            attributes: ["username"]
+        }
     })
+
+
+
+    return data;
 }
 
 module.exports = { searchUserService, searchPostService }
