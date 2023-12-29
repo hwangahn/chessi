@@ -44,9 +44,8 @@ body{
     flex-direction: row;
     margin: 5px 20px;
 }
-.right_item .icon{
+.right_item div{
     margin: 10px 10px;
-    width: 18px; height: 19px
 }
 
 
@@ -54,7 +53,7 @@ body{
     background: #B0ABAB;
     width: 600px;
     height: 35px;
-    margin: 11px 10vw 0vw 20px;
+    margin: 13px 10vw 0vw 0vw;
     position: relative;
     border-radius: 10px;
 }
@@ -75,7 +74,7 @@ ul.single-vertical-menu  {
 }
 ul.single-vertical-menu  li {
 	left:0px;
-	height: 5.8vw;
+	height: 6.5vw;
 	padding:0px ;  
     margin:0px;        
 	list-style:none;
@@ -143,6 +142,29 @@ ul.single-vertical-menu  li > a:hover {
 }
 
 .game-mode:hover, .game-mode:focus, .game-mode:active{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+.logoutButton{
+    background-color: #1E1D2F;
+    color: #232237;
+    width: 70%;
+    height: 3vw;
+    border: none;
+    border-radius: 2.5vw;
+    margin-left: 15%;
+    margin-top: 6vw;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+
+.logoutButton:hover, .logoutButton:focus, .logoutButton:active{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     -webkit-transform: scale(1.03);
     transform: scale(1.03);

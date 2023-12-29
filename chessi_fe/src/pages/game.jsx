@@ -318,6 +318,9 @@ export default function Game() {
   return (
     <GameContent>
       <div style={leftbar}>
+        <div className="lb1">
+          <div style={gameInfor}></div>
+        </div>
         <div className="lb2" style={{color: "#BEC1DC"}}>
           <Chat roomid={params.roomid} />
         </div>
