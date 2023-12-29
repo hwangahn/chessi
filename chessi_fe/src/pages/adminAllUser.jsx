@@ -1,24 +1,18 @@
-import React from "react";
 import view from './view.module.css';
-import {NavLink, Link, useLocation} from "react-router-dom";
+import { Link } from "react-router-dom";
 // reactstrap components
-import {
-    Row,
-    Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
-
-} from "reactstrap";
-import styles from './view.module.css';
-import VerticalmenuUser from './verticalmenuUser';
-export default function Ranking() {
+import { Table } from "reactstrap";
+import VerticalmenuAdmin from './verticalmenuAdmin';
+export default function AdminAllUser() {
     return (
         <>
         <div id="leftbar" style={{float:"left"}}>
-            <VerticalmenuUser />
+            <VerticalmenuAdmin />
         </div>
         <div className={view.content}>
             
             <div className={view.title}>
-                <h1 >Bảng xếp hạng</h1>
+                <h1 style={{textAlign:"center"}}>Bảng xếp hạng</h1>
             </div>
             <div className={view.ranking_table} >
 
@@ -26,14 +20,13 @@ export default function Ranking() {
                 <Table className={view.tablesorter}>
                     <thead className="text-primary">
                     <tr style={{paddingTop:"0",paddingLeft:"5%", background:"#2D2C45",color:"white", height:"30px"}}>
-                        <th className="Stt2">Hạng</th>
-                        <th style={{width:"50%"}}>Họ và tên</th>
-                        <th>Thắng</th>
-                        <th>Thua</th>
-                        <th>Hòa</th>
-                        <th>Điểm</th>
-
-
+                        <th className="Stt2">STT</th>
+                        <th style={{width:"40%"}}>Username</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
 
@@ -50,7 +43,7 @@ export default function Ranking() {
                         </td>
                          <td>100</td>
                         <td>0</td>
-                        <td>120</td>
+                        <td>1</td>
                         <td>199</td>
                     </tr>
                     <tr>
@@ -64,7 +57,7 @@ export default function Ranking() {
                         </td>
                          <td>100</td>
                         <td>0</td>
-                        <td>120</td>
+                        <td>1</td>
                         <td>199</td>
                         
                     </tr>
@@ -79,7 +72,7 @@ export default function Ranking() {
                         </td>
                          <td>100</td>
                         <td>0</td>
-                        <td>120</td>
+                        <td>0</td>
                         <td>199</td>
                         
 
@@ -95,7 +88,7 @@ export default function Ranking() {
                         </td>
                          <td>100</td>
                         <td>0</td>
-                        <td>120</td>
+                        <td>0</td>
                         <td>199</td>
                         
                     </tr>
@@ -110,7 +103,7 @@ export default function Ranking() {
                         </td>
                          <td>100</td>
                         <td>0</td>
-                        <td>120</td>
+                        <td>0</td>
                         <td>199</td>
                         
 
@@ -126,7 +119,7 @@ export default function Ranking() {
                         </td>
                          <td>100</td>
                         <td>0</td>
-                        <td>120</td>
+                        <td>0</td>
                         <td>199</td>
                         
 

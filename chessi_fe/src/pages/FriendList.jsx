@@ -6,13 +6,13 @@ import {
 
 } from "reactstrap";
 import view from './view.module.css';
-import Verticalmenu from './verticalmenu';
+import VerticalmenuUser from './verticalmenuUser';
 
 export default function FriendList() {
     return (
     <>
     <div id="leftbar" style={{float:"left"}}>
-        <Verticalmenu />
+        <VerticalmenuUser />
     </div>
     <div className={view.content}>
         <div className={view.title}>

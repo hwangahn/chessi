@@ -18,7 +18,7 @@ let activeGameCache = (function() {
         return { inGame: false, gameid: null };
     }
 
-    let filterGameOver = () => { // remove games that is over off active games
+    let filterGameOver = () => { // remove games that is over 
         let gamesOver = new Array; 
         gameList = gameList.filter(Element => {
             let isOver = Element.isGameOver();

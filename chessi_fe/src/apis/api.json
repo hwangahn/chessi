@@ -24,6 +24,10 @@
       "description": "Game API"
     },
     {
+      "name": "Lobby",
+      "description": "Lobby API. Used when playing with friend to create match"
+    },
+    {
       "name": "Discussion",
       "description": "Post and comment API"
     }
@@ -56,6 +60,11 @@
                 },
                 "password": {
                   "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The email of the admin",
+                  "default": "john@example.com"
                 }
               },
               "required": ["username", "password"]
@@ -104,7 +113,7 @@
             "examples": {
               "application/json": {
                 "status": "error",
-                "msg": "Username and/or email already used"
+                "msg": "Username already used"
               }
             }
           },
@@ -270,6 +279,71 @@
       "get": {
         "tags": ["Admin"],
         "summary": "Get all users",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "Authorization",
+          "in": "header",
+          "description": "Bearer token for authorization",
+          "required": true,
+          "type": "string",
+          "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done",
+                "user": [{
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/admin/all-admin": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get all admin",
         "produces": ["application/json"],
         "parameters": [{
           "name": "Authorization",
@@ -782,6 +856,9 @@
                 "msg": "Cannot find user with given username/email"
               }
             }
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
@@ -900,15 +977,6 @@
               }
             }
           },
-          "401 3": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "msg": "Cannot verify session"
-              }
-            }
-          },
           "403": {
             "description": "Forbidden",
             "examples": {
@@ -992,15 +1060,6 @@
               }
             }
           },
-          "401 3": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "msg": "Cannot verify session"
-              }
-            }
-          },
           "403": {
             "description": "Forbidden",
             "examples": {
@@ -1074,21 +1133,30 @@
               }
             }
           },
-          "401 3": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "msg": "Cannot verify session"
-              }
-            }
-          },
           "403": {
             "description": "Forbidden",
             "examples": {
               "application/json": {
                 "status": "error",
                 "msg": "Cannot find game. Try again later"
+              }
+            }
+          },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
               }
             }
           },
@@ -1133,24 +1201,6 @@
               "application/json": {
                 "status": "error",
                 "msg": "Session expired. Please log in again"
-              }
-            }
-          },
-          "401 3": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "msg": "Cannot verify session"
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "examples": {
-              "application/json": {
-                "status": "error",
-                "msg": "Cannot find game. Try again later"
               }
             }
           },
@@ -1271,6 +1321,479 @@
               "application/json": {
                 "status": "error",
                 "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Create lobby",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "lobbyid": "290569495"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot create lobby"
+              }
+            }
+          },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/{lobbyid}": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Join lobby",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "creator": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "guest": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "white": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "black": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                }
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403 1": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot join lobby"
+              }
+            }
+          },
+          "403 2": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Lobby full"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Lobby"],
+        "summary": "Leave lobby",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/user-active-lobby": {
+      "get": {
+        "tags": ["Lobby"],
+        "summary": "Get user's current active lobby",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "inLobby": true,
+                "lobbyid": "290569495"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/{lobbyid}/switch-side": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Switch game side",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not the lobby creator"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/{lobbyid}/start": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Start game",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403 1": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not the lobby creator"
+              }
+            }
+          },
+          "403 2": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not enough player"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
               }
             }
           },

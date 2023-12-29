@@ -8,11 +8,10 @@ import {
     Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
 
 } from "reactstrap";
-
+import VerticalmenuUser from './verticalmenuUser';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import {message} from 'antd';
-import Verticalmenu from './verticalmenu';
 import {Line} from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -34,6 +33,7 @@ import {
     Tooltip,
     Legend
   );
+
 export default function History() {
 
     let [ratingChange, setRatingChange] = useState(null);
@@ -109,7 +109,7 @@ export default function History() {
         <>
         
         <div id="leftbar" style={{float:"left"}}>
-        <Verticalmenu />
+          <VerticalmenuUser />
         </div>   
         <div className={view.content}>
         <div className={view.title}>
