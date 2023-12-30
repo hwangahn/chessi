@@ -14,12 +14,14 @@ import History from './pages/History';
 import './components/TrangChu.css';
 import FriendList from './pages/FriendList';
 import Ranking from './pages/Ranking';
-import ProtectedRoute from './components/protectedRoute';
+import ProtectedRouteAdmin from './components/protectedRouteAdmin';
+import ProtectedRouteUser from './components/protectedRouteUser';
 import AdminAllUser from './pages/adminAllUser';
 import AdminActiveUser from './pages/adminActiveUser';
 import Lobby from './pages/lobby';
 import GameHistory from './pages/gameHistory';
 import Search from './pages/Search'
+import ChangePassword from './pages/changePassword';
 
 //test
 export default function App() {
@@ -66,10 +68,14 @@ export default function App() {
           <Route path='/ranking' Component={Ranking}></Route>
           <Route path='/admin' Component={AdminAllUser}></Route>
           <Route path='/admin/active-user' Component={AdminActiveUser}></Route>
-          <Route Component={ProtectedRoute}> 
+          <Route Component={ProtectedRouteAdmin}> 
+ 
+          </Route>
+          <Route Component={ProtectedRouteUser}> 
  
           </Route>
           <Route path='/forgot-password' Component={ForgotPassword}></Route>
+          <Route path='/change-password' Component={ChangePassword}></Route>
          </Routes>
         <FloatButton.BackTop visibilityHeight={100} />
       </BrowserRouter>

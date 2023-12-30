@@ -3,11 +3,11 @@ import { message } from "antd";
 import { AuthContext } from '../contexts/auth';
 import { useContext } from 'react';
 
-export default function ProtectedRoute() {
-    let { accessToken, profile } = useContext(AuthContext);
+export default function ProtectedRouteUser() {
+    let { accessToken } = useContext(AuthContext);
 
-    if (!accessToken || !profile?.isAdmin) {
-        message.error('You are not admin!');
+    if (!accessToken) {
+        message.error('You are not logged in!');
         return <Navigate to='/' />
     } else {
         return <Outlet/>;

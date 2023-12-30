@@ -100,6 +100,18 @@ let loginService = async (username, password, socketid) => {
     return { accessToken: accessToken, sessionToken: sessionToken, profile: profile };
 }
 
+let changePasswordService = async (userid, password) => {
+    let userFound = await user.findOne({ where: { userid: userid } });
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user"));
+    }
+
+    let hashedPassword = await bcrypt.hash(password, 10); // hash the password
+
+    await userFound.update({ password: hashedPassword });
+}
+
 let silentLoginService = async (userid, socketid) => {
     let userFound = await user.findOne({ 
         where: { userid: userid },
@@ -176,4 +188,4 @@ let resetPasswordService = async (username, _email) => {
     sendPassword(_email, password);
 }
 
-module.exports = { signupService, verifyEmailService, loginService, silentLoginService, logoutService, resetPasswordService }
+module.exports = { signupService, verifyEmailService, loginService, changePasswordService, silentLoginService, logoutService, resetPasswordService }

@@ -26,7 +26,7 @@ function GameInfo() {
     }
 
     let getGameInfo = async () => {
-      let rawData = await fetch(`/api/game-info/${param.roomid}`, {
+      let rawData = await fetch(`/api/game/${param.roomid}`, {
         method: 'get'
       });
 

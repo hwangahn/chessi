@@ -49,7 +49,7 @@ export default function Home() {
     if (socket.connected) {
       if (!isFindingGame) {
         try {
-          let rawData = await fetch('/api/find-game', { // request to join match making queue
+          let rawData = await fetch('/api/game/find-game', { // request to join match making queue
             method: "post",
             headers: {
               'authorization': 'Bearer ' + accessToken,
@@ -65,7 +65,7 @@ export default function Home() {
         }
       } else {
         try {
-          let rawData = await fetch('/api/find-game', { // request to leave match making queue
+          let rawData = await fetch('/api/game/find-game', { // request to leave match making queue
             method: "delete",
             headers: {
               'authorization': 'Bearer ' + accessToken,
