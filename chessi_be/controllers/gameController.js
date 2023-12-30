@@ -1,4 +1,4 @@
-const { findGameService, stopFindGameService, getGameService, getUserActiveGameService } = require('../services/gameService');
+const { findGameService, stopFindGameService, getGameService, getUserActiveGameService, getGamePlayedService } = require('../services/gameService');
 const { checkHttpError } = require('../utils/checkError');
 
 let handleFindGame = async (req, res) => {
@@ -61,4 +61,19 @@ let handleGetUserActiveGame = async (req, res) => {
     }
 }
 
-module.exports = { handleFindGame, handleStopFindGame, handleGetGame, handleGetUserActiveGame }
+let handleGetGamePlayed = async (req, res) => {
+    try {
+        let gameid = req.params.gameid;
+
+        let { reason, moves, white, black } = await getGamePlayedService(gameid);
+
+        res.status(200).json({ status: "ok", reason: reason, moves: moves, white: white, black: black });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+module.exports = { handleFindGame, handleStopFindGame, handleGetGame, handleGetUserActiveGame, handleGetGamePlayed }

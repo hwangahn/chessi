@@ -8,7 +8,7 @@ a, h1, h2, h3, h4, h5, h6 {
     color: white;
 }
 
-.swagger-ui a, h1, h2, h3, h4, h5, h6, p {
+div.swagger-ui a, div.swagger-ui h1, div.swagger-ui h2, div.swagger-ui h3, div.swagger-ui h4, div.swagger-ui h5, div.swagger-ui h6, div.swagger-ui p {
     color: black
 }
 
