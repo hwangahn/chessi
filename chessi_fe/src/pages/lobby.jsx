@@ -140,6 +140,10 @@ function White({ username, rating, isCreator }) {
                 {username ? <h2>{username}</h2> : <></>}
                 {rating ? <h3>Rating: {rating}</h3> : <></> }
             </div>
+            {isCreator ?
+                <img src="../../public/chess1.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-1.7vw", left: "2.2vw"}}/> :
+                <img src="../../public/chess1.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-5vw", left: "2.2vw"}}/>
+            }
         </div>
     )
 }
@@ -157,6 +161,10 @@ function Black({ username, rating, isCreator }) {
                 {username ? <h2>{username}</h2> : <></>}
                 {rating ? <h3>Rating: {rating}</h3> : <></> }
             </div>
+            {isCreator ?
+                <img src="../../public/chess2.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-1.7vw", left: "2.2vw"}}/> :
+                <img src="../../public/chess2.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-5vw", left: "2.2vw"}}/>
+            }
         </div>
     )
 }
