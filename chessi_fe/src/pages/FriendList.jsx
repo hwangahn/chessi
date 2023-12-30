@@ -10,6 +10,7 @@ import view from './view.module.css';
 import VerticalmenuUser from '../components/verticalmenuUser';
 
 export default function FriendList() {
+
     return (
     <>
     <div id="leftbar" style={{float:"left"}}>
@@ -17,19 +18,19 @@ export default function FriendList() {
     </div>
     <div className={view.content}>
         <div className={view.title}>
-            <h1>Bạn bè</h1>
+            <h1>Following</h1>
         </div>
         <div className={view.table1}>
 
             <Input placeholder="SEARCH" type="text" className={view.sreachbox}/>
-            <h2 style={{paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white"}}>Bạn bè 5</h2>
+            <h2 style={{paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white"}}>Following</h2>
             <ul id='friend-list'>
                 <li className={view.friend}><Link to='/'>
                         <img src='https://i.imgur.com/nkN3Mv0.jpg'/>
                         <div className={view.name}>
                             <h3>Andres Perez</h3>
                             <p>Hạng</p>
-                            <p>Hoạt động 5 giờ trước</p>
+                            <p>Hoạt động 5 giờ </p>
                         </div>
                     </Link>
                     

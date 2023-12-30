@@ -9,7 +9,7 @@ export default function verticalmenuUser(){
     let navigate = useNavigate();
 
     let { useLogout } = useContext(AuthContext);
-
+    let { profile } = useContext(AuthContext);
     let handleLogout = async () => {
         let { status, msg } = await useLogout();
     
@@ -19,33 +19,33 @@ export default function verticalmenuUser(){
             navigate('/');
         }
       }
-
+      const userId= profile.userid;
     const leftbar = {display:"inline", float:"left", width: "14.1vw", height: "45.3vw",
     borderRight: "2px solid #2C2B4D", marginTop: "-8px"}
 
     return(
-        <Affix offsetTop={60}>
+        <Affix offsetTop={65}>
             <div id="leftbar" style={leftbar}>
                 <ul className="single-vertical-menu">
                     <li>
                         <img src="../../public/choi.png" alt=""/>
-                        <Link to ="/">Chơi</Link>
+                        <Link to ="/">Home</Link>
                     </li> 
                     <li>
                         <img src="../../public/friend.png" alt=""/>
-                        <Link to ="/friendlist">Bạn bè</Link>
+                        <Link to ="/friendlist">Follow</Link>
                     </li>
                     <li>
                         <img src="../../public/history.png" alt=""/>
-                        <Link to ="/history">Lịch sử đấu</Link>
+                        <Link to ={`/history/${userId}`}>User</Link>
                     </li>
                     <li>
                         <img src="../../public/diendan.png" alt=""/>
-                        <Link to ="/new">Diễn đàn</Link>
+                        <Link to ="/new">Post</Link>
                     </li>
                     <li>
                         <img src="../../public/ranking.png" alt=""/>
-                        <Link to ="/ranking">Bảng xếp hạng</Link>
+                        <Link to ="/ranking">Ranking</Link>
                     </li>	
                 </ul>	
                 <div className="logoutButton">

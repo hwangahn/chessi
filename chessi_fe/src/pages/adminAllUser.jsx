@@ -24,7 +24,6 @@ export default function AdminAllUser() {
                         <th className="Stt2">STT</th>
                         <th style={{width:"40%"}}>Username</th>
                         <th>Email</th>
-                        <th>Password</th>
                         <th>Edit</th>
                         <th>Add</th>
                         <th>Delete</th>
@@ -42,7 +41,6 @@ export default function AdminAllUser() {
                             </Link>
                         </td>
                          <td>100</td>
-                        <td>0</td>
                         <td>1</td>
                         <td>199</td>
                         <td><img src="../../public/x-regular-24.png" style = {{marginTop: "0.3vw",cursor: "pointer"}}/></td>
@@ -56,7 +54,6 @@ export default function AdminAllUser() {
                             </Link>
                         </td>
                          <td>100</td>
-                        <td>0</td>
                         <td>1</td>
                         <td>199</td>
                         <td><img src="../../public/x-regular-24.png" style = {{marginTop: "0.3vw",cursor: "pointer"}}/></td>
@@ -70,7 +67,6 @@ export default function AdminAllUser() {
                             </Link>
                         </td>
                          <td>100</td>
-                        <td>0</td>
                         <td>0</td>
                         <td>199</td>
                         <td><img src="../../public/x-regular-24.png" style = {{marginTop: "0.3vw",cursor: "pointer"}}/></td>
@@ -86,7 +82,6 @@ export default function AdminAllUser() {
                         </td>
                          <td>100</td>
                         <td>0</td>
-                        <td>0</td>
                         <td>199</td>
                         <td><img src="../../public/x-regular-24.png" style = {{marginTop: "0.3vw",cursor: "pointer"}}/></td>
                     </tr>
@@ -99,7 +94,6 @@ export default function AdminAllUser() {
                             </Link>
                         </td>
                          <td>100</td>
-                        <td>0</td>
                         <td>0</td>
                         <td>199</td>
                         <td><img src="../../public/x-regular-24.png" style = {{marginTop: "0.3vw",cursor: "pointer"}}/></td>
@@ -114,7 +108,6 @@ export default function AdminAllUser() {
                             </Link>
                         </td>
                          <td>100</td>
-                        <td>0</td>
                         <td>0</td>
                         <td>199</td>
                         <td><img src="../../public/x-regular-24.png" style = {{marginTop: "0.3vw",cursor: "pointer"}}/></td>

@@ -116,7 +116,7 @@ export default function History() {
         </div>   
         <div className={view.content}>
         <div className={view.title}>
-        <h1 style={{textShadow: "0 0 1.3 #396FAE"}}>Lịch sử đấu </h1>
+        <h1 style={{textShadow: "0 0 1.3 #396FAE"}}>History</h1>
         </div>
         <div className={view.Profile}>
             <div className={view.Profile_text}>
@@ -125,9 +125,9 @@ export default function History() {
                 <h4>Trạng thái hoạt động</h4>
             </div>
             <div className={view.Profile_button}>
-                <Button className={view.btn_fill} type="submit">Theo dõi
+                <Button className={view.btn_fill} type="submit">Follow  
                 </Button>
-                <Button className={view.btn_fill} type="submit">Xem trận đấu
+                <Button className={view.btn_fill} type="submit">Spectate
                 </Button>
             </div>
             <div className={view.chartProfile} style={{height:"auto"}}>
@@ -142,7 +142,7 @@ export default function History() {
 
         <div className={view.table1}>
         <Input placeholder="SEARCH" type="text" className={view.sreachbox} />
-        <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>Lịch sử đấu</h2>
+        <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>History</h2>
         <ul id="history-list">
           {gameHistory && gameHistory.map((game, index) => (
             <li className={view.history} key={index}>

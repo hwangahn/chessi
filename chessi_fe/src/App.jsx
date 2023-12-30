@@ -19,6 +19,7 @@ import AdminAllUser from './pages/adminAllUser';
 import AdminActiveUser from './pages/adminActiveUser';
 import Lobby from './pages/lobby';
 import GameHistory from './pages/gameHistory';
+import Search from './pages/Search'
 
 //test
 export default function App() {
@@ -53,6 +54,7 @@ export default function App() {
         <Header />
         <Routes>
           <Route exact path='/' Component={Home}></Route>
+          <Route path='/search' Component={Search}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/signup' Component={Signup}></Route>
           <Route path='/game/:roomid' Component={Game}></Route>
