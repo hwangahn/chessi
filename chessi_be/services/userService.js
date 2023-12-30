@@ -20,9 +20,10 @@ let getUserDataService = async (userid) => {
     let gameHistoryList = await game.findAll({ // get all games user played
         include: {
             model: gameUser,
-            where: { userid: userid }
+            where: { userid: userid },
         },
-        order: [['gameid', 'DESC']]
+        order: [['gameid', 'DESC']],
+        limit: 20
     });
 
     let conditions = gameHistoryList.map(Element => { // building condition array for Sequelize query

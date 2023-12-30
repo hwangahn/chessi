@@ -49,23 +49,12 @@ body{
     margin: 10px 10px;
 }
 
-
-.sreachbox{
-    background: #B0ABAB;
-    width: 600px;
-    height: 35px;
-    margin: 13px 10vw 0vw 0vw;
+.searchbox{
+    width: 45vw;
+    height: 2.35vw;
+    margin: 1vw 10vw 0vw 0vw;
     position: relative;
     border-radius: 10px;
-}
-.sreachbox .sreachbox_input{
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    padding: 10px 60px 10px 10px;
-    font-size: 15px;
-    border: none;
-    outline: none;
 }
 
 ul.single-vertical-menu  {
