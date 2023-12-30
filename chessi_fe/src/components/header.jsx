@@ -46,8 +46,8 @@ export default function header() {
                     </div> :
                     <>
                     <div>
-                        <Link to={"/login"}><Button type='primary' style={{marginRight: "10px"}}>Login</Button></Link>
-                        <Link to={"/signup"}><Button>Signup</Button></Link>
+                        <Link to={"/signup"}><Button style={{marginRight: "10px"}}>Signup</Button></Link>
+                        <Link to={"/login"}><Button type='primary'>Login</Button></Link>
                     </div>
                     </>
                 }

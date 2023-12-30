@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Chessboard } from 'react-chessboard';
 import { Spin, Button, message } from 'antd'
 import { UserOutlined } from '@ant-design/icons';
-import TextArea from "antd/es/input/TextArea";
 import socket from "../utils/socket";
 import { AuthContext } from "../contexts/auth";
 import { GameContent, GameContentContext } from "../contexts/gameContent";
@@ -93,7 +92,8 @@ function GameInfo() {
   }
 
   const playerAva = {
-      margin: "0.3vw 6.5vw 0.5vw 0vw",
+      margin: "0.3vw 0vw 0.5vw 0vw",
+      width: "20vw",
       color: "#B0ABAB",
       fontSize: "1.6vw",
       fontWeight: "bold"

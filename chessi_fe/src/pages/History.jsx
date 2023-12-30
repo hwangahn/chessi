@@ -1,13 +1,7 @@
-// import React from "react";
 import view from './view.module.css';
 import { Chessboard } from 'react-chessboard';
-
-import { NavLink, Link, useLocation } from "react-router-dom";
-import {
-  Row,
-  Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
-
-} from "reactstrap";
+import { Link } from "react-router-dom";
+import { Input,  Button } from "reactstrap";
 
 import VerticalmenuUser from '../components/verticalmenuUser';
 
@@ -110,7 +104,6 @@ export default function History() {
 
   return (
     <>
-
       <div id="leftbar" style={{ float: "left" }}>
         <VerticalmenuUser />
       </div>

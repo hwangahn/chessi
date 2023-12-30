@@ -10,8 +10,7 @@ export default function AdminActiveUser() {
         <div id="leftbar" style={{float:"left"}}>
             <VerticalmenuAdmin />
         </div>
-        <div className={view.content}>
-            
+        <div className={view.content}>    
             <div className={view.title}>
                 <h1 style={{textAlign:"center"}}>Bảng xếp hạng</h1>
             </div>
@@ -124,10 +123,7 @@ export default function AdminActiveUser() {
 
                     </tbody>
                 </Table>
-
             </div>
-
-
         </div>
         </>
     );
