@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { Chessboard } from 'react-chessboard';
-import { Spin, Button, message } from 'antd'
+import { Spin, Button } from 'antd'
 import TextArea from "antd/es/input/TextArea";
 import socket from "../utils/socket";
 import { AuthContext } from "../contexts/auth";

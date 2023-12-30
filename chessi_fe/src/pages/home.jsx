@@ -127,7 +127,7 @@ export default function Home() {
     const gallery = {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
       position: "absolute",
-      height: "92vh",
+      height: "91vh",
       width: "100vw",
       zIndex: "1"
     }
@@ -206,8 +206,8 @@ export default function Home() {
   const introduce = {marginLeft: "212px", padding: "5px 0px", color:"#B0ABAB", textAlign: "center",
   borderBottom: "2px solid #2C2B4D", fontSize: "1.6vw", fontWeight: "bold"}
 
-  const title = {position: "relative", color: "#00ace3", fontWeight: "bold", fontSize: "3vw",
-  top:"5vw", left: "18vw", width: "19vw"}
+  const title = {position: "relative", color: "#00ace3", fontWeight: "bold", fontSize: "3.4vw",
+  top:"5vw", left: "18.2vw", width: "19vw"}
 
   return (
     <div>

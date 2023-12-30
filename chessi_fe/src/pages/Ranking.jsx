@@ -1,14 +1,8 @@
-import React from "react";
 import view from './view.module.css';
 import { UserOutlined } from '@ant-design/icons';
-import {NavLink, Link, useLocation} from "react-router-dom";
-// reactstrap components
-import {
-    Row,
-    Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
-
-} from "reactstrap";
-import styles from './view.module.css';
+import { Link } from "react-router-dom";
+import { Button } from "reactstrap";
+import './view.module.css';
 import VerticalmenuUser from '../components/verticalmenuUser';
 export default function Ranking() {
     const data = [{
@@ -64,30 +58,29 @@ export default function Ranking() {
         <div className={view.content}>
             
             <div className={view.title}>
-                <h1 >Ranking</h1>
+              <h1 >Ranking</h1>
             </div>
             <div className={view.table1}>
-            <div className={view.title}>
-            <h1 >Top 10</h1>
-            </div>
+              <div className={view.title}>
+                <h1 >Top 10</h1>
+              </div>
 
-        <ul id='friend-list'>
-        {data.slice(0, 10).map((item, index) => (
-              <li className={view.friend} key={item.userid}>
-                <Link to='/'>
-                  <h1 style={{width:"50px",paddingRight:"50%"}}key={index + 1}>#{index + 1}.</h1>
-                  <div className={view.name}>
-                    <h2>{item.username}</h2>
-                    <p>Rating: {item.rating}</p>
-                    <p>Id: {item.userid}</p>
-                  </div>
-                </Link>
-                <Button className={view.btn_fill} type="submit">Theo dõi</Button>
-              </li>
-            ))}
- 
-</ul>
-</div>
+              <ul id='friend-list'>
+                {data.slice(0, 10).map((item, index) => (
+                  <li className={view.friend} key={item.userid}>
+                    <Link to='/'>
+                      <h1 style={{width: "50px", paddingRight: "40%", marginLeft: "8%"}}key={index + 1}>#{index + 1}.</h1>
+                      <div className={view.name}>
+                        <h2>{item.username}</h2>
+                        <p>Rating: {item.rating}</p>
+                        <p>Id: {item.userid}</p>
+                      </div>
+                    </Link>
+                    <Button className={view.btn_fill} type="submit">Theo dõi</Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
         </div>
         </>

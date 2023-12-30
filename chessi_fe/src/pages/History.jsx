@@ -1,13 +1,8 @@
-// import React from "react";
 import view from './view.module.css';
 import { Chessboard } from 'react-chessboard';
 
-import {NavLink, Link, useLocation} from "react-router-dom";
-import {
-    Row,
-    Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
-
-} from "reactstrap";
+import { Link } from "react-router-dom";
+import { Input,  Button } from "reactstrap";
 
 import VerticalmenuUser from '../components/verticalmenuUser';
 
@@ -141,8 +136,8 @@ export default function History() {
         </div>
 
         <div className={view.table1}>
-        <Input placeholder="SEARCH" type="text" className={view.sreachbox} />
-        <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>History</h2>
+        <h2 style={{ padding: "1% 0% 1% 3%", background: "#2D2C45", color: "white" }}>History</h2>
+        <Input placeholder="Search..." type="text" className={view.sreachbox} />
         <ul id="history-list">
           {gameHistory && gameHistory.map((game, index) => (
             <li className={view.history} key={index}>
