@@ -37,7 +37,7 @@ export default function History() {
   let [gameHistory, setGameHistory] = useState(null);
   let [username, setUsername] = useState(null);
   let [rating, setRating] = useState(null);
-  let [posts, setPosts] = useState(null);
+  // let [posts, setPosts] = useState(null);
   let [historyType, setHistoryType] = useState('game');
   let params = useParams();
   let navigate = useNavigate();
@@ -56,7 +56,7 @@ export default function History() {
         setUsername(data.username);
         setGameHistory(data.gameHistory);
         setRatingChange(data.ratingChange);
-        setPosts(data.posts);
+        // setPosts(data.posts);
         console.log(ratingChange["rating"]);
       }
     })()
@@ -101,7 +101,51 @@ export default function History() {
     }
   };
 
-
+  const posts = [{
+    "timestamp": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
+    "username": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
+    "post": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomething"
+  },{
+    "timestamp": 2,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 3,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 4,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 5,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 6,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 7,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 8,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 9,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 10,
+    "username": "something",
+    "post": 1500
+  },]
   return (
     <>
       <div id="leftbar" style={{ float: "left" }}>
@@ -180,17 +224,19 @@ export default function History() {
               <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>Post</h2>
               <ul id="post-history-list">
                 {posts && posts.map((post, index) => (
-                  <div className={view.table1} key={index}>
+                  <li className={view.history} key={index}>
+                    <div className={view.post} style={{marginBottom:"10px",textWrap:"wrap",overflowWrap: "break-word", wordBreak: "break-word"}}>
                     <Link to="/">
-                      <div style={{ width: "100%", paddingTop: "10px", paddingBottom: "10px" }}>
-                        <h1>{post.post}</h1>
+                      <div >
+                        <h1 style={{textWrap:"wrap"}}>{post.post}</h1>
                         <br />
                         <h4>Author: {post.username}</h4>
                         <br />
-                        <p>{post.timestamp}</p>
+                        <p style={{textWrap:"wrap"}}>{post.timestamp}ádasdasdas</p>
                       </div>
                     </Link>
-                  </div>
+                    </div>
+                  </li>
                 ))}
               </ul>
             </>

@@ -25,6 +25,7 @@
 }
 
 .table1 {
+    text-wrap:wrap;
     margin-top: 20px;
     border-radius: 8px;
     margin-left: 14.7%;
@@ -49,6 +50,19 @@
         border: 3px solid #ff0000;
     }
 }
+
+
+
+.post {
+    text-wrap:wrap;
+    margin-top: 20px;
+    border-radius: 8px;
+    /* margin-right: 3%; */
+    display: inline-block;
+    /*border: 1px solid red;*/
+    width: 100%;
+    background: #1E1D2F;
+    }
 
 .table1 td {
     padding-top: 15px;
@@ -269,7 +283,7 @@ td.Stt {
 
 .history   {
     width: 100%;
-    height: 224px;
+    /* height: 224px; */
     /*background: #EEE;*/
     border-bottom: 1px solid #1e1d2f;
     cursor: pointer;
@@ -292,9 +306,9 @@ td.Stt {
 }
 
 .post   {
-    width: 100%;
-    height: 150px;
-    /*background: #EEE;*/
+    width: 94%;
+    margin-left: 3%;
+    background: linear-gradient(92.88deg, #5270dc 9.16%, rgba(178, 109, 190, 0.8) 43.89%, rgba(132, 81, 207, 0.8) 64.72%);
     border-bottom: 1px solid #1e1d2f;
     padding-left: 10px; 
     cursor: pointer;
