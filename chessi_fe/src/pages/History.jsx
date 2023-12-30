@@ -224,7 +224,7 @@ export default function History() {
               <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>Post</h2>
               <ul id="post-history-list">
                 {posts && posts.map((post, index) => (
-                  <li className={view.history} key={index}>
+                  <li className={view.history_post} key={index}>
                     <div className={view.post} style={{marginBottom:"10px",textWrap:"wrap",overflowWrap: "break-word", wordBreak: "break-word"}}>
                     <Link to="/">
                       <div >
