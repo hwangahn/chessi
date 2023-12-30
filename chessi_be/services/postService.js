@@ -35,7 +35,7 @@ let postCommentService = async (userid, postid, _comment) => {
     });
 }
 
-let getPost = async (postid) => {
+let getPostService = async (postid) => {
     let postFound = await post.findOne({ 
         where: { postid: postid },
         include: [
@@ -68,4 +68,20 @@ let getPost = async (postid) => {
 
     return { authorName: authorName, authorid: authorid, post: _post, comments: comments } 
 }
-module.exports = { postService, postCommentService, getPost }
+
+let getAllPostService = async () => {
+    let allPosts = await post.findAll({ 
+        include: {
+            model: user
+        },
+        limit: 10 
+    });
+
+    let normalizedAllPost = allPosts.map(Element => {
+        return { postid: Element.postid, author: Element.user.username, post: Element.post, timestamp: Element.timestamp }
+    });
+
+    return normalizedAllPost;
+}
+
+module.exports = { postService, postCommentService, getPostService,getAllPostService }

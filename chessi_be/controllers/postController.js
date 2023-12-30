@@ -1,4 +1,4 @@
-const { postService, postCommentService, getPost } = require('../services/postService');
+const { postService, postCommentService, getPostService, getAllPostService } = require('../services/postService');
 const { checkHttpError } = require('../utils/checkError');
 
 let handlePost = async (req, res) => {
@@ -35,7 +35,7 @@ let handleGetPost = async (req, res) => {
     try {
         let postid = req.params.postid;
         
-        let { authorName, authorid, post, comments } = await getPost(postid);
+        let { authorName, authorid, post, comments } = await getPostService(postid);
 
         res.status(200).json({ status: "ok", authorName: authorName, authorid: authorid, post: post, comments: comments });
     } catch(err) {
@@ -46,4 +46,17 @@ let handleGetPost = async (req, res) => {
     }
 }
 
-module.exports = { handlePost, handlePostComment, handleGetPost }
+let handleGetAllPost = async (req, res) => {
+    try {
+        let allPost = await getAllPostService();
+
+        res.status(200).json({ status: "ok", posts: allPost });
+    } catch(err) {
+        console.log(err)
+        if(checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({status: "error", msg: err.getMessage()})
+        }
+    }
+}
+
+module.exports = { handlePost, handlePostComment, handleGetPost, handleGetAllPost }

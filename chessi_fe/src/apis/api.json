@@ -2046,6 +2046,36 @@
       }
     },
     "/post": {
+      "get": {
+        "tags": ["Post"],
+        "summary": "Get 10 most recent posts",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "posts": [
+                  {
+                    "postid": 1,
+                    "author": "something",
+                    "post": "string",
+                    "timestamp": "2023-12-29T16:18:55.000Z"
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
       "post": {
         "tags": ["Post"],
         "summary": "Create post",
