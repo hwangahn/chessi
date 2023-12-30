@@ -4,7 +4,7 @@ import { Chessboard } from 'react-chessboard';
 import socket from '../utils/socket';
 import { AuthContext } from "../contexts/auth"
 import { useContext, useEffect, useState } from "react"
-import VerticalmenuUser from './verticalmenuUser';
+import VerticalmenuUser from '../components/verticalmenuUser';
 import UseGetGame from '../utils/useGetGame';
 import UseGetLobby from '../utils/useGetLobby';
 
@@ -127,7 +127,7 @@ export default function Home() {
     const gallery = {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
       position: "absolute",
-      height: "92.2vh",
+      height: "92vh",
       width: "100vw",
       zIndex: "1"
     }
@@ -207,7 +207,7 @@ export default function Home() {
   borderBottom: "2px solid #2C2B4D", fontSize: "1.6vw", fontWeight: "bold"}
 
   const title = {position: "relative", color: "#00ace3", fontWeight: "bold", fontSize: "3vw",
-  top:"5vw", left: "15vw", width: "19vw"}
+  top:"5vw", left: "18vw", width: "19vw"}
 
   return (
     <div>
@@ -220,27 +220,27 @@ export default function Home() {
             Let's play a game.
           </div>
 
-          <div className="game-screen" style={{display: "flex",padding: "0px",margin: "0px"}}>
+          <div className="game-screen" style={{display: "flex",padding: "0px",margin: "0px", marginLeft:"14.1vw"}}>
             <div className="board" style={{width: "46%"}}>
               <Chessboard id={0} arePiecesDraggable={false} />              
             </div>
             <div className="play">
-              <div className="title" style={title}>So tài cờ vua</div>
+              <div className="title" style={title}>Chessi</div>
               <div className="game-play" style={{display: "flex", justifyContent: "space-between"}}>
                 <div className="gp1">
                   {!isFindingGame ?
-                    <div id="gm1" className="game-mode" onClick={handleFindGame}>Chơi với người</div>
+                    <div id="gm1" className="game-btn" onClick={handleFindGame}>Quick play</div>
                     : 
-                    <div id="gm1" className="game-mode" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
+                    <div id="gm1" className="game-btn" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
                   }
-                  <div id="gm2" className="game-mode" onClick={handleClickOpen}>Tìm Phòng</div>
+                  <div id="gm2" className="game-btn" onClick={handleClickOpen}>Join lobby</div>
                 </div>
                 <div className="gp2">
-                  <div id="gm3" className="game-mode">
-                    <Link to ="/new">Chơi với máy</Link>
+                  <div id="gm3" className="game-btn">
+                    <Link to ="/new">Play with computer</Link>
                   </div>
-                  <div id="gm4" className="game-mode" onClick={handleCreateLobby}>
-                    Tạo phòng
+                  <div id="gm4" className="game-btn" onClick={handleCreateLobby}>
+                    Create lobby
                   </div>
                 </div>
               </div>

@@ -7,11 +7,11 @@ import Home from './pages/home';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Game from './pages/game';
-import Header from './pages/header';
+import Header from './components/header';
 import APIdocs from './pages/api-docs';
 import ForgotPassword from './pages/forgotPassword';
 import History from './pages/History';
-import './pages/TrangChu.css';
+import './components/TrangChu.css';
 import FriendList from './pages/FriendList';
 import Ranking from './pages/Ranking';
 import ProtectedRouteAdmin from './components/protectedRouteAdmin';
@@ -20,6 +20,7 @@ import AdminAllUser from './pages/adminAllUser';
 import AdminActiveUser from './pages/adminActiveUser';
 import Lobby from './pages/lobby';
 import GameHistory from './pages/gameHistory';
+import Search from './pages/Search'
 import ChangePassword from './pages/changePassword';
 
 //test
@@ -55,13 +56,14 @@ export default function App() {
         <Header />
         <Routes>
           <Route exact path='/' Component={Home}></Route>
+          <Route path='/search' Component={Search}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/signup' Component={Signup}></Route>
           <Route path='/game/:roomid' Component={Game}></Route>
           <Route path='/gamehistory' Component={GameHistory}></Route>
           <Route path='/lobby/:lobbyid' Component={Lobby}></Route>
           <Route path='/docs' Component={APIdocs}></Route>
-          <Route path='/history' Component={History}></Route>
+          <Route path='/history/:userid' Component={History}></Route>
           <Route path='/friendlist' Component={FriendList}></Route>
           <Route path='/ranking' Component={Ranking}></Route>
           <Route path='/admin' Component={AdminAllUser}></Route>
