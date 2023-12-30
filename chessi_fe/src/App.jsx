@@ -59,11 +59,11 @@ export default function App() {
           <Route path='/search' Component={Search}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/signup' Component={Signup}></Route>
+          <Route path='/game/played/:gameid' Component={GameHistory}></Route>
           <Route path='/game/:roomid' Component={Game}></Route>
-          <Route path='/gamehistory' Component={GameHistory}></Route>
           <Route path='/lobby/:lobbyid' Component={Lobby}></Route>
           <Route path='/docs' Component={APIdocs}></Route>
-          <Route path='/history/:userid' Component={History}></Route>
+          <Route path='/user/:userid' Component={History}></Route>
           <Route path='/friendlist' Component={FriendList}></Route>
           <Route path='/ranking' Component={Ranking}></Route>
           <Route path='/admin' Component={AdminAllUser}></Route>
