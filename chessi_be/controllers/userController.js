@@ -5,9 +5,9 @@ let handleGetUserData = async (req, res) => {
     try {
         let userid = req.params.userid;
 
-        let { username, rating, ratingChange, gameHistory } = await getUserDataService(userid);
+        let { username, rating, ratingChange, gameHistory, posts } = await getUserDataService(userid);
 
-        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory });
+        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory, posts: posts });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
@@ -18,7 +18,7 @@ let handleGetUserData = async (req, res) => {
 
 let handleUserFollow = async (req, res) => {
     try {
-        let { followerid, userid } = { followerid: req.token.userid, userid: req.params.userid } // userid indicates user to follow\
+        let { followerid, userid } = { followerid: req.token.userid, userid: req.params.userid } // userid indicates user to follow
 
         await userFollowService(followerid, userid);
 

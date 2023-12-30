@@ -131,11 +131,23 @@ function GameInfo() {
       <div style = {playerComponent}>
               <div style = {playerAva}>
                   <UserOutlined style = {{width: "2vw", height: "3vw"}}/>                  
-                  {playerInfo?.white?.username !== profile?.username ?
-                  `${playerInfo?.white?.username} (${playerInfo?.white?.rating})` :
-                  `${playerInfo?.black?.username} (${playerInfo?.black?.rating})`}
+                  { 
+                    side === "spectator" ? // if is spectator
+                    `${playerInfo?.black?.username} (${playerInfo?.black?.rating})` // render black further away
+                    : // else
+                    (playerInfo?.white?.username !== profile?.username ? // if player's side isn't white, render white here, else render black
+                    `${playerInfo?.white?.username} (${playerInfo?.white?.rating})` :
+                    `${playerInfo?.black?.username} (${playerInfo?.black?.rating})`) 
+                  }
               </div>
-              <div style = {playerTimer}>{`${turn !== side?.charAt(0) ? `${timeLeft}` : ""}`}</div>
+              <div style = {playerTimer}>
+                { 
+                  side === "spectator" ? // if is spectator
+                  `${turn === "b" ? `${timeLeft}` : ""}` // render black's clock if it's their turn
+                  : // else 
+                  `${turn !== side?.charAt(0) ? `${timeLeft}` : ""}` // render opponent's clock if is their turn
+                }
+              </div>
       </div>
       <div style = {gameComponent}>
           <div style = {gc1}>Lịch sử nước di chuyển</div>
@@ -146,11 +158,23 @@ function GameInfo() {
       <div style = {playerComponent}>
           <div style = {playerAva}>
               <UserOutlined style = {{width: "2vw", height: "3vw"}}/>                  
-              {playerInfo?.white?.username === profile?.username ?
-              `${playerInfo?.white?.username} (${playerInfo?.white?.rating})` :
-              `${playerInfo?.black?.username} (${playerInfo?.black?.rating})`}
+              {
+                side === "spectator" ? // if is spectator
+                `${playerInfo?.white?.username} (${playerInfo?.white?.rating})` // render white nearer
+                : // else
+                playerInfo?.white?.username === profile?.username ? // if player's side is white, render white here, else render black
+                `${playerInfo?.white?.username} (${playerInfo?.white?.rating})` :
+                `${playerInfo?.black?.username} (${playerInfo?.black?.rating})`
+              }
           </div>
-          <div style = {playerTimer}>{`${turn === side?.charAt(0) ? `${timeLeft}` : ""}`}</div>
+          <div style = {playerTimer}>
+            {
+              side === "spectator" ? // if is spectator
+              `${turn === "w" ? `${timeLeft}` : ""}` // render white's clock if it's their turn
+              : // else 
+              `${turn === side?.charAt(0) ? `${timeLeft}` : ""}` // render player's clock if is their turn
+            }
+          </div>
       </div>
       {/* <p>{`White: ${playerInfo?.white?.username} (${playerInfo?.white?.rating}) ${turn === "w" ? "x" : ""}`}</p>
       <p>{`Black: ${playerInfo?.black?.username} (${playerInfo?.black?.rating}) ${turn === "b" ? "x" : ""}`}</p>

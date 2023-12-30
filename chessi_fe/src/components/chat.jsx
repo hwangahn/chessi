@@ -1,3 +1,4 @@
+import view from '../pages/view.module.css';
 import { useContext, useState, useRef, useEffect } from "react";
 import { Button } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -38,7 +39,7 @@ export default function Chat({ roomid }) {
 
     return (
         <div id="chat" style={{ backgroundColor: "#1E1D2F", width: "92%", height: "calc(60vw * 0.5)", paddingBottom: "10px" }}>
-            <div style={{width: "100%", backgroundColor: "rgb(45, 44, 69)", color: "white", height: "2vw", padding: "0.4vw 0.5vw", fontSize: "1.1vw"}}>Phòng trò chuyện</div>
+            <div style={{width: "100%", backgroundColor: "rgb(45, 44, 69)", color: "white", height: "2vw", padding: "0.4vw 0.5vw", fontSize: "1.1vw"}}>Chat</div>
             <div id="chat-message" style={{ width: "97%", marginLeft: "3%", paddingTop: "2%", height: "calc(100% - 110px)", overflowY: "auto", fontSize: "1.2vw", color: "#B0ABAB" }}>
                 {chatHistory.map(Element => {
                     return <p><b>{Element.sender}</b>: {Element.message}</p>
@@ -48,7 +49,7 @@ export default function Chat({ roomid }) {
             <div id="message-input" style={{ width: "92%", height: "fit-content", marginLeft: "0.7vw", marginTop: "1vw" }}>
                 <TextArea id="message-input" placeholder="Enter your message..." value={message} autoSize={{ minRows: 1, maxRows: 3 }}
                     style={{ width: "100%" }} onChange={(e) => { setMessage(e.target.value) }} onPressEnter={handleSendChat} />
-                <Button id="submit-message" type="primary" style={{ width: "100%" }} onClick={handleSendChat}>Send</Button>
+                <Button id="submit-message" type="primary" style={{ width: "100%" }} className={view.btn_fill} onClick={handleSendChat}>Send</Button>
             </div>
         </div>
     )
