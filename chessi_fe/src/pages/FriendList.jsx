@@ -1,11 +1,6 @@
-import React from "react";
-import { Affix } from 'antd';
-import {NavLink, Link, useLocation} from "react-router-dom";
+import { Link } from "react-router-dom";
 // reactstrap components
-import {
-    Row, Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
-
-} from "reactstrap";
+import { Input, Button } from "reactstrap";
 import view from './view.module.css';
 import VerticalmenuUser from '../components/verticalmenuUser';
 
@@ -34,8 +29,7 @@ export default function FriendList() {
                         </div>
                     </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/0I4lkh9.jpg'/>
@@ -46,8 +40,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/s2WCwH2.jpg'/>
@@ -58,8 +51,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/rxBwsBB.jpg'/>
@@ -70,8 +62,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/tovkOg2.jpg'/>
@@ -82,8 +73,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
 
                 <li className={view.friend}><Link to='/'>
@@ -95,8 +85,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Hủy theo dõi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
             </ul>
         </div>

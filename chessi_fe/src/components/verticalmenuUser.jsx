@@ -50,7 +50,7 @@ export default function verticalmenuUser(){
                 </ul>	
                 <div className="logoutButton">
                     <img src="../../public/logout-button.png" alt="" style={{float: "left", marginLeft: "15%", marginTop : "0.75vw", width: "1.6vw"}}/>
-                    <span onClick={handleLogout} style={{color:"#FFFFFF", float: "left", marginLeft: "10%", marginTop : "0.85vw", fontSize: "1.1vw"}}>Log out</span>
+                    <span onClick={handleLogout} style={{color:"#FFFFFF", float: "left", marginLeft: "10%", marginTop : "0.7vw", fontSize: "1.1vw"}}>Log out</span>
                 </div>	
             </div>
         </Affix>
