@@ -157,9 +157,8 @@ export default function History() {
         </div>
         <div className={view.Profile}>
           <div className={view.Profile_text}>
-            <h1> {username}</h1>
-            <br />
-            <h4>Trạng thái hoạt động</h4>
+            <h1 style={{marginBottom: "7%"}}>{username}</h1>
+            <h4 style={{ color: "#B0ABAB" }}>Trạng thái hoạt động</h4>
           </div>
           <div className={view.Profile_button}>
             <Button className={view.btn_fill} type="submit">Follow
@@ -168,7 +167,7 @@ export default function History() {
             </Button>
           </div>
           <div className={view.chartProfile} style={{ height: "auto" }}>
-            <h2>Current rating:{rating}</h2>
+            <h2 style={{ margin: "0vw 0.5vw" }}>Current rating:{rating}</h2>
             <Line
               data={dataChart}
               options={options}
@@ -178,14 +177,14 @@ export default function History() {
         </div>
 
         <div className={view.table1}>
-          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history
+          <Button className={view.btn_fill} style={{ margin: "1vw 1vw" }} type="submit" onClick={() => { setHistoryType('game') }}>Game history
           </Button>
-          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history
+          <Button className={view.btn_fill} style={{ margin: "1vw 1vw" }} type="submit" onClick={() => { setHistoryType('post') }}>Post history
           </Button>
           {
             historyType === 'game' ?  
             <>
-              <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>History</h2>
+              <h2 style={{ padding: "0.5vw 1vw", background: "#2D2C45", color: "white" }}>History</h2>
               <ul id="game-history-list">
                 {gameHistory && gameHistory.map((game, index) => (
                   <li className={view.history} key={index}>

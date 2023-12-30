@@ -18,7 +18,7 @@ export default function FriendList() {
         <div className={view.table1}>
 
             <Input placeholder="SEARCH" type="text" className={view.sreachbox}/>
-            <h2 style={{paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white"}}>Following</h2>
+            <h2 style={{padding: "0.5vw 1vw", background: "#2D2C45", color: "white"}}>Following</h2>
             <ul id='friend-list'>
                 <li className={view.friend}><Link to='/'>
                         <img src='https://i.imgur.com/nkN3Mv0.jpg'/>

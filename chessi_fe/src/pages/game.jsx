@@ -150,7 +150,7 @@ function GameInfo() {
               </div>
       </div>
       <div style = {gameComponent}>
-          <div style = {gc1}>Lịch sử nước di chuyển</div>
+          <div style = {gc1}>Move History</div>
           <div style={{color: "#BEC1DC"}}>
               <MoveHistory />
           </div>

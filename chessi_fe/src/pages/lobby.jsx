@@ -109,7 +109,7 @@ function Info() {
                         isCreator={lobbyInfo?.white?.userid === lobbyInfo?.creator?.userid}
                 />
             </div>
-            <div style={{float: "left", width: "20%", height: "80%", textAlign: "center", paddingTop: "10px"}}>
+            <div style={{float: "left", width: "20%", height: "80%", textAlign: "center", paddingTop: "10px", marginTop: "1vw"}}>
                 <h2 style={{color: "white"}}>{timeLeft}</h2>
                 <div style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}>
                     <div className='game-btn' style={{width: "100%", height: "80px", paddingTop: "27px", marginTop: "30px"}} onClick={handleSwitchSide}><a>Switch side</a></div>
@@ -201,10 +201,10 @@ export default function Lobby() {
             <div id="leftbar" style={{ float: "left" }}>
                 <VerticalmenuUser />
             </div>
-            <div style={{ float: "left", width: "21%", marginLeft:"15.5vw", marginTop: "1.5%" }}>
+            <div style={{ float: "left", width: "21%", marginLeft:"15.5vw", marginTop: "4.5%" }}>
                 <Chat roomid={params.roomid} />
             </div>
-            <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%" }}>
+            <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%", marginTop: "3vw" }}>
                 <Info />
             </div>
         </div>
