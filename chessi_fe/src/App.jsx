@@ -22,7 +22,7 @@ import Lobby from './pages/lobby';
 import GameHistory from './pages/gameHistory';
 import Search from './pages/Search'
 import ChangePassword from './pages/changePassword';
-
+import CreatePost from './pages/createPost';
 //test
 export default function App() {
   let [ isLoading, setLoading ] = useState(true);
@@ -55,7 +55,9 @@ export default function App() {
       <BrowserRouter>
         <Header />
         <Routes>
+
           <Route exact path='/' Component={Home}></Route>
+          <Route path='/createpost' Component={CreatePost}></Route>
           <Route path='/search' Component={Search}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/signup' Component={Signup}></Route>
@@ -69,7 +71,7 @@ export default function App() {
           <Route path='/admin' Component={AdminAllUser}></Route>
           <Route path='/admin/active-user' Component={AdminActiveUser}></Route>
           <Route Component={ProtectedRouteAdmin}> 
- 
+
           </Route>
           <Route Component={ProtectedRouteUser}> 
  

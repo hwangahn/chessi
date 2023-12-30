@@ -41,7 +41,7 @@ export default function verticalmenuUser(){
                     </li>
                     <li>
                         <img src="../../public/diendan.png" alt=""/>
-                        <Link to ="/new">Post</Link>
+                        <Link to ="/createpost">Post</Link>
                     </li>
                     <li>
                         <img src="../../public/ranking.png" alt=""/>
