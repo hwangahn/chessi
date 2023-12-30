@@ -5,6 +5,7 @@ const { game } = require('../models/game')
 const { httpError } = require('../error/httpError')
 const { ratingChange } = require('../models/ratingChange');
 const { userFollow } = require('../models/userFollow');
+const { post } = require('../models/post');
 require('dotenv').config();
 
 let getUserDataService = async (userid) => {
@@ -37,14 +38,19 @@ let getUserDataService = async (userid) => {
     // gameHistoryList.sort((a, b) => { return a.gameid - b.gameid });
     // gameUserInfo.sort((a, b) => { return a.gameid - b.gameid });
 
+    let userPostList = await post.findAll({ 
+        where: { authorid: userid },
+        include: { model: user }
+    });
+
     let normalizedRatingChange = _ratingChange.map(Element => { 
-        return { rating: Element.rating, timestamp: Element.timestamp } 
+        return { rating: Element.rating, timestamp: Element.timestamp } // map to reduce return size
     }); 
 
     let normalizedGameHistory = new Array;
 
     for (let i = 0; i < gameHistoryList.length; i++) {
-        normalizedGameHistory.push({
+        normalizedGameHistory.push({ // map to reduce return size
             gameid: gameHistoryList[i].gameid,
             reason: gameHistoryList[i].reason,
             timestamp: gameHistoryList[i].timestamp,
@@ -56,7 +62,11 @@ let getUserDataService = async (userid) => {
         });
     }
 
-    return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory }
+    let normalizedPostList = userPostList.map(Element => {
+        return { postid: Element.postid, username: Element.user.username, post: Element.post, timestamp: Element.timestamp } // map to reduce return size
+    });
+
+    return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory, posts: normalizedPostList }
 }
 
 let userFollowService = async (followerid, userid) => { // userid indicates user to follow 

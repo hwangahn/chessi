@@ -983,6 +983,17 @@
                   {
                     "...": "same format"
                   }
+                ],
+                "posts": [
+                  {
+                    "postid": 1,
+                    "username": "something",
+                    "post": "string",
+                    "timestamp": "2023-12-29T16:18:55.000Z"
+                  },
+                  {
+                    "...": "same format"
+                  }
                 ]
               }
             }
