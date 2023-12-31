@@ -66,7 +66,7 @@ let getUserDataService = async (userid) => {
     }
 
     let normalizedPostList = userPostList.map(Element => {
-        return { postid: Element.postid, username: Element.user.username, post: Element.post, timestamp: Element.timestamp } // map to reduce return size
+        return { postid: Element.postid, author: Element.user.username, post: Element.post, timestamp: Element.timestamp } // map to reduce return size
     });
 
     return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory, posts: normalizedPostList }
