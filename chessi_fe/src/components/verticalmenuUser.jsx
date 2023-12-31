@@ -26,7 +26,7 @@ export default function verticalmenuUser(){
     return (
         <>
             {
-                profile &&
+                profile && !profile.isAdmin &&
                 <Affix offsetTop={65}>
                     <div id="leftbar" style={leftbar}>
                         <ul className="single-vertical-menu">

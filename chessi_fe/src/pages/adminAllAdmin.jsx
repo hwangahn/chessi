@@ -6,7 +6,7 @@ import VerticalmenuAdmin from '../components/verticalmenuAdmin';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/auth';
 import { message } from 'antd';
-export default function AdminActiveUser() {
+export default function AdminAllAdmin() {
     let navigate = useNavigate();
 
     let { accessToken } = useContext(AuthContext);
@@ -15,7 +15,7 @@ export default function AdminActiveUser() {
 
     useEffect(() => {
         (async () => {
-            let rawData = await fetch('/api/admin/active-user', {
+            let rawData = await fetch('/api/admin/all-admin', {
                 method: 'get',
                 headers: {
                     "authorization": "Bearer " + accessToken

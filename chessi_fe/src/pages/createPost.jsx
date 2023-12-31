@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from 'react';
 const { TextArea } = Input;
 import view from './view.module.css';
 import VerticalmenuUser from '../components/verticalmenuUser';
+import VerticalmenuAdmin from '../components/verticalmenuAdmin';
 import SinglePost from '../components/singlePost.jsx'
 import { AuthContext } from '../contexts/auth.jsx';
 
@@ -67,6 +68,7 @@ function LatestPost({ latestPosts }) {
 }
 
 export default function Post() {
+    let { profile } = useContext(AuthContext);
     let [latestPosts, setLatestPosts] = useState(new Array);
 
     let addPost = (postobj) => {
@@ -93,7 +95,7 @@ export default function Post() {
     return (
         <>
             <div id="leftbar" style={{ float: "left" }}>
-                <VerticalmenuUser />
+                {profile.isAdmin ? <VerticalmenuAdmin /> : <VerticalmenuUser />}
             </div>
             <div className={view.content}>
                 <div className={view.title}>

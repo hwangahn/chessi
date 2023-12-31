@@ -24,6 +24,8 @@ import Search from './pages/Search'
 import ChangePassword from './pages/changePassword';
 import Post from './pages/createPost';
 import PostDetail from './pages/postDetail';
+import AdminHome from './pages/adminHome';
+import AdminAllAdmin from './pages/adminAllAdmin';
 
 //test
 export default function App() {
@@ -71,8 +73,11 @@ export default function App() {
           <Route path='/user/:userid' Component={History}></Route>
           <Route path='/following' Component={FriendList}></Route>
           <Route path='/ranking' Component={Ranking}></Route>
-          <Route path='/admin' Component={AdminAllUser}></Route>
+          <Route path='/admin' Component={AdminHome}></Route>
+          <Route path='/admin/all-user' Component={AdminAllUser}></Route>
           <Route path='/admin/active-user' Component={AdminActiveUser}></Route>
+          <Route path='/admin/all-admin' Component={AdminAllAdmin}></Route>
+          <Route path='/admin/all-game' Component={AdminAllUser}></Route>
           <Route Component={ProtectedRouteAdmin}> 
 
           </Route>
