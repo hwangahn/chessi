@@ -31,11 +31,13 @@ ChartJS.register(
   Legend
 );
 import SinglePost from '../components/singlePost';
+import socket from '../utils/socket';
 
 
 export default function History() {
   let { profile, accessToken } = useContext(AuthContext);
 
+  let [status, setStatus] = useState("Unknown");
   let [ratingChange, setRatingChange] = useState(null);
   let [gameHistory, setGameHistory] = useState(null);
   let [username, setUsername] = useState(null);
@@ -64,6 +66,16 @@ export default function History() {
         setFollowing(data.isFollowing);
       }
     })()
+
+    socket.emit("join room", params.userid); // join user room
+
+    socket.on("user status", (status) => { // server will emit status every second. can be Online, In game|gameid, In lobby, 
+      setStatus(status);
+    })
+
+    return () => {
+      socket.off("user status");
+    }
 
   }, [params.userid])
 
@@ -135,7 +147,7 @@ export default function History() {
           <div className={view.Profile_text}>
             <h1> {username}</h1>
             <br />
-            <h4>Trạng thái hoạt động</h4>
+            <h4>Status: {status.split('|')[0]}</h4>
           </div>
           {
             profile && // if logged in, render
@@ -147,7 +159,7 @@ export default function History() {
                 // render follow and spectate button
                 <>
                   {isFollowing !== null && <Button className={view.btn_fill} type="submit" onClick={handleFollow}>{isFollowing ? "Unfollow" : "Follow"}</Button>}
-                  <Button className={view.btn_fill} type="submit">Spectate</Button>
+                  {status.split('|')[0] == "In game" && <Button className={view.btn_fill} type="submit" onClick={() => {navigate(`/game/${status.split('|')[1]}`)}}>Spectate</Button>}
                 </>
               }
             </div>
