@@ -49,7 +49,7 @@ export default function Chat({ roomid }) {
             <div id="message-input" style={{ width: "92%", height: "fit-content", marginLeft: "0.7vw", marginTop: "1vw" }}>
                 <TextArea id="message-input" placeholder="Enter your message..." value={message} autoSize={{ minRows: 1, maxRows: 3 }}
                     style={{ width: "100%" }} onChange={(e) => { setMessage(e.target.value) }} onPressEnter={handleSendChat} />
-                <Button id="submit-message" type="primary" style={{ width: "100%" }} className={view.btn_fill} onClick={handleSendChat}>Send</Button>
+                <Button id="submit-message" type="primary" style={{ width: "100%" }} onClick={handleSendChat}>Send</Button>
             </div>
         </div>
     )

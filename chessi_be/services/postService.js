@@ -9,10 +9,12 @@ let postService = async (userid, _post) => {
         throw (new httpError(404, "Cannot find user"));
     }
 
-    await post.create({
+    let newPost = await post.create({
         authorid: userid,
         post: _post
     });
+
+    return { postid: newPost.postid, post: newPost.post, timestamp: newPost.timestamp }
 }
 
 let postCommentService = async (userid, postid, _comment) => {
@@ -74,6 +76,7 @@ let getAllPostService = async () => {
         include: {
             model: user
         },
+        order: [["timestamp", "DESC"]],
         limit: 10 
     });
 
