@@ -5,13 +5,13 @@ export default function SinglePost({ post, index }) {
     return (
         <li className={view.history_post} key={index}>
             <div className={view.post} style={{ marginBottom: "10px", textWrap: "wrap", overflowWrap: "break-word", wordBreak: "break-word" }}>
-                <Link to="/">
+                <Link to={`/post/${post.postid}`}>
                     <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
                         <h1 style={{ textWrap: "wrap" }}>{post.post}</h1>
                         <br />
                         <h5>Author: {post.author}</h5>
                         <br />
-                        <p style={{ textWrap: "wrap" }}>{post.timestamp}</p>
+                        <p style={{ textWrap: "wrap" }}>{post.timestamp.replace('T', " ").slice(0, -5)}</p>
                     </div>
                 </Link>
             </div>

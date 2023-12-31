@@ -45,6 +45,14 @@ module.exports = (io) => {
         socket.to(roomid).emit("chat message", sender, message);
         socket.emit("chat message", sender, message);
     }
+
+    let handleSendComment = function(roomid, cmt) {
+        let socket = this;
+
+        // broadcast comment to room
+        socket.to(roomid).emit("comment sent", cmt);
+        socket.emit("comment sent", cmt);
+    }
     
-    return { handleGetRoomInfo, handleMakeMove, handleSendMessage }
+    return { handleGetRoomInfo, handleMakeMove, handleSendMessage, handleSendComment }
 }

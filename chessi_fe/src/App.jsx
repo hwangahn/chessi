@@ -23,6 +23,8 @@ import GameHistory from './pages/gameHistory';
 import Search from './pages/Search'
 import ChangePassword from './pages/changePassword';
 import Post from './pages/createPost';
+import PostDetail from './pages/postDetail';
+
 //test
 export default function App() {
   let [ isLoading, setLoading ] = useState(true);
@@ -58,6 +60,7 @@ export default function App() {
 
           <Route exact path='/' Component={Home}></Route>
           <Route path='/post' Component={Post}></Route>
+          <Route path='/post/:postid' Component={PostDetail}></Route>
           <Route path='/search' Component={Search}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/signup' Component={Signup}></Route>

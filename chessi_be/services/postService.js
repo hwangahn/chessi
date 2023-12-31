@@ -47,7 +47,7 @@ let getPostService = async (postid) => {
             },
             {
                 model: comment,
-                attributes: ["comment"],
+                attributes: ["comment", "timestamp"],
                 include: {
                     model: user, 
                     attributes: ["userid", "username"]
@@ -64,11 +64,12 @@ let getPostService = async (postid) => {
     let author = postFound.user.username;
     let authorid =  postFound.user.userid;
     let _post = postFound.post;
+    let timestamp = postFound.timestamp;
     let comments = postFound.comments.map(Element => {
-        return { comment: Element.comment, author: Element.user.username, authorid: Element.user.userid }
+        return { comment: Element.comment, author: Element.user.username, authorid: Element.user.userid, timestamp: Element.timestamp }
     });
 
-    return { author: author, authorid: authorid, post: _post, comments: comments } 
+    return { author: author, authorid: authorid, post: _post, timestamp: timestamp, comments: comments } 
 }
 
 let getAllPostService = async () => {

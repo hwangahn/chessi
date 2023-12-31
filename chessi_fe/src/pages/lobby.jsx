@@ -209,12 +209,12 @@ export default function Lobby() {
                 <VerticalmenuUser />
             </div>
             <div className = {view.content}>
-            <div style={{ float: "left", width: "30%", marginTop: "3%", marginLeft:"5%" }}>
-                <Chat roomid={params.roomid} />
-            </div>
-            <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%", marginTop: "3%" }}>
-                <Info />
-            </div>
+              <div style={{ float: "left", width: "30%", marginTop: "3%", marginLeft:"5%" }}>
+                  <Chat roomid={params.lobbyid} />
+              </div>
+              <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%", marginTop: "3%" }}>
+                  <Info />
+              </div>
             </div>
         </div>
 
