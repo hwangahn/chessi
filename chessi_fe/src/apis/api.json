@@ -782,7 +782,7 @@
             "description": "Bearer token for authorization",
             "required": true,
             "type": "string",
-            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+            "default": "Bearer ACCESS_TOKEN_HERE"
           }
         ],
         "responses": {
@@ -940,12 +940,23 @@
         }
       }
     },
-    "/user/{userid}": {
+    "/user/{userid}?currentuserid={currentuserid}": {
       "get": {
         "tags": ["User"],
         "summary": "Get user account",
         "produces": ["application/json"],
-        "parameters": [{
+        "parameters": [
+          {
+            "in": "path",
+            "name": "currentuserid",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "default": -100,
+            "description": "Current user id to check if thay have followed target user or not. If not logged in, default to -100"
+          },
+          {
             "in": "path",
             "name": "userid",
             "required": "true",
@@ -994,7 +1005,8 @@
                   {
                     "...": "same format"
                   }
-                ]
+                ],
+                "isFollowing": true
               }
             }
           },
@@ -1121,7 +1133,7 @@
               "type": "integer",
               "minimum": "1"
             },
-            "description": "User id"
+            "description": "User id to follow"
           },
           {
             "name": "Authorization",
@@ -1204,7 +1216,7 @@
               "type": "integer",
               "minimum": "1"
             },
-            "description": "User id"
+            "description": "User id to unfollow"
           },
           {
             "name": "Authorization",

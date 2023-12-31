@@ -38,8 +38,9 @@ function CommentInput() {
     }
 
     let handleComment = async () => {
-        console.log(new Date(Date.now()).toISOString());
-
+        if (content === "") {
+            return;
+        }
         socket.emit("send comment", params.postid, { author: profile.username, comment: content, timestamp: new Date(Date.now()).toISOString() } );
 
         let rawData = await fetch(`/api/post/${params.postid}/comment`, { // create post

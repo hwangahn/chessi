@@ -34,7 +34,7 @@ import SinglePost from '../components/singlePost';
 
 
 export default function History() {
-  let { profile } = useContext(AuthContext);
+  let { profile, accessToken } = useContext(AuthContext);
 
   let [ratingChange, setRatingChange] = useState(null);
   let [gameHistory, setGameHistory] = useState(null);
@@ -42,12 +42,13 @@ export default function History() {
   let [rating, setRating] = useState(null);
   let [posts, setPosts] = useState(null);
   let [historyType, setHistoryType] = useState('game');
+  let [isFollowing, setFollowing] = useState(null);
   let params = useParams();
   let navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
-      let rawData = await fetch(`/api/user/${params.userid}`, {
+      let rawData = await fetch(`/api/user/${params.userid}?currentuserid=${(profile && profile.userid !== params.userid) ? `${profile.userid}` : "-100"}`, {
         method: "GET",
       });
       let data = await rawData.json();
@@ -60,6 +61,7 @@ export default function History() {
         setGameHistory(data.gameHistory);
         setRatingChange(data.ratingChange);
         setPosts(data.posts);
+        setFollowing(data.isFollowing);
       }
     })()
 
@@ -103,6 +105,23 @@ export default function History() {
     }
   };
 
+  let handleFollow = async () => {
+    let rawData = await fetch(`/api/user/${params.userid}/follow`, {
+      method: `${isFollowing ? "delete" : "post"}`,
+      headers: {
+        "Authorization": "Bearer " + accessToken
+      }
+    });
+
+    let data = await rawData.json();
+
+    if (data.status === "ok") {
+      setFollowing(!isFollowing);
+    } else {
+      message.error(data.msg);
+    }
+  }
+
   return (
     <>
       <div id="leftbar" style={{ float: "left" }}>
@@ -127,7 +146,7 @@ export default function History() {
                 <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> : // else
                 // render follow and spectate button
                 <>
-                  <Button className={view.btn_fill} type="submit">Follow</Button>
+                  {isFollowing !== null && <Button className={view.btn_fill} type="submit" onClick={handleFollow}>{isFollowing ? "Unfollow" : "Follow"}</Button>}
                   <Button className={view.btn_fill} type="submit">Spectate</Button>
                 </>
               }

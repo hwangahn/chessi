@@ -17,6 +17,9 @@ function CreatePost({ addPost }) {
     }
 
     let handlePost = async () => {
+        if (content === "") {
+            return;
+        }
         let rawData = await fetch('/api/post', { // create post
             method: 'post',
             headers: {

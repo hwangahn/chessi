@@ -36,7 +36,7 @@ export default function verticalmenuUser(){
                             </li> 
                             <li>
                                 <img src="../../public/friend.png" alt=""/>
-                                <Link to ="/friendlist">Follow</Link>
+                                <Link to ="/following">Follow</Link>
                             </li>
                             <li>
                                 <img src="../../public/history.png" alt=""/>
