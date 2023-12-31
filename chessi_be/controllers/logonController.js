@@ -1,4 +1,4 @@
-const { signupService, verifyEmailService, loginService, silentLoginService, logoutService, resetPasswordService } = require('../services/logonService');
+const { signupService, verifyEmailService, loginService, silentLoginService, logoutService, resetPasswordService, changePasswordService } = require('../services/logonService');
 const { checkHttpError } = require('../utils/checkError');
 
 let handleSignup = async (req, res) => {
@@ -38,6 +38,21 @@ let handleLogin = async (req, res) => {
         let { accessToken, sessionToken, profile } = await loginService(username, password, socketid);
 
         res.status(200).json({ status: "ok", msg: "Logged in", accessToken: accessToken, sessionToken: sessionToken, profile: profile });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+let handleChangePassword = async (req, res) => {
+    try {
+        let { userid, password } = { userid: req.token.userid, password: req.body.data.password }
+
+        await changePasswordService(userid, password);
+
+        res.status(200).json({ status: "ok", msg: "Password changed" });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
@@ -91,4 +106,4 @@ let handleResetPassword = async (req, res) => {
     }
 }
 
-module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleLogout, handleSilentLogin, handleResetPassword }
+module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleChangePassword, handleLogout, handleSilentLogin, handleResetPassword }

@@ -1,39 +1,35 @@
-import React from "react";
-import {NavLink, Link, useLocation} from "react-router-dom";
+import { Link } from "react-router-dom";
 // reactstrap components
-import {
-    Row, Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
-
-} from "reactstrap";
+import { Input, Button } from "reactstrap";
 import view from './view.module.css';
-import Verticalmenu from './verticalmenu';
+import VerticalmenuUser from '../components/verticalmenuUser';
 
 export default function FriendList() {
+
     return (
     <>
     <div id="leftbar" style={{float:"left"}}>
-        <Verticalmenu />
+        <VerticalmenuUser />
     </div>
     <div className={view.content}>
         <div className={view.title}>
-            <h1>Bạn bè</h1>
+            <h1>Following</h1>
         </div>
         <div className={view.table1}>
 
             <Input placeholder="SEARCH" type="text" className={view.sreachbox}/>
-            <h2 style={{paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white"}}>Bạn bè 5</h2>
+            <h2 style={{paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white"}}>Following</h2>
             <ul id='friend-list'>
                 <li className={view.friend}><Link to='/'>
                         <img src='https://i.imgur.com/nkN3Mv0.jpg'/>
                         <div className={view.name}>
                             <h3>Andres Perez</h3>
                             <p>Hạng</p>
-                            <p>Hoạt động 5 giờ trước</p>
+                            <p>Hoạt động 5 giờ </p>
                         </div>
                     </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/0I4lkh9.jpg'/>
@@ -44,8 +40,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/s2WCwH2.jpg'/>
@@ -56,8 +51,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/rxBwsBB.jpg'/>
@@ -68,8 +62,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
                 <li className={view.friend}><Link to='/'>
                     <img src='https://i.imgur.com/tovkOg2.jpg'/>
@@ -80,8 +73,7 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
 
                 <li className={view.friend}><Link to='/'>
@@ -93,21 +85,10 @@ export default function FriendList() {
                     </div>
                 </Link>
                     
-                    <Button className={view.btn_fill} type="submit">Mời Chơi
-                    </Button>
+                    <Button className={view.btn_fill} type="submit">Hủy theo dõi</Button>
                 </li>
             </ul>
-
         </div>
-        <div className="table2">
-
-            <div className="author">
-
-                <h2 className="title">Trận đấu đang diễn ra</h2>
-                <p className="description">Không có trận đấu nào đang diễn ra</p>
-            </div>
-        </div>
-
     </div>
     </>
 );

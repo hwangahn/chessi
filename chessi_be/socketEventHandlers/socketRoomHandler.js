@@ -4,7 +4,18 @@ module.exports = (io) => {
     let handleGetRoomInfo = function (roomid) {
         let socket = this;
 
-        socket.join(roomid); // join game room
+        // socket.rooms indicates rooms user joined
+        // by default it is a set
+        // transform room set to room array
+        let allRoom = Array.from(socket.rooms); 
+
+        allRoom.forEach(room => {
+            if (room !== socket.id) {
+                socket.leave(room);  // leave all rooms except the default room (socket.id)
+            }
+        });
+
+        socket.join(roomid); // join room
         
         console.log(`socket ${socket.id} joined room ${roomid}`);
     } 

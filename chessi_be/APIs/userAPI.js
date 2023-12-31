@@ -1,9 +1,13 @@
 const express = require('express')
-const { takeUserData, takeGameData } = require('../controllers/userController')
+const { handleGetUserData, handleUserFollow, handleUserUnfollow, handleGetUserFollowing, handleGetLeaderboard } = require('../controllers/userController');
+const { verifyJWT, verifyAccessToken } = require('../middlewares/auth');
 
-let router = express.router();
+let router = express.Router();
 
-router.post('/api/userData',takeUserData)
-router.post('/api/gameData',takeGameData)
+router.get('/api/user/following', verifyJWT, verifyAccessToken, handleGetUserFollowing);
+router.get('/api/user/leaderboard', handleGetLeaderboard);
+router.get('/api/user/:userid', handleGetUserData);
+router.post('/api/user/:userid/follow', verifyJWT, verifyAccessToken, handleUserFollow); // userid indicates user to follow
+router.delete('/api/user/:userid/follow/', verifyJWT, verifyAccessToken, handleUserUnfollow); // userid indicates user to follow
 
 module.exports = router;

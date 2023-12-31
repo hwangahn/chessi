@@ -1,143 +1,86 @@
-import React from "react";
 import view from './view.module.css';
-import {NavLink, Link, useLocation} from "react-router-dom";
-// reactstrap components
-import {
-    Row,
-    Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
-
-} from "reactstrap";
-import styles from './view.module.css';
-import Verticalmenu from './verticalmenu';
+import { UserOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
+import { Button } from "reactstrap";
+import './view.module.css';
+import VerticalmenuUser from '../components/verticalmenuUser';
 export default function Ranking() {
+    const data = [{
+        "userid": 1,
+        "username": "something",
+        "rating": 1500
+      },{
+        "userid": 2,
+        "username": "something",
+        "rating": 1500
+      },{
+        "userid": 3,
+        "username": "something",
+        "rating": 1500
+      },{
+        "userid": 4,
+        "username": "something",
+        "rating": 1500
+      },{
+        "userid": 5,
+        "username": "something",
+        "rating": 1500
+      },{
+        "userid": 6,
+        "username": "something",
+        "rating": 1500
+      },
+      {
+        "userid": 7,
+        "username": "something",
+        "rating": 1500
+      },
+      {
+        "userid": 8,
+        "username": "something",
+        "rating": 1500
+      },
+      {
+        "userid": 9,
+        "username": "something",
+        "rating": 1500
+      },
+      {
+        "userid": 10,
+        "username": "something",
+        "rating": 1500
+      },]
     return (
         <>
         <div id="leftbar" style={{float:"left"}}>
-            <Verticalmenu />
+            <VerticalmenuUser />
         </div>
         <div className={view.content}>
             
             <div className={view.title}>
-                <h1 style={{textAlign:"center"}}>Bảng xếp hạng</h1>
+              <h1 >Ranking</h1>
             </div>
-            <div className={view.ranking_table} >
+            <div className={view.table1}>
+              <div className={view.title}>
+                <h1 >Top 10</h1>
+              </div>
 
-                {/*<Input placeholder="SEARCH" type="text" className="sreachbox"/>*/}
-                <Table className={view.tablesorter}>
-                    <thead className="text-primary">
-                    <tr style={{paddingTop:"0",paddingLeft:"5%", background:"#2D2C45",color:"white", height:"30px"}}>
-                        <th className="Stt2">Hạng</th>
-                        <th style={{width:"50%"}}>Họ và tên</th>
-                        <th>Thắng</th>
-                        <th>Thua</th>
-                        <th>Hòa</th>
-                        <th>Điểm</th>
-
-
-                    </tr>
-                    </thead>
-
-                    <tbody>
-
-                    <tr>
-                        <td className={view.Stt}>1</td>
-                        <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
-                                <p style={{ marginLeft: "5px" }}>Dat 09</p>
-                            </Link>
-                        </td>
-                         <td>100</td>
-                        <td>0</td>
-                        <td>120</td>
-                        <td>199</td>
-                    </tr>
-                    <tr>
-                        <td className={view.Stt}>2</td>
-                        <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
-                                <p style={{ marginLeft: "5px" }}>Dat 09</p>
-                            </Link>
-                        </td>
-                         <td>100</td>
-                        <td>0</td>
-                        <td>120</td>
-                        <td>199</td>
-                        
-                    </tr>
-                    <tr>
-                        <td className={view.Stt}>3</td>
-                        <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
-                                <p style={{ marginLeft: "5px" }}>Dat 09</p>
-                            </Link>
-                        </td>
-                         <td>100</td>
-                        <td>0</td>
-                        <td>120</td>
-                        <td>199</td>
-                        
-
-                    </tr>
-                    <tr>
-                        <td className={view.Stt}>4</td>
-                        <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
-                                <p style={{ marginLeft: "5px" }}>Dat 09</p>
-                            </Link>
-                        </td>
-                         <td>100</td>
-                        <td>0</td>
-                        <td>120</td>
-                        <td>199</td>
-                        
-                    </tr>
-                    <tr>
-                        <td className={view.Stt}>5</td>
-                        <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
-                                <p style={{ marginLeft: "5px" }}>Dat 09</p>
-                            </Link>
-                        </td>
-                         <td>100</td>
-                        <td>0</td>
-                        <td>120</td>
-                        <td>199</td>
-                        
-
-                    </tr>
-                    <tr>
-                        <td className={view.Stt}>6</td>
-                        <td>
-                            <Link to={"/admin/History"} style={{ display: "flex", alignItems: "center" }}>
-                                <img style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg' />
-                                <p style={{ marginLeft: "5px" }}>Dat 09</p>
-                            </Link>
-                        </td>
-                         <td>100</td>
-                        <td>0</td>
-                        <td>120</td>
-                        <td>199</td>
-                        
-
-                    </tr>
-
-
-                    </tbody>
-                </Table>
-
+              <ul id='friend-list'>
+                {data.slice(0, 10).map((item, index) => (
+                  <li className={view.friend} key={item.userid}>
+                    <Link to='/'>
+                      <h1 style={{width: "50px", paddingRight: "40%", marginLeft: "8%"}}key={index + 1}>#{index + 1}.</h1>
+                      <div className={view.name}>
+                        <h2>{item.username}</h2>
+                        <p>Rating: {item.rating}</p>
+                        <p>Id: {item.userid}</p>
+                      </div>
+                    </Link>
+                    <Button className={view.btn_fill} type="submit">Theo dõi</Button>
+                  </li>
+                ))}
+              </ul>
             </div>
-
 
         </div>
         </>

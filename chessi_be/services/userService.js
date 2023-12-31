@@ -1,55 +1,173 @@
-const bcrypt = require('bcrypt')
+const { Op } = require('sequelize');
 const { user } = require('../models/user')
 const { gameUser } = require('../models/gameUser')
 const { game } = require('../models/game')
 const { httpError } = require('../error/httpError')
+const { ratingChange } = require('../models/ratingChange');
+const { userFollow } = require('../models/userFollow');
+const { post } = require('../models/post');
 require('dotenv').config();
 
+let getUserDataService = async (userid) => {
+    let userFound = await user.findOne({ where: { userid: userid } });
 
-let userDataService = async (userId) => {
-    //lay data cua user chinh qua id
-    let userData = await user.findAll({
-        where: {userid: userId},
-        attributes: ['userid','username', 'rating'],
-    })
-    if (!user) {
-        throw (new httpError(404,"User not found"))
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user"));
     }
 
-    return { userData }
+    let _ratingChange = await ratingChange.findAll({ where: { userid: userid } });
 
-}
-let gameDataService = async (gameId) => {
-    //lay game data tu game id
-    let gameData = await gameUser.findOne( {
-        where: { gameid: gameId},
-    })
-    
-    if (!gameData) {
-        throw(new httpError(404,"Game data not found"))
-    }
-    //lay 2 user name tu side va game id
-    let userJoined = await gameData.findAll( { 
-        include: [
-            { 
-            model:user,
-            attributes: ['username']
-            }, 
-        ],
-        where: { 
-            gameid: gameId,
-            side: ['black','white']
+    let gameHistoryList = await game.findAll({ // get all games user played
+        include: {
+            model: gameUser,
+            where: { userid: userid },
         },
-        attributes:['gameid','username','side']
-    })
-    return {gameData, userJoined}
+        order: [['gameid', 'DESC']],
+        limit: 20
+    });
+
+    let conditions = gameHistoryList.map(Element => { // building condition array for Sequelize query
+        return { gameid: Element.gameid }
+    });
+
+    let gameUserInfo = await gameUser.findAll({ // get info of games user played
+        where: { [Op.or]: conditions }, 
+        include: { model: user },
+        order: [['gameid', 'DESC']]
+    });
+
+    // gameHistoryList.sort((a, b) => { return a.gameid - b.gameid });
+    // gameUserInfo.sort((a, b) => { return a.gameid - b.gameid });
+
+    let userPostList = await post.findAll({ 
+        where: { authorid: userid },
+        include: { model: user }
+    });
+
+    let normalizedRatingChange = _ratingChange.map(Element => { 
+        return { rating: Element.rating, timestamp: Element.timestamp } // map to reduce return size
+    }); 
+
+    let normalizedGameHistory = new Array;
+
+    for (let i = 0; i < gameHistoryList.length; i++) {
+        normalizedGameHistory.push({ // map to reduce return size
+            gameid: gameHistoryList[i].gameid,
+            reason: gameHistoryList[i].reason,
+            timestamp: gameHistoryList[i].timestamp,
+            finalFen: gameHistoryList[i].finalFen,
+            white: gameUserInfo[i * 2].side === "white" ? gameUserInfo[i * 2].user.username : gameUserInfo[i * 2 + 1].user.username,
+            black: gameUserInfo[i * 2].side === "black" ? gameUserInfo[i * 2].user.username : gameUserInfo[i * 2 + 1].user.username,
+            whiteRatingChange: gameUserInfo[i * 2].side === "white" ? gameUserInfo[i * 2].ratingChange : gameUserInfo[i * 2 + 1].ratingChange,
+            blackRatingChange: gameUserInfo[i * 2].side === "black" ? gameUserInfo[i * 2].ratingChange : gameUserInfo[i * 2 + 1].ratingChange
+        });
+    }
+
+    let normalizedPostList = userPostList.map(Element => {
+        return { postid: Element.postid, username: Element.user.username, post: Element.post, timestamp: Element.timestamp } // map to reduce return size
+    });
+
+    return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory, posts: normalizedPostList }
 }
 
-let gameMoveService = async (gameId) => {
-    // lay qua game id vs side
-    // lay username qua gameid, side va userid
+let userFollowService = async (followerid, userid) => { // userid indicates user to follow 
+    let userFound = await user.findOne({ where: { userid: userid } }); // check uhether user exists
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user")); // if not, throw error
+    }
+
+    if (followerid == userid) { // check if user is requesting to follow themself
+        throw (new httpError(403, "You cannot follow yourself")); // throw error
+    }
+
+    let isFollowing = await userFollow.findOne({ // check if user is already following  
+        where: {
+            followerid: followerid, 
+            userid: userid,
+        }
+    });
+
+    if (isFollowing) {
+        throw (new httpError(409, "You are already following this player")); // throw error
+    }
+
+    await userFollow.create({
+        userid: userid,
+        followerid: followerid
+    });
+    
+    console.log(`user ${followerid} followed user ${userid}`);
+}
+
+let userUnfollowService = async (followerid, userid) => {
+    let userFound = await user.findOne({ where: { userid: userid } }); // check uhether user exists
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user")); // if not, throw error
+    }
+
+    if (followerid == userid) { // check if user is requesting to follow themself
+        throw (new httpError(403, "You cannot unfollow yourself")); // throw error
+    }
+
+    let isFollowing = await userFollow.findOne({ // check if user is following  
+        where: {
+            followerid: followerid, 
+            userid: userid,
+        }
+    });
+
+    if (!isFollowing) {
+        throw (new httpError(409, "You are not following this player"));
+    }
+
+    await isFollowing.destroy(); // delete record
+
+    console.log(`user ${followerid} unfollowed user ${userid}`);
 
 }
 
+let getUserFollowingService = async (userid) => {
+    let userFound = await user.findOne({ where: { userid: userid } }); // check uhether user exists
 
-module.exports = { userDataService, gameDataService, gameMoveService }
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user")); // if not, throw error
+    }
+    
+    let userFollowingid = await userFollow.findAll({
+        where: { followerid: userid },
+        attributes: ["userid"] 
+    });
+
+    let conditions = userFollowingid.map(Element => { // building condition array for Sequelize query
+        return { userid: Element.userid }
+    });
+
+    let userFollowingInfo = await user.findAll({ // get info of users user following
+        where: { [Op.or]: conditions }
+    });
+
+    userFollowingInfo = userFollowingInfo.map(Element => {
+        return { userid: Element.userid, username: Element.username, rating: Element.rating } // map to reduce return size
+    });
+
+    return userFollowingInfo;
+}
+
+let getLeaderboardService = async () => {
+
+    // get 10 highest rated players
+    let leaderboard = await user.findAll({
+        order: [["rating", "DESC"]],
+        limit: 10
+    });
+
+    leaderboard = leaderboard.map(Element => {
+        return { userid: Element.userid, username: Element.username, rating: Element.rating } // map to reduce return size
+    });
+
+    return leaderboard
+}
+
+module.exports = { getUserDataService, userFollowService, userUnfollowService, getUserFollowingService, getLeaderboardService }

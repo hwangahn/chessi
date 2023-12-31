@@ -1,81 +1,250 @@
-import React from "react";
 import view from './view.module.css';
-import {NavLink, Link, useLocation} from "react-router-dom";
-import {
-    Row,
-    Col, Card, CardHeader, CardBody, Form, FormGroup, Input, CardFooter, Button, CardText, Table,
+import { Chessboard } from 'react-chessboard';
+import { Link } from "react-router-dom";
+import { Input,  Button } from "reactstrap";
 
-} from "reactstrap";
-import Verticalmenu from './verticalmenu';
+import VerticalmenuUser from '../components/verticalmenuUser';
+
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
+import { message, Space } from 'antd';
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  // datalabels
+} from 'chart.js';
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 
 export default function History() {
-    return (
-        <>
-        
-        <div id="leftbar" style={{float:"left"}}>
-            <Verticalmenu />
-        </div>   
-        <div className={view.content}>
+
+  let [ratingChange, setRatingChange] = useState(null);
+  let [gameHistory, setGameHistory] = useState(null);
+  let [username, setUsername] = useState(null);
+  let [rating, setRating] = useState(null);
+  // let [posts, setPosts] = useState(null);
+  let [historyType, setHistoryType] = useState('game');
+  let params = useParams();
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      let rawData = await fetch(`/api/user/${params.userid}`, {
+        method: "GET",
+      });
+      let data = await rawData.json();
+      if (data.status != "ok") {
+        message.error(data.msg);
+        navigate("/");
+      } else {
+        setRating(data.rating);
+        setUsername(data.username);
+        setGameHistory(data.gameHistory);
+        setRatingChange(data.ratingChange);
+        // setPosts(data.posts);
+        console.log(ratingChange["rating"]);
+      }
+    })()
+
+  }, [])
+
+  const chartRating = [];
+  const chartTime = [];
+  for (let i = 0; i < ratingChange?.length; i++) {
+    chartRating[i] = ratingChange[i]["rating"];
+    chartTime[i] = ratingChange[i]["timestamp"]
+  }
+  console.log(chartRating);
+  const dataChart = {
+    labels: chartTime,
+    datasets: [
+      {
+        label: "Rating",
+        fill: true,
+        borderColor: "#1f8ef1",
+        borderWidth: 2,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        pointBackgroundColor: "#1f8ef1",
+        pointBorderColor: "rgba(255,255,255,0)",
+        pointHoverBackgroundColor: "#1f8ef1",
+        pointBorderWidth: 20,
+        pointHoverRadius: 4,
+        pointHoverBorderWidth: 15,
+        pointRadius: 4,
+        data: chartRating,
+      },],
+
+  };
+  const options = {
+    scales: {
+      x: {
+        ticks: {
+          display: false
+        }
+      }
+    }
+  };
+
+  const posts = [{
+    "timestamp": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
+    "username": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
+    "post": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomething"
+  },{
+    "timestamp": 2,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 3,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 4,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 5,
+    "username": "something",
+    "post": 1500
+  },{
+    "timestamp": 6,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 7,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 8,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 9,
+    "username": "something",
+    "post": 1500
+  },
+  {
+    "timestamp": 10,
+    "username": "something",
+    "post": 1500
+  },]
+  return (
+    <>
+      <div id="leftbar" style={{ float: "left" }}>
+        <VerticalmenuUser />
+      </div>
+      <div className={view.content}>
         <div className={view.title}>
-            <h1>Lịch sử đấu </h1>
+          <h1 style={{ textShadow: "0 0 1.3 #396FAE" }}>User profile</h1>
+        </div>
+        <div className={view.Profile}>
+          <div className={view.Profile_text}>
+            <h1> {username}</h1>
+            <br />
+            <h4>Trạng thái hoạt động</h4>
+          </div>
+          <div className={view.Profile_button}>
+            <Button className={view.btn_fill} type="submit">Follow
+            </Button>
+            <Button className={view.btn_fill} type="submit">Spectate
+            </Button>
+          </div>
+          <div className={view.chartProfile} style={{ height: "auto" }}>
+            <h2>Current rating:{rating}</h2>
+            <Line
+              data={dataChart}
+              options={options}
+            />
+
+          </div>
         </div>
 
-                <div className={view.Profile}>
-                    <img src="https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg"
-                         className={view.Profile_image}/>
-                    <div className={view.Profile_text}>
-                        <h1> Dat 09</h1>
-                        <p>Không là nhà vô địch nhưng tôi có người yêu</p>
+        <div className={view.table1}>
+          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history
+          </Button>
+          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history
+          </Button>
+          {
+            historyType === 'game' ?  
+            <>
+              <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>History</h2>
+              <ul id="game-history-list">
+                {gameHistory && gameHistory.map((game, index) => (
+                  <li className={view.history} key={index}>
+                    <Link to="/">
+                      <div className={view.history_board} style={{ width: "250px" }}>
+                        <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} />
+                      </div>
+                      <div style={{ minWidth: "200px", marginTop: "-15%" }}>
+                        <h1>{game.reason}</h1>
+                        <p>{game.timestamp}</p>
+                      </div>
+                      <div className={view.name} style={{ minWidth: "200px", textAlign: "right" }}>
+                        <h2>{game.white}</h2>
+                        <h3 style={game.whiteRatingChange >= 0 ? { color: "green", paddingLeft: "5px" } : { color: "red", paddingLeft: "5px" }}>
+                          Rating:
+                          {game.whiteRatingChange >= 0 ? " +" : " "}
+                          {game.whiteRatingChange}
+                        </h3>
+                      </div>
+                      <img src="../public/Vs.png" style={{ width: "100px" }} />
+                      <div className={view.name} style={{ minWidth: "200px" }}>
+                        <h2>{game.black}</h2>
+                        <h3 style={game.blackRatingChange >= 0 ? { color: "green" } : { color: "red" }}>
+                          Rating:
+                          {game.blackRatingChange >= 0 ? " +" : " "}
+                          {game.blackRatingChange}
+                        </h3>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+            :
+            <>
+              <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>Post</h2>
+              <ul id="post-history-list">
+                {posts && posts.map((post, index) => (
+                  <li className={view.history_post} key={index}>
+                    <div className={view.post} style={{marginBottom:"10px",textWrap:"wrap",overflowWrap: "break-word", wordBreak: "break-word"}}>
+                    <Link to="/">
+                      <div >
+                        <h1 style={{textWrap:"wrap"}}>{post.post}</h1>
+                        <br />
+                        <h4>Author: {post.username}</h4>
+                        <br />
+                        <p style={{textWrap:"wrap"}}>{post.timestamp}ádasdasdas</p>
+                      </div>
+                    </Link>
                     </div>
-                    <div className={view.Profile_button}>
-                        <Button className={view.btn_fill} type="submit">Kết bạn
-                        </Button>
-                        <Button className={view.btn_fill} type="submit">Kết bạn
-                        </Button>
-                        <Button className={view.btn_fill}  type="submit">Kết bạn
-                        </Button>
-                        <Button className={view.btn_fill}  type="submit">Kết bạn
-                        </Button>
-                    </div>
-
-                </div>
-                <div className={view.table2}>
-                    <div className={view.author}>
-
-                        <h2 className={view.title}>Trận đấu đang diễn ra</h2>
-                        <p className={view.description}>Không có trận đấu nào đang diễn ra</p>
-                    </div>
-                </div>
-
-                <div className={view.table1}>
-                    <h2 style={{textAlign: "center"}}>Lịch sử đấu</h2>
-                    <Input placeholder="SEARCH" type="text" className={view.sreachbox}/>
-
-                    <Table className={view.tablesorter}>
-                        <thead className={view.text_primary}>
-                        <tr>
-                            <th style={{textAlign: "left"}}>Đối thủ</th>
-                            <th>Kết quả</th>
-                            <th className={view.text_center}>Số nước đi</th>
-                            <th> Ngày</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td style={{display: "flex", alignItems: "center"}}>
-                                <img style={{width: "50px", height: "50px", borderRadius: "50%"}}
-                                     src='https://png.pngtree.com/element_origin_min_pic/17/09/17/f3b45173e323d174be4fd3ce92053df0.jpg'/>
-                                <p style={{marginLeft: "6px", alignSelf: "center"}}>asdsakjd</p>
-                            </td>
-                            <td>-100</td>
-                            <td className={view.text_center}>1500</td>
-                            <td>30/02/2003</td>
-                        </tr>
-                        </tbody>
-                    </Table>
-                </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          }
         </div>
-        </>
-    )
-        ;
+      </div>
+    </>
+  )
 }
+
+
