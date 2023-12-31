@@ -40,19 +40,15 @@ function CreatePost({ addPost }) {
 
     return (
         <>
-            <div>
-                <div className={view.table1}>
-                    <TextArea
-                        // showCount
-                        maxLength={300}
-                        value={content}
-                        onChange={handleChangeContent}
-                        placeholder="Enter post here"
-                        style={{ height: 120, resize: 'none', margin: "1%", width: "98%", marginBottom: "0" }}
-                    />
-                    <Button className={view.btn_fill} style={{ width: "96%", margin: "2%" }} onClick={handlePost}>Post</Button>
-                </div>
-            </div>
+            <TextArea
+                // showCount
+                maxLength={300}
+                value={content}
+                onChange={handleChangeContent}
+                placeholder="Enter post here"
+                style={{ height: 120, resize: 'none', margin: "1%", width: "98%", marginBottom: "0" }}
+            />
+            <Button className={view.btn_fill} style={{ width: "96%", margin: "2%" }} onClick={handlePost}>Post</Button>
         </>
     )
 }
@@ -100,7 +96,9 @@ export default function Post() {
                 <div className={view.title}>
                     <h1>Create post</h1>
                 </div>
-                <CreatePost addPost={addPost} />
+                <div className={view.table1}>
+                    <CreatePost addPost={addPost} />
+                </div>
                 <div className={view.table1}>
                     <LatestPost latestPosts={latestPosts} />
                 </div>

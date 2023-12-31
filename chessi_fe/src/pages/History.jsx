@@ -69,7 +69,7 @@ export default function History() {
   const chartTime = [];
   for (let i = 0; i < ratingChange?.length; i++) {
     chartRating[i] = ratingChange[i]["rating"];
-    chartTime[i] = ratingChange[i]["timestamp"]
+    chartTime[i] = ratingChange[i]["timestamp"].replace('T', " ").slice(0, -5);
   }
   console.log(chartRating);
   const dataChart = {
@@ -162,7 +162,7 @@ export default function History() {
                       </div>
                       <div style={{ minWidth: "200px", marginTop: "-15%" }}>
                         <h1>{game.reason}</h1>
-                        <p>{game.timestamp}</p>
+                        <p>{game.timestamp.replace('T', " ").slice(0, -5)}</p>
                       </div>
                       <div className={view.name} style={{ minWidth: "200px", textAlign: "right" }}>
                         <h2>{game.white}</h2>
