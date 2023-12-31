@@ -35,9 +35,9 @@ let handleGetPost = async (req, res) => {
     try {
         let postid = req.params.postid;
         
-        let { authorName, authorid, post, comments } = await getPostService(postid);
+        let { author, authorid, post, comments } = await getPostService(postid);
 
-        res.status(200).json({ status: "ok", authorName: authorName, authorid: authorid, post: post, comments: comments });
+        res.status(200).json({ status: "ok", author: author, authorid: authorid, post: post, comments: comments });
     } catch(err) {
         console.log(err)
         if(checkHttpError(err)) {

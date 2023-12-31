@@ -9,7 +9,7 @@ export default function SinglePost({ post, index }) {
                     <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
                         <h1 style={{ textWrap: "wrap" }}>{post.post}</h1>
                         <br />
-                        <h5>Author: {post.username}</h5>
+                        <h5>Author: {post.author}</h5>
                         <br />
                         <p style={{ textWrap: "wrap" }}>{post.timestamp}</p>
                     </div>

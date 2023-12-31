@@ -61,14 +61,14 @@ let getPostService = async (postid) => {
     }
 
     // normalizing return value
-    let authorName = postFound.user.username;
+    let author = postFound.user.username;
     let authorid =  postFound.user.userid;
     let _post = postFound.post;
     let comments = postFound.comments.map(Element => {
-        return { comment: Element.comment, authorName: Element.user.username, authorid: Element.user.userid }
+        return { comment: Element.comment, author: Element.user.username, authorid: Element.user.userid }
     });
 
-    return { authorName: authorName, authorid: authorid, post: _post, comments: comments } 
+    return { author: author, authorid: authorid, post: _post, comments: comments } 
 }
 
 let getAllPostService = async () => {

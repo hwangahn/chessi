@@ -987,7 +987,7 @@
                 "posts": [
                   {
                     "postid": 1,
-                    "username": "something",
+                    "author": "something",
                     "post": "string",
                     "timestamp": "2023-12-29T16:18:55.000Z"
                   },
@@ -2255,13 +2255,13 @@
             "examples": {
               "application/json": {
                 "status": "ok",
-                "authorName": "something",
+                "author": "something",
                 "authorid": 1,
                 "post": "string",
                 "comments": [
                   {
                     "comment": "string",
-                    "authorName": "something",
+                    "author": "something",
                     "authorid": 1
                   },
                   {
