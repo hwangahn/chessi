@@ -3,11 +3,11 @@ const { checkHttpError } = require('../utils/checkError');
 
 let handlePost = async (req, res) => {
     try {
-        let { userid, post } = { userid: req.token.userid, post: req.body.post };
+        let { userid, _post } = { userid: req.token.userid, _post: req.body.post };
 
-        await postService(userid, post);
+        let { postid, post, timestamp } = await postService(userid, _post);
 
-        res.status(200).json({ status: "ok" });
+        res.status(200).json({ status: "ok", postid: postid, post: post, timestamp: timestamp });
     } catch(err) {
         console.log(err)
         if(checkHttpError(err)) {

@@ -111,14 +111,6 @@ export default function Home() {
     }
   }
 
-  let handleTestDisconnect = () => {
-    if (socket.io.engine) {
-      // close the low-level connection and trigger a reconnection
-      socket.io.engine.close();
-      setConnected(socket.connected);
-    }
-  }
-
   let handleClickOpen = () => {
     setPop(!popup);
   }
@@ -181,6 +173,16 @@ export default function Home() {
       cursor: "pointer"
     }
 
+
+
+    let handleJoinLobby = () => {
+      if (lobbyid !== "") {
+        navigate(`/lobby/${lobbyid}`);
+      }
+    }
+
+    let [lobbyid, setLobbyid] = useState("");
+
     return(
       <>
         {popup?
@@ -191,10 +193,10 @@ export default function Home() {
                       <img src="x-regular-24.png" onClick={handleClickOpen} style = {{cursor: "pointer"}}/>
                   </div>
                   <div style={findGameBody}>
-                      <input style={findGameBodyInput} type="text" id="roomID" placeholder="roomID" />
+                      <input style={findGameBodyInput} value={lobbyid} type="text" id="roomID" placeholder="roomID" onChange={(e) => {setLobbyid(e.target.value)}} />
                   </div>
                   <div style={findGameFooter}>
-                      <button style={findGameFooterButton} onClick={handleClickOpen}>Find Game</button>
+                      <button style={findGameFooterButton} onClick={handleJoinLobby}>Find Game</button>
                   </div>
               </div>
           </div>
@@ -249,4 +251,5 @@ export default function Home() {
         </> : ""
       }
     </div>
-  )}
+  )
+}

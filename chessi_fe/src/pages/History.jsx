@@ -30,6 +30,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+import SinglePost from '../components/singlePost';
 
 
 export default function History() {
@@ -39,7 +40,7 @@ export default function History() {
   let [gameHistory, setGameHistory] = useState(null);
   let [username, setUsername] = useState(null);
   let [rating, setRating] = useState(null);
-  // let [posts, setPosts] = useState(null);
+  let [posts, setPosts] = useState(null);
   let [historyType, setHistoryType] = useState('game');
   let params = useParams();
   let navigate = useNavigate();
@@ -58,8 +59,7 @@ export default function History() {
         setUsername(data.username);
         setGameHistory(data.gameHistory);
         setRatingChange(data.ratingChange);
-        // setPosts(data.posts);
-        console.log(ratingChange["rating"]);
+        setPosts(data.posts);
       }
     })()
 
@@ -103,51 +103,6 @@ export default function History() {
     }
   };
 
-  const posts = [{
-    "timestamp": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
-    "username": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
-    "post": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomething"
-  },{
-    "timestamp": 2,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 3,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 4,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 5,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 6,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 7,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 8,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 9,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 10,
-    "username": "something",
-    "post": 1500
-  },]
   return (
     <>
       <div id="leftbar" style={{ float: "left" }}>
@@ -163,16 +118,21 @@ export default function History() {
             <br />
             <h4>Trạng thái hoạt động</h4>
           </div>
-          <div className={view.Profile_button}>
-            {
-              profile.userid == params.userid ?
-              <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> :
-              <>
-                <Button className={view.btn_fill} type="submit">Follow</Button>
-                <Button className={view.btn_fill} type="submit">Spectate</Button>
-              </>
-            }
-          </div>
+          {
+            profile && // if logged in, render
+            <div className={view.Profile_button}>
+              {
+                profile?.userid == params.userid ? // if in user's own profile
+                // render change passwond button 
+                <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> : // else
+                // render follow and spectate button
+                <>
+                  <Button className={view.btn_fill} type="submit">Follow</Button>
+                  <Button className={view.btn_fill} type="submit">Spectate</Button>
+                </>
+              }
+            </div>
+          }
           <div className={view.chartProfile} style={{ height: "auto" }}>
             <h2>Current rating:{rating}</h2>
             <Line
@@ -184,14 +144,15 @@ export default function History() {
         </div>
 
         <div className={view.table1}>
-          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history
-          </Button>
-          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history
-          </Button>
+          <div style={{ marginBottom: "10px", marginTop: "10px" }}>
+            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history
+            </Button>
+            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history
+            </Button>
+          </div>
           {
             historyType === 'game' ?  
             <>
-              <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>History</h2>
               <ul id="game-history-list">
                 {gameHistory && gameHistory.map((game, index) => (
                   <li className={view.history} key={index}>
@@ -227,22 +188,9 @@ export default function History() {
             </>
             :
             <>
-              <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>Post</h2>
               <ul id="post-history-list">
                 {posts && posts.map((post, index) => (
-                  <li className={view.history_post} key={index}>
-                    <div className={view.post} style={{marginBottom:"10px",textWrap:"wrap",overflowWrap: "break-word", wordBreak: "break-word"}}>
-                    <Link to="/">
-                      <div >
-                        <h1 style={{textWrap:"wrap"}}>{post.post}</h1>
-                        <br />
-                        <h4>Author: {post.username}</h4>
-                        <br />
-                        <p style={{textWrap:"wrap"}}>{post.timestamp}ádasdasdas</p>
-                      </div>
-                    </Link>
-                    </div>
-                  </li>
+                  <SinglePost post={post} index={index} />
                 ))}
               </ul>
             </>

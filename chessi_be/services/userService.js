@@ -41,7 +41,9 @@ let getUserDataService = async (userid) => {
 
     let userPostList = await post.findAll({ 
         where: { authorid: userid },
-        include: { model: user }
+        include: { model: user },
+        order: [["timestamp", "DESC"]], 
+        limit: 10 // get 10 latest
     });
 
     let normalizedRatingChange = _ratingChange.map(Element => { 
@@ -159,6 +161,7 @@ let getLeaderboardService = async () => {
 
     // get 10 highest rated players
     let leaderboard = await user.findAll({
+        where: { isAdmin: false },
         order: [["rating", "DESC"]],
         limit: 10
     });

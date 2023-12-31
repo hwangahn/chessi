@@ -703,7 +703,7 @@
             "description": "Bearer token for session checking",
             "required": true,
             "type": "string",
-            "default": "Bearer USER_SESSION_TOKEN_HERE"
+            "default": "Bearer SESSION_TOKEN_HERE"
           },
           {
             "name": "body",
@@ -2109,7 +2109,10 @@
             "description": "Success",
             "examples": {
               "application/json": {
-                "status": "ok"
+                "status": "ok",
+                "postid": 1,
+                "post": "string",
+                "timestamp": "2023-11-30 18:26:03"
               }
             }
           },

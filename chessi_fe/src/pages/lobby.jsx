@@ -80,6 +80,11 @@ function Info() {
             message.error(data.msg);
         }
     }
+    
+    let handleCopylobbyid = () => {
+        navigator.clipboard.writeText(params.lobbyid);
+        message.success("Copied");
+    }
 
     let handleExit = async () => {
         let rawData = await fetch(`/api/lobby/${params.lobbyid}/`, { // leave lobby
@@ -112,9 +117,10 @@ function Info() {
             <div style={{float: "left", width: "20%", height: "80%", textAlign: "center", paddingTop: "10px"}}>
                 <h2 style={{color: "white"}}>{timeLeft}</h2>
                 <div style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}>
-                    <div className='game-btn' style={{width: "100%", height: "80px", paddingTop: "27px", marginTop: "30px"}} onClick={handleSwitchSide}><a>Switch side</a></div>
-                    <div className='game-btn' style={{width: "100%", height: "80px", paddingTop: "27px", marginTop: "30px"}} onClick={handleStart}><a>Start</a></div>
-                    <div className='game-btn' style={{width: "100%", height: "80px", paddingTop: "27px", marginTop: "30px", backgroundColor: "#bf2c3b"}} onClick={handleExit}><a>Exit lobby</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "60px", paddingTop: "27px", marginTop: "10px"}} onClick={handleSwitchSide}><a>Switch side</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "110px", paddingTop: "27px", marginTop: "10px"}} onClick={handleCopylobbyid} ><a>Copy lobby ID</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "60px", paddingTop: "27px", marginTop: "10px", backgroundColor: "#036bfc"}} onClick={handleStart}><a>Start</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "60px", paddingTop: "27px", marginTop: "10px", backgroundColor: "#bf2c3b"}} onClick={handleExit}><a>Exit lobby</a></div>
                 </div>
             </div>
             <div style={{float: "right", width: "40%", height: "80%"}}>
@@ -204,7 +210,7 @@ export default function Lobby() {
             <div style={{ float: "left", width: "21%", marginLeft:"15.5vw", marginTop: "1.5%" }}>
                 <Chat roomid={params.roomid} />
             </div>
-            <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%" }}>
+            <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%", marginTop: "3%" }}>
                 <Info />
             </div>
         </div>
