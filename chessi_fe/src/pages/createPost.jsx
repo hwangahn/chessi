@@ -31,7 +31,7 @@ function CreatePost({ addPost }) {
         let data = await rawData.json();
 
         if (data.status === "ok") {
-            addPost({ postid: data.postid, post: data.post, timestamp: data.timestamp, username: profile.username });
+            addPost({ postid: data.postid, post: data.post, timestamp: data.timestamp, author: profile.username });
             setContent("");
         } else {
             message.error(data.msg);

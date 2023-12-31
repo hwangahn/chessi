@@ -6,6 +6,8 @@ import VerticalmenuUser from '../components/verticalmenuUser';
 import { message } from 'antd';
 import Chat from '../components/chat';
 import socket from '../utils/socket';
+import view from './view.module.css';
+
 
 function Info() {
     let { accessToken } = useContext(AuthContext);
@@ -117,10 +119,10 @@ function Info() {
             <div style={{float: "left", width: "20%", height: "80%", textAlign: "center", paddingTop: "10px"}}>
                 <h2 style={{color: "white"}}>{timeLeft}</h2>
                 <div style={{width: "80%", marginLeft: "auto", marginRight: "auto"}}>
-                    <div className='game-btn' style={{width: "100%", height: "60px", paddingTop: "27px", marginTop: "10px"}} onClick={handleSwitchSide}><a>Switch side</a></div>
-                    <div className='game-btn' style={{width: "100%", height: "110px", paddingTop: "27px", marginTop: "10px"}} onClick={handleCopylobbyid} ><a>Copy lobby ID</a></div>
-                    <div className='game-btn' style={{width: "100%", height: "60px", paddingTop: "27px", marginTop: "10px", backgroundColor: "#036bfc"}} onClick={handleStart}><a>Start</a></div>
-                    <div className='game-btn' style={{width: "100%", height: "60px", paddingTop: "27px", marginTop: "10px", backgroundColor: "#bf2c3b"}} onClick={handleExit}><a>Exit lobby</a></div>
+                <div className='game-btn' style={{width: "100%", height: "5vw", paddingTop: "27px", marginTop: "1vw", backgroundColor: "#036bfc"}} onClick={handleStart}><a>Start</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "5vw", paddingTop: "27px", marginTop: "1vw"}} onClick={handleSwitchSide}><a>Switch side</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "5vw", paddingTop: "27px", marginTop: "1vw"}} onClick={handleCopylobbyid} ><a>Copy lobby ID</a></div>
+                    <div className='game-btn' style={{width: "100%", height: "60px", paddingTop: "27px", marginTop: "1vw", backgroundColor: "#bf2c3b"}} onClick={handleExit}><a>Exit lobby</a></div>
                 </div>
             </div>
             <div style={{float: "right", width: "40%", height: "80%"}}>
@@ -135,7 +137,8 @@ function Info() {
 
 function White({ username, rating, isCreator }) {
     return (
-        <div style={{width: "100%", height: "500px", backgroundColor: "#1E1D2F", textAlign: "center", paddingTop: "10px"}}>
+        <div style={{width: "100%", height: "100%", backgroundColor: "#1E1D2F", textAlign: "center", paddingTop: "10px"}}>
+            <div style={{minHeight:"150px"}}>
             <h1>White</h1>
             <div style={{ color:"white",fontSize: "1.6vw" }}>
                 {isCreator ?
@@ -146,18 +149,18 @@ function White({ username, rating, isCreator }) {
                 {username ? <h2>{username}</h2> : <></>}
                 {rating ? <h3>Rating: {rating}</h3> : <></> }
             </div>
-            {isCreator ?
-                <img src="../../public/chess1.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-1.7vw", left: "2.2vw"}}/> :
-                <img src="../../public/chess1.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-5vw", left: "2.2vw"}}/>
-            }
+            </div>
+                <img src="../../public/chess1.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-1.7vw" }}/> 
         </div>
     )
 }
 
 function Black({ username, rating, isCreator }) {
     return (
-        <div style={{width: "100%", height: "500px", backgroundColor: "#1E1D2F", textAlign: "center", paddingTop: "10px"}}>
+        <div style={{width: "100%", height: "100%", backgroundColor: "#1E1D2F", textAlign: "center", paddingTop: "10px"}}>
+            <div style={{minHeight:"150px"}}>
             <h1>Black</h1>
+            
             <div style={{ color:"white",fontSize: "1.6vw" }}>
                 {isCreator ?
                 <CrownOutlined /> :
@@ -167,10 +170,8 @@ function Black({ username, rating, isCreator }) {
                 {username ? <h2>{username}</h2> : <></>}
                 {rating ? <h3>Rating: {rating}</h3> : <></> }
             </div>
-            {isCreator ?
-                <img src="../../public/chess2.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-1.7vw", left: "2.2vw"}}/> :
-                <img src="../../public/chess2.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-5vw", left: "2.2vw"}}/>
-            }
+            </div>
+                <img src="../../public/chess2.png" alt="" style={{display: "flex", position:"relative", width: "20vw", height: "20vw", bottom: "-1.7vw"}}/> 
         </div>
     )
 }
@@ -204,14 +205,16 @@ export default function Lobby() {
 
     return (
         <div>
-            <div id="leftbar" style={{ float: "left" }}>
+            <div id="leftbar" style={{float:"left"}}>
                 <VerticalmenuUser />
             </div>
-            <div style={{ float: "left", width: "21%", marginLeft:"15.5vw", marginTop: "1.5%" }}>
-                <Chat roomid={params.lobbyid} />
-            </div>
-            <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%", marginTop: "3%" }}>
-                <Info />
+            <div className = {view.content}>
+              <div style={{ float: "left", width: "30%", marginTop: "3%", marginLeft:"5%" }}>
+                  <Chat roomid={params.lobbyid} />
+              </div>
+              <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%", marginTop: "3%" }}>
+                  <Info />
+              </div>
             </div>
         </div>
 
