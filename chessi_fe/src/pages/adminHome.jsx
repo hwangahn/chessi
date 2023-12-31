@@ -10,7 +10,7 @@ export default function AdminHome() {
         <div id="leftbar" style={{float:"left"}}>
             <VerticalmenuAdmin />
         </div>
-        <div className={view.content}>    
+        {/* <div className={view.content}>    
             <div className={view.title}>
                 <h1 style={{textAlign:"center"}}>Dashboard</h1>
             </div>
@@ -33,7 +33,7 @@ export default function AdminHome() {
                 <h2>123123</h2>
                 </div>
             </div>
-        </div>
+        </div> */}
         </>
     );
 }

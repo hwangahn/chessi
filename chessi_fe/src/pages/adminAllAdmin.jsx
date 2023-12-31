@@ -40,44 +40,44 @@ export default function AdminAllAdmin() {
 
     return (
         <>
-        <div id="leftbar" style={{float:"left"}}>
-            <VerticalmenuAdmin />
-        </div>
-        <div className={view.content}>
-            
-            <div className={view.title}>
-                <h1 style={{textAlign:"center"}}></h1>
+            <div id="leftbar" style={{float:"left"}}>
+                <VerticalmenuAdmin />
             </div>
-            <div className={view.ranking_table} >
+            <div className={view.content}>
+                
+                <div className={view.title}>
+                    <h1 style={{textAlign:"center"}}></h1>
+                </div>
+                <div className={view.ranking_table} >
 
-                {/*<Input placeholder="SEARCH" type="text" className="sreachbox"/>*/}
-                <Table className={view.tablesorter}>
-                    <thead className="text-primary">
-                    <tr style={{paddingTop:"0",paddingLeft:"5%", background:"#2D2C45",color:"white", height:"30px"}}>
-                        <th className="Stt2">STT</th>
-                        <th style={{width:"40%"}}>Username</th>
-                        <th>Rating</th>
-                    </tr>
-                    </thead>
+                    {/*<Input placeholder="SEARCH" type="text" className="sreachbox"/>*/}
+                    <Table className={view.tablesorter}>
+                        <thead className="text-primary">
+                        <tr style={{paddingTop:"0",paddingLeft:"5%", background:"#2D2C45",color:"white", height:"30px"}}>
+                            <th className="Stt2">STT</th>
+                            <th style={{width:"40%"}}>Username</th>
+                            <th>Rating</th>
+                        </tr>
+                        </thead>
 
-                    <tbody>
-                        {users.map((Element, index) => (
+                        <tbody>
+                            {users.map((Element, index) => (
 
-                                <tr>
-                                                                
-                                    <td className={view.Stt}>{index}</td>
-                                    <td><Link to={`/user/${Element.userid}`}><UserOutlined style={{marginRight: "0.3vw"}} /> {Element.username}</Link></td>
-                                    <td>{Element.rating}</td>
-                        
-                                </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                                    <tr>
+                                                                    
+                                        <td className={view.Stt}>{index}</td>
+                                        <td><Link to={`/user/${Element.userid}`}><UserOutlined style={{marginRight: "0.3vw"}} /> {Element.username}</Link></td>
+                                        <td>{Element.rating}</td>
+                            
+                                    </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+
+                </div>
+
 
             </div>
-
-
-        </div>
         </>
     );
 }

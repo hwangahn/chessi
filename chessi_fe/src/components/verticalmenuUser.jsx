@@ -8,8 +8,7 @@ import { useContext } from "react"
 export default function verticalmenuUser(){
     let navigate = useNavigate();
 
-    let { useLogout } = useContext(AuthContext);
-    let { profile } = useContext(AuthContext);
+    let { useLogout, profile } = useContext(AuthContext);
     let handleLogout = async () => {
         let { status, msg } = await useLogout();
     

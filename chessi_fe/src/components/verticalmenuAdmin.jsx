@@ -6,7 +6,7 @@ import { useContext } from "react"
 
 export default function verticalmenuAdmin(){
 
-    let { useLogout } = useContext(AuthContext);
+    let { useLogout, profile } = useContext(AuthContext);
 
     let handleLogout = async () => {
         let { status, msg } = await useLogout();
@@ -35,6 +35,10 @@ export default function verticalmenuAdmin(){
                             <li>
                                 <img src="../../public/choi.png" alt=""/>
                                 <Link to ="/admin/all-admin">All admin</Link>
+                            </li>
+                            <li>
+                                <img src="../../public/choi.png" alt=""/>
+                                <Link to ="/admin/add-admin">Add admin</Link>
                             </li>
                             <li>
                                 <img src="../../public/choi.png" alt=""/>
