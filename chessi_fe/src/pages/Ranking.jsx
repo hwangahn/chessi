@@ -44,7 +44,7 @@ export default function Ranking() {
             {data.map((item, index) => (
               <li className={view.friend} key={item.userid}>
                 <Link to={`/user/${item.userid}`}>
-                  <h1 style={{ width: "50px", paddingRight: "40%", marginLeft: "8%" }} key={index + 1}>#{index + 1}.</h1>
+                  <h1 style={{ width: "50px", paddingRight: "30%", marginLeft: "8%" }} key={index + 1}>#{index + 1}.</h1>
                   <div className={view.name}>
                     <h2>{item.username}</h2>
                     <p>Rating: {item.rating}</p>
