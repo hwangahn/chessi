@@ -47,11 +47,11 @@ export default function Ranking() {
                   <h1 style={{ width: "50px", paddingRight: "30%", marginLeft: "8%" }} key={index + 1}>#{index + 1}.</h1>
                   <div className={view.name}>
                     <h2>{item.username}</h2>
-                    <p>Rating: {item.rating}</p>
-                    <p>Id: {item.userid}</p>
+                    {/* <p>Rating: {item.rating}</p> */}
+                    {/* <p>Id: {item.userid}</p>   */}
                   </div>
                 </Link>
-                <Button className={view.btn_fill} type="submit">Theo dõi</Button>
+                <Button className={view.btn_fill} type="submit">{item.rating}</Button>
               </li>
             ))}
           </ul>

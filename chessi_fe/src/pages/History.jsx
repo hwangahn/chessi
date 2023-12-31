@@ -155,25 +155,26 @@ export default function History() {
             <>
               <ul id="game-history-list">
                 {gameHistory && gameHistory.map((game, index) => (
-                  <li className={view.history} key={index}>
+                  <li  key={index}>
+                    <div className={view.history} >
                     <Link to={`/game/played/${game.gameid}`}>
-                      <div className={view.history_board} style={{ width: "250px" }}>
+                      <div className={view.history_board} style={{ width: "13vw" }}>
                         <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} />
                       </div>
-                      <div style={{ minWidth: "200px", marginTop: "-15%" }}>
+                      <div style={{ minWidth: "13vw",marginTop:"-6vw" ,fontSize:"1vw"}}>
                         <h1>{game.reason}</h1>
                         <p>{game.timestamp.replace('T', " ").slice(0, -5)}</p>
                       </div>
-                      <div className={view.name} style={{ minWidth: "200px", textAlign: "right" }}>
-                        <h2>{game.white}</h2>
+                      <div className={view.name} style={{ minWidth: "13vw", textAlign: "right" ,fontSize:"1vw"}}>
+                        <h2 >{game.white}</h2>
                         <h3 style={game.whiteRatingChange >= 0 ? { color: "green", paddingLeft: "5px" } : { color: "red", paddingLeft: "5px" }}>
                           Rating:
                           {game.whiteRatingChange >= 0 ? " +" : " "}
                           {game.whiteRatingChange}
                         </h3>
                       </div>
-                      <img src="../public/Vs.png" style={{ width: "100px" }} />
-                      <div className={view.name} style={{ minWidth: "200px" }}>
+                      <img src="../public/Vs.png" style={{ width: "5vw" }} />
+                      <div className={view.name} style={{ minWidth: "13vw" ,fontSize:"1vw" }}>
                         <h2>{game.black}</h2>
                         <h3 style={game.blackRatingChange >= 0 ? { color: "green" } : { color: "red" }}>
                           Rating:
@@ -182,6 +183,7 @@ export default function History() {
                         </h3>
                       </div>
                     </Link>
+                    </div>
                   </li>
                 ))}
               </ul>
