@@ -5,7 +5,7 @@ import { Input,  Button } from "reactstrap";
 
 import VerticalmenuUser from '../components/verticalmenuUser';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { message, Space } from 'antd';
 import { Line } from "react-chartjs-2";
@@ -20,6 +20,7 @@ import {
   Legend,
   // datalabels
 } from 'chart.js';
+import { AuthContext } from '../contexts/auth';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -32,6 +33,7 @@ ChartJS.register(
 
 
 export default function History() {
+  let { profile } = useContext(AuthContext);
 
   let [ratingChange, setRatingChange] = useState(null);
   let [gameHistory, setGameHistory] = useState(null);
@@ -61,7 +63,7 @@ export default function History() {
       }
     })()
 
-  }, [])
+  }, [params.userid])
 
   const chartRating = [];
   const chartTime = [];
@@ -162,10 +164,14 @@ export default function History() {
             <h4>Trạng thái hoạt động</h4>
           </div>
           <div className={view.Profile_button}>
-            <Button className={view.btn_fill} type="submit">Follow
-            </Button>
-            <Button className={view.btn_fill} type="submit">Spectate
-            </Button>
+            {
+              profile.userid == params.userid ?
+              <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> :
+              <>
+                <Button className={view.btn_fill} type="submit">Follow</Button>
+                <Button className={view.btn_fill} type="submit">Spectate</Button>
+              </>
+            }
           </div>
           <div className={view.chartProfile} style={{ height: "auto" }}>
             <h2>Current rating:{rating}</h2>
@@ -189,9 +195,9 @@ export default function History() {
               <ul id="game-history-list">
                 {gameHistory && gameHistory.map((game, index) => (
                   <li className={view.history} key={index}>
-                    <Link to="/">
+                    <Link to={`/game/played/${game.gameid}`}>
                       <div className={view.history_board} style={{ width: "250px" }}>
-                        <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} />
+                        <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} />
                       </div>
                       <div style={{ minWidth: "200px", marginTop: "-15%" }}>
                         <h1>{game.reason}</h1>

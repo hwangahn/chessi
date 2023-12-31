@@ -222,7 +222,7 @@ export default function Home() {
 
           <div className="game-screen" style={{display: "flex",padding: "0px",margin: "0px", marginLeft:"14.1vw"}}>
             <div className="board" style={{width: "46%"}}>
-              <Chessboard id={0} arePiecesDraggable={false} />              
+              <Chessboard id={0} arePiecesDraggable={false} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} />              
             </div>
             <div className="play">
               <div className="title" style={title}>Chessi</div>

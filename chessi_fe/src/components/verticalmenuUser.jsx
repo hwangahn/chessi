@@ -37,7 +37,7 @@ export default function verticalmenuUser(){
                     </li>
                     <li>
                         <img src="../../public/history.png" alt=""/>
-                        <Link to ={`/history/${userId}`}>User</Link>
+                        <Link to ={`/user/${userId}`}>User</Link>
                     </li>
                     <li>
                         <img src="../../public/diendan.png" alt=""/>
