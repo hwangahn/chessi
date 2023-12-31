@@ -1,33 +1,79 @@
-const { userDataService, gameDataService, gameMoveService} = require('../services/userService')
+const { getUserDataService, userFollowService, userUnfollowService, getUserFollowingService, getLeaderboardService } = require('../services/userService')
 const { checkHttpError } = require('../utils/checkError')
 
-let takeUserData = async (req, res) => {
+let handleGetUserData = async (req, res) => {
     try {
-        let { userId } = req.body
+        let { userid, currentuserid } = { userid: req.params.userid, currentuserid: req.query.currentuserid  };
 
-        await userDataService(userId);
+        console.log(currentuserid);
 
-        res.status(200).json({ status: "ok", msg: ""})
+        let { username, rating, ratingChange, gameHistory, posts, isFollowing } = await getUserDataService(userid, currentuserid);
+
+        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory, posts: posts, isFollowing });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {
-            res.status(err.getHttpCode()).json({ status: "error", msg: ""})
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
         }
     }
 }
 
-let takeGameData = async (req, res) => {
+let handleUserFollow = async (req, res) => {
     try {
-        let { gameId } = req.body
+        let { followerid, userid } = { followerid: req.token.userid, userid: req.params.userid } // userid indicates user to follow
 
-        await gameDataService(gameId);
-        await gameMoveService(gameId);
-        res.status(200).json( { status: "ok", msg: ""} )
+        await userFollowService(followerid, userid);
+
+        res.status(200).json({ status: "ok" });
     } catch(err) {
         console.log(err);
-        res.status(err.getHttpCode()).json({status: "error", msg: ""})
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
     }
 }
 
+let handleUserUnfollow = async (req, res) => {
+    try {
+        let { followerid, userid } = { followerid: req.token.userid, userid: req.params.userid } // userid indicates user to follow\
 
-module.exports = { takeUserData, takeGameData }
+        await userUnfollowService(followerid, userid);
+
+        res.status(200).json({ status: "ok" });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+let handleGetUserFollowing = async (req, res) => {
+    try {
+        let { userid } = req.token;
+        
+        let data = await getUserFollowingService(userid);
+
+        res.status(200).json({ status: "ok", following: data });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+let handleGetLeaderboard = async (req, res) => {
+    try {        
+        let leaderboard = await getLeaderboardService();
+
+        res.status(200).json({ status: "ok", leaderboard: leaderboard });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+module.exports = { handleGetUserData, handleUserFollow, handleUserUnfollow, handleGetUserFollowing, handleGetLeaderboard }

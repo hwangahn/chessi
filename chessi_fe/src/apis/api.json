@@ -1,0 +1,2369 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API document",
+    "version": "1.0",
+    "title": "Chessi"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/",
+  "tags": [{
+      "name": "Admin",
+      "description": "System admin/management API"
+    },
+    {
+      "name": "Logon",
+      "description": "Logon related API. Used for both user and admin unless stated otherwise"
+    },
+    {
+      "name": "User",
+      "description": "User related API"
+    },
+    {
+      "name": "Game",
+      "description": "Game API"
+    },
+    {
+      "name": "Lobby",
+      "description": "Lobby API. Used when playing with friend to create match"
+    },
+    {
+      "name": "Post",
+      "description": "Post and comment API"
+    },
+    {
+      "name": "Search",
+      "description": "Search API"
+    }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/admin": {
+      "put": {
+        "tags": ["Admin"],
+        "summary": "Create admin account",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object", 
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "The email of the admin",
+                      "default": "john@example.com"
+                    }
+                  }
+                }
+              },
+              "required": ["username", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Admin account created"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Username already used"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/admin/{adminid}": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get admin account",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "adminid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Admin id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done",
+                "username": "something",
+                "isAdmin": true
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find admin"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Admin"],
+        "summary": "Remove admin account",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "adminid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Admin id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find admin"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/admin/all-user": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get all users",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "Authorization",
+          "in": "header",
+          "description": "Bearer token for authorization",
+          "required": true,
+          "type": "string",
+          "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done",
+                "user": [{
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/admin/all-admin": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get all admin",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "Authorization",
+          "in": "header",
+          "description": "Bearer token for authorization",
+          "required": true,
+          "type": "string",
+          "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done",
+                "user": [{
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/admin/active-user": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get all active users",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "Authorization",
+          "in": "header",
+          "description": "Bearer token for authorization",
+          "required": true,
+          "type": "string",
+          "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done",
+                "user": [{
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/admin/all-game": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get all games",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "Authorization",
+          "in": "header",
+          "description": "Bearer token for authorization",
+          "required": true,
+          "type": "string",
+          "default": "Bearer ADMIN_ACCESS_TOKEN_HERE"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done",
+                "game": [{
+                    "gameid": 17013687199650,
+                    "reason": "Timed out",
+                    "timestamp": "2023-11-30 18:26:03",
+                    "finalFen": "rn1qkbnr/pppB1ppp/8/3p4/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 0 5",
+                    "white": "something",
+                    "black": "something",
+                    "whiteRatingChange": 7,
+                    "blackRatingChange": -7
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not admin"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "User signup",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": "true",
+          "schema": {
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "Must include lowercase, uppercase, number and no other symbol. Min length 8"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "The email of the user",
+                    "default": "john@example.com"
+                  }
+                }
+              }
+            },
+            "required": ["username", "password", "email"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Head over to your mailbox for verification"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Username Exist"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Login",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": "true",
+          "schema": {
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "Must include lowercase, uppercase, number and no other symbol. Min length 8"
+                  },
+                  "socketid": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "required": ["username", "password", "socketid"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Logged in",
+                "accessToken": "JWT token",
+                "sessionToken": "JWT token",
+                "profile": {
+                  "userid": 1,
+                  "username": "something",
+                  "isAdmin": false,
+                  "rating": 1500
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Wrong credentials"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Verify your email before continue"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "This account is logged in on another computer. Log out of the existing session then proceed to log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/silent-login": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Login using session token",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for session checking",
+            "required": true,
+            "type": "string",
+            "default": "Bearer SESSION_TOKEN_HERE"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "socketid": {
+                  "type": "string"
+                }
+              },
+              "required": ["socketid"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Logged in",
+                "accessToken": "JWT token",
+                "profile": {
+                  "userid": 1,
+                  "username": "something",
+                  "isAdmin": false,
+                  "rating": 1500
+                }
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "401 3": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot verify session"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Logout",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Logged out"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/reset-password": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Reset password. A random password will be sent to the user via email",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": "true",
+          "schema": {
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "email": {
+                    "type": "string",
+                    "default": "john@example.com"
+                  }
+                }
+              }
+            },
+            "required": ["username", "email"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Head over to your mailbox to obtain new password"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user with given username/email"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/change-password": {
+      "post": {
+        "tags": ["Logon"],
+        "summary": "Get user's current active lobby",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "password": {
+                      "type": "string",
+                      "description": "The username of the user"
+                    }
+                  }
+                }
+              },
+              "required": ["password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Password changed"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/{userid}?currentuserid={currentuserid}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user account",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "currentuserid",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "default": -100,
+            "description": "Current user id to check if thay have followed target user or not. If not logged in, default to -100"
+          },
+          {
+            "in": "path",
+            "name": "userid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "User id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "msg": "Done",
+                "username": "something",
+                "rating": 1500, 
+                "ratingChange": [
+                  { "timestamp": "2023-11-30 18:26:03", "rating": 1493 },
+                  { "...": "same format" }
+                ],
+                "gameHistory": [
+                  {
+                    "gameid": 17013687199650,
+                    "reason": "Timed out",
+                    "timestamp": "2023-11-30 18:26:03",
+                    "finalFen": "rn1qkbnr/pppB1ppp/8/3p4/3P4/8/PPP2PPP/RNBQK1NR b KQkq - 0 5",
+                    "white": "something",
+                    "black": "something",
+                    "whiteRatingChange": 7,
+                    "blackRatingChange": -7
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ],
+                "posts": [
+                  {
+                    "postid": 1,
+                    "author": "something",
+                    "post": "string",
+                    "timestamp": "2023-12-29T16:18:55.000Z"
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ],
+                "isFollowing": true
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/leaderboard": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all user's following",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "leaderboard": [
+                  {
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  { "...": "same format" }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/following": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all user's following",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "following": [
+                  {
+                    "userid": 1,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  { "...": "same format" }
+                ]
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/{userid}/follow": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Follow other user",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "User id to follow"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You cannot follow yourself"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already following this player"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Unfollow other user if following",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "User id to unfollow"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You cannot unfollow yourself"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not following this player"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/game/find-game": {
+      "post": {
+        "tags": ["Game"],
+        "summary": "User find game",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "Authorization",
+          "in": "header",
+          "description": "Bearer token for authorization",
+          "required": true,
+          "type": "string",
+          "default": "Bearer USER_ACCESS_TOKEN_HERE"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find game. Try again later"
+              }
+            }
+          },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Game"],
+        "summary": "User stop find game",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "Authorization",
+          "in": "header",
+          "description": "Bearer token for authorization",
+          "required": true,
+          "type": "string",
+          "default": "Bearer USER_ACCESS_TOKEN_HERE"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/game/{gameid}": {
+      "get": {
+        "tags": ["Game"],
+        "summary": "Get game info",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "gameid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Game id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "gameInfo": {
+                  "gameid": 17028124918640,
+                  "black": {
+                    "username": "something",
+                    "rating": 1465
+                  },
+                  "white": {
+                    "username": "somgthing",
+                    "rating": 1535
+                  },
+                  "position": "rnbqkbnr/ppp2ppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+                  "history": [
+                    {
+                      "color": "w",
+                      "piece": "p",
+                      "from": "e2",
+                      "to": "e4",
+                      "san": "e4",
+                      "flags": "b",
+                      "lan": "e2e4",
+                      "before": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+                      "after": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+                    },
+                    {
+                      "...": "same format"
+                    }
+                  ],
+                  "turn": "w",
+                  "timeLeft": 897
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find game"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/game/user-active-game": {
+      "get": {
+        "tags": ["Game"],
+        "summary": "Get user's current active game",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "inGame": true,
+                "gameid": 17013687199650
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/game/played/{gameid}": {
+      "get": {
+        "tags": ["Game"],
+        "summary": "Get played game with gameid",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "gameid",
+            "required": "true",
+            "type": "integer" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "reason": "Timed out",
+                "moves": [
+                  {
+                    "moveOrder": 1,
+                    "side": "white",
+                    "notation": "e3",
+                    "fen": "rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+                  },
+                  {
+                    "...":"same format"
+                  }
+                ],
+                "white": {
+                  "userid": 3,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "black": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find game"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Create lobby",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "lobbyid": "290569495"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot create lobby"
+              }
+            }
+          },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/{lobbyid}": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Join lobby",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "creator": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "guest": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "white": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                },
+                "black": {
+                  "userid": 1,
+                  "username": "something",
+                  "rating": 1500
+                }
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403 1": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot join lobby"
+              }
+            }
+          },
+          "403 2": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Lobby full"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "409 1": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a game"
+              }
+            }
+          },
+          "409 2": {
+            "description": "Conflict",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are already in a lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Lobby"],
+        "summary": "Leave lobby",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/user-active-lobby": {
+      "get": {
+        "tags": ["Lobby"],
+        "summary": "Get user's current active lobby",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "inLobby": true,
+                "lobbyid": "290569495"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/{lobbyid}/switch-side": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Switch game side",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not the lobby creator"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/lobby/{lobbyid}/start": {
+      "post": {
+        "tags": ["Lobby"],
+        "summary": "Start game",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lobbyid",
+            "required": "true",
+            "schema": {
+              "type": "integer",
+              "minimum": "1"
+            },
+            "description": "Lobby id"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "403 1": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not the lobby creator"
+              }
+            }
+          },
+          "403 2": {
+            "description": "Forbidden",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Not enough player"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find lobby"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/post": {
+      "get": {
+        "tags": ["Post"],
+        "summary": "Get 10 most recent posts",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "posts": [
+                  {
+                    "postid": 1,
+                    "author": "something",
+                    "post": "string",
+                    "timestamp": "2023-12-29T16:18:55.000Z"
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Post"],
+        "summary": "Create post",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ACCESS_TOKEN_HERE"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "post": {
+                  "type": "string"
+                }
+              },
+              "required": ["post"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "postid": 1,
+                "post": "string",
+                "timestamp": "2023-11-30 18:26:03"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/post/{postid}/comment": {
+      "post": {
+        "tags": ["Post"],
+        "summary": "Comment on post",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token for authorization",
+            "required": true,
+            "type": "string",
+            "default": "Bearer ACCESS_TOKEN_HERE"
+          },
+          {
+            "in": "path",
+            "name": "postid",
+            "required": "true",
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": "true",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "comment": {
+                  "type": "string"
+                }
+              },
+              "required": ["post"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok"
+              }
+            }
+          },
+          "401 1": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "You are not logged in"
+              }
+            }
+          },
+          "401 2": {
+            "description": "Unauthorized",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Session expired. Please log in again"
+              }
+            }
+          },
+          "404 1": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find user"
+              }
+            }
+          },
+          "404 2": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find post"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/post/{postid}": {
+      "get": {
+        "tags": ["Post"],
+        "summary": "Get post and comment",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postid",
+            "required": "true",
+            "type": "integer" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "author": "something",
+                "authorid": 1,
+                "post": "string",
+                "timestamp":"2023-11-30 18:26:03",
+                "comments": [
+                  {
+                    "comment": "string",
+                    "author": "something",
+                    "authorid": 1,
+                    "timestamp":"2023-11-30 18:26:03"
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "msg": "Cannot find post"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/search?keyword={keyword}&type={type}": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "Search for items",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyword",
+            "required": "true",
+            "type": "string",
+            "description": "Keyword to search for"
+          },
+          {
+            "in": "path",
+            "name": "type",
+            "required": "true",
+            "type": "string",
+            "description": "Type of search. Can only be user or post"
+          }
+        ],
+        "responses": {
+          "200 1": {
+            "description": "Success for user query",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "result": [
+                  {
+                    "userid": 8,
+                    "username": "something",
+                    "rating": 1500
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]
+              }
+            }
+          },
+          "200 2": {
+            "description": "Success for post query",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "result": [
+                  {
+                    "postid": 1,
+                    "author": "something",
+                    "post": "something",
+                    "timestamp": "2023-12-30T16:11:26.000Z"
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]              
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,14 +1,15 @@
 const bcrypt = require('bcrypt');
-const { sendVerificationMail } = require('../utils/mail');
+const { sendVerificationMail, sendPassword } = require('../utils/mail');
 const { user } = require('../models/user');
 const { email } = require('../models/email');
 const { gameUser } = require('../models/gameUser');
 const { game } = require('../models/game');
 const { activeUser } = require('../cache/userCache');
 const { userOnlineCache } = require('../cache/userOnlineCache');
+const { matchMakingCache } = require('../cache/matchmakingCache');
+const { activeLobbyCache } = require('../cache/activeLobbyCache');
 const { httpError } = require('../error/httpError');
 const jwt = require('jsonwebtoken');
-const { matchMakingCache } = require('../cache/matchmakingCache');
 require('dotenv').config();
 
 let accessTokenLifetime = '1d';
@@ -52,10 +53,9 @@ let verifyEmailService = async (token) => {
 }
 
 let loginService = async (username, password, socketid) => {
-
     let userFound = await user.findOne({ 
         where: { username: username },
-        attributes: ["username", "password", "userid", "rating"],
+        attributes: ["username", "password", "userid", "rating", "isAdmin"],
         include: [
             { 
                 model: email,
@@ -86,24 +86,36 @@ let loginService = async (username, password, socketid) => {
     let userOnlineStatus = userOnlineCache.findUserByuserid(userFound.userid); // find user from online user list to check if user is online
 
     if (userOnlineStatus) { // if found
-        throw (new httpError(403, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
+        throw (new httpError(409, "This account is logged in on another computer. Log out of the existing session then proceed to log in again"));
     }
 
     userOnlineCache.addUser(new activeUser(userFound.userid, userFound.username, socketid, userFound.rating, userFound.gameUsers.map(Element =>  Element.side))); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
     let sessionToken = jwt.sign({ userid: userFound.userid, type: "session token" }, process.env.SECRET_WORD, { expiresIn: sessionTokenLifetime });
-    let profile = { userid: userFound.userid, username: userFound.username, rating: userFound.rating };
+    let profile = { userid: userFound.userid, username: userFound.username, isAdmin: userFound.isAdmin, rating: userFound.rating };
 
     console.log(`user ${userFound.userid} logged in`)
 
     return { accessToken: accessToken, sessionToken: sessionToken, profile: profile };
 }
 
+let changePasswordService = async (userid, password) => {
+    let userFound = await user.findOne({ where: { userid: userid } });
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user"));
+    }
+
+    let hashedPassword = await bcrypt.hash(password, 10); // hash the password
+
+    await userFound.update({ password: hashedPassword });
+}
+
 let silentLoginService = async (userid, socketid) => {
     let userFound = await user.findOne({ 
         where: { userid: userid },
-        attributes: ["username", "userid", "rating"],
+        attributes: ["username", "userid", "rating", "isAdmin"],
         include: [
             { 
                 model: email
@@ -134,7 +146,7 @@ let silentLoginService = async (userid, socketid) => {
     userOnlineCache.addUser(new activeUser(userFound.userid, userFound.username, socketid, userFound.rating, userFound.gameUsers.map(Element =>  Element.side))); // push user to online list
 
     let accessToken = jwt.sign({ userid: userFound.userid, isAdmin: userFound.isAdmin, type: "access token" }, process.env.SECRET_WORD, { expiresIn: accessTokenLifetime });
-    let profile = { userid: userFound.userid, username: userFound.username, rating: userFound.rating };
+    let profile = { userid: userFound.userid, username: userFound.username, isAdmin: userFound.isAdmin, rating: userFound.rating };
 
     console.log(`user ${userFound.userid} logged in silently`);
 
@@ -144,6 +156,36 @@ let silentLoginService = async (userid, socketid) => {
 let logoutService = async (userid) => {
     userOnlineCache.filterUserByuserid(userid); // remove user from online user list
     matchMakingCache.filterUserByuserid(userid); // remove user from match making queue if in
+    activeLobbyCache.filterUserByuserid(userid); // remove user from lobby if in
 }
 
-module.exports = { signupService, verifyEmailService, loginService, silentLoginService, logoutService }
+let resetPasswordService = async (username, _email) => {
+    let userFound = await user.findOne({ where: { username: username } });
+
+    if (!userFound) {
+        throw (new httpError(404, "Cannot find user with given username/email")); 
+    }
+
+    let emailFound = await email.findOne({ 
+        where: {
+            userid: userFound.userid,
+            email: _email
+        }
+    });
+
+    if (!emailFound) {
+        throw (new httpError(404, "Cannot find user with given username/email")); 
+    }
+
+    let seed = "afshkfhg" + Date.now() + "alkglw";
+
+    let password = await bcrypt.hash(seed, 5);
+
+    let hashedPassword = await bcrypt.hash(password, 10);
+
+    userFound.update({ password: hashedPassword });
+
+    sendPassword(_email, password);
+}
+
+module.exports = { signupService, verifyEmailService, loginService, changePasswordService, silentLoginService, logoutService, resetPasswordService }

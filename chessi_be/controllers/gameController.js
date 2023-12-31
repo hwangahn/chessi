@@ -1,7 +1,7 @@
-const { findGameService, stopFindGameService, getGameService, getUserActiveGameService } = require('../services/gameService');
+const { findGameService, stopFindGameService, getGameService, getUserActiveGameService, getGamePlayedService } = require('../services/gameService');
 const { checkHttpError } = require('../utils/checkError');
 
-let findGameController = async (req, res) => {
+let handleFindGame = async (req, res) => {
     try {
         let { userid } = req.token;
         
@@ -16,7 +16,7 @@ let findGameController = async (req, res) => {
     }
 }
 
-let stopFindGameController = async (req, res) => {
+let handleStopFindGame = async (req, res) => {
     try {
         let { userid } = req.token;
         
@@ -31,7 +31,7 @@ let stopFindGameController = async (req, res) => {
     }
 }
 
-let getGameController = async (req, res) => {
+let handleGetGame = async (req, res) => {
     try {
         let gameid  = req.params.gameid;
 
@@ -46,7 +46,7 @@ let getGameController = async (req, res) => {
     }
 }
 
-let getUserActiveGameController = async (req, res) => {
+let handleGetUserActiveGame = async (req, res) => {
     try {
         let userid = req.token.userid;
 
@@ -61,4 +61,19 @@ let getUserActiveGameController = async (req, res) => {
     }
 }
 
-module.exports = { findGameController, stopFindGameController, getGameController, getUserActiveGameController }
+let handleGetGamePlayed = async (req, res) => {
+    try {
+        let gameid = req.params.gameid;
+
+        let { reason, moves, white, black } = await getGamePlayedService(gameid);
+
+        res.status(200).json({ status: "ok", reason: reason, moves: moves, white: white, black: black });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+module.exports = { handleFindGame, handleStopFindGame, handleGetGame, handleGetUserActiveGame, handleGetGamePlayed }

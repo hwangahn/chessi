@@ -1,0 +1,160 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+a, h1, h2, h3, h4, h5, h6 {
+    color: white;
+}
+
+div.swagger-ui a, div.swagger-ui h1, div.swagger-ui h2, div.swagger-ui h3, div.swagger-ui h4, div.swagger-ui h5, div.swagger-ui h6, div.swagger-ui p {
+    color: black
+}
+
+body{
+    height: 100vh;
+    background: #242337;
+}
+
+.header{
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    position: relative;
+    background-color: #242337;
+    border-bottom: 2px solid #2C2B4D;
+    margin-top: -8px;
+}
+
+.home{
+    border-right: 2px solid #2C2B4D;
+}
+
+.logo{
+    align-items: center;
+    margin-left: 4.65vw;
+    padding-top: 20px;
+    padding-right: 4.65vw;
+    padding-bottom: 10px;
+    width: 9.35vw;
+}
+
+.right_item{
+    display: flex;
+    flex-direction: row;
+    margin: 5px 20px;
+}
+.right_item div{
+    margin: 10px 10px;
+}
+
+.searchbox{
+    width: 45vw;
+    margin: 1vw 10vw 0vw 0vw;
+    position: relative;
+    border-radius: 10px;
+}
+
+ul.single-vertical-menu  {
+	padding: 0px;
+    padding-top: 1vw;
+
+}
+ul.single-vertical-menu  li {
+	left:0px;
+	height: 6.5vw;
+	padding:0px ;  
+    margin:0px;        
+	list-style:none;
+}
+
+ul.single-vertical-menu  li > a {
+	text-decoration:none;
+	cursor: pointer;
+	position:relative;
+    font-size: 1.5vw;
+    top: 0.85vw;
+    left: 1.5vw;
+	color: #BEC1DC;
+}
+
+ul.single-vertical-menu  li > img {
+    position:relative;
+	width: 1.95vw;
+	top: 1.2vw;
+	left: 1vw;
+}
+
+ul.single-vertical-menu  li > a:hover {
+	color:#B5E67B;
+}
+
+.gp1{
+    position: relative;
+    justify-content: space-between;
+    top: 8vw;
+    left: 1.5vw;
+}
+
+.gp2{
+    position: relative;
+    top: 8vw;
+    left: 5vw;
+}
+
+#gm2, #gm4{
+    position:relative;
+    top: 3.4vw;
+}
+
+.game-btn{
+    background-color: #1E1D2F;
+    width: 20vw;
+    color:#B0ABAB;
+    padding: 3.4vw 0vw;
+    text-align: center;
+    font-size: 1.6vw;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+
+.game-btn a{
+    text-decoration:none;
+    color:#B0ABAB;
+}
+
+.game-btn:hover, .game-btn:focus, .game-btn:active{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+.logoutButton{
+    background-color: #1E1D2F;
+    color: #232237;
+    width: 70%;
+    height: 3vw;
+    border: none;
+    border-radius: 2.5vw;
+    margin-left: 15%;
+    margin-top: 6vw;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+
+.logoutButton:hover, .logoutButton:focus, .logoutButton:active{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
+}

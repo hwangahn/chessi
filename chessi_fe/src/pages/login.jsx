@@ -13,12 +13,18 @@ export default function Login() {
   const onFinish = async ( formData ) => {
     formData.socketid = socket.id;
 
-    let { status, msg } = await useLogin(formData);
+    let { status, msg, profile } = await useLogin(formData);
 
     if (status === "ok") {
       message.success(msg);
 
-      navigate("/");
+      if (profile.isAdmin === "true") {
+        navigate("/admin");
+      }
+      else {
+        navigate("/");
+      }
+      
     } else {
       message.warning(msg);
     }
@@ -60,8 +66,12 @@ export default function Login() {
           Log in
         </Button>
       </Form.Item>
-      Or <Link to={"/signup"}>register now!</Link>
-      <Button onClick={() => socket.disconnect()}>Disconnect socket</Button>
+      <div style={{float: "left"}}>
+        Or <Link to={"/signup"}>register now!</Link>
+      </div>
+      <div style={{float: "right", textAlign: "right"}}>
+        <Link to={"/forgot-password"}>Forgot password?</Link>
+      </div>
     </Form>
   );
 };

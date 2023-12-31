@@ -1,4 +1,4 @@
-const { signupService, verifyEmailService, loginService, silentLoginService, logoutService } = require('../services/logonService');
+const { signupService, verifyEmailService, loginService, silentLoginService, logoutService, resetPasswordService, changePasswordService } = require('../services/logonService');
 const { checkHttpError } = require('../utils/checkError');
 
 let handleSignup = async (req, res) => {
@@ -46,6 +46,21 @@ let handleLogin = async (req, res) => {
     }
 }
 
+let handleChangePassword = async (req, res) => {
+    try {
+        let { userid, password } = { userid: req.token.userid, password: req.body.data.password }
+
+        await changePasswordService(userid, password);
+
+        res.status(200).json({ status: "ok", msg: "Password changed" });
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
 let handleSilentLogin = async (req, res) => {
     try {
         let { userid, socketid } = { userid: req.token.userid, socketid: req.body.socketid };
@@ -76,4 +91,19 @@ let handleLogout = async (req, res) => {
     }
 }
 
-module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleLogout, handleSilentLogin }
+let handleResetPassword = async (req, res) => {
+    try {
+        let { username, email } = req.body.data;
+        
+        await resetPasswordService(username, email);
+
+        res.status(200).json({ status: "ok", msg: "Head over to your mailbox to obtain new password" })
+    } catch(err) {
+        console.log(err);
+        if (checkHttpError(err)) {
+            res.status(err.getHttpCode()).json({ status: "error", msg: err.getMessage() });
+        }
+    }
+}
+
+module.exports = { handleSignup, handleVerifyEmail, handleLogin, handleChangePassword, handleLogout, handleSilentLogin, handleResetPassword }

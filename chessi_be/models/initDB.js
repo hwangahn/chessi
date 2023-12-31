@@ -9,8 +9,17 @@ const { post } = require('./post');
 const { comment } = require('./comment');
 const { transaction } = require('./transaction');
 const { userFollow } = require('./userFollow');
+const mysql = require('mysql2');
+const util = require('util');
+const bcrypt = require('bcrypt');
 
-let connection = new Sequelize(process.env.DB_KEY);
+let DB_KEY = process.env.DB_KEY;
+
+let dbName = DB_KEY.split('/')[DB_KEY.split('/').length - 1];
+let dbURL = DB_KEY.slice(0, -dbName.length);
+
+let dummyConnection = mysql.createConnection(dbURL); // connect to mysql with the url string
+let connection = new Sequelize(DB_KEY);
 
 connection.authenticate()
 .then(() => {
@@ -138,12 +147,38 @@ let create = async () => {
 }
 
 (async () => {
-
-    
     try {
-        // await drop();
+        const query = util.promisify(dummyConnection.query).bind(dummyConnection); // bind all query to a promise
+        await util.promisify(dummyConnection.connect).call(dummyConnection); // connect to mysql
+        console.log('created dummy connection to MySQL!');
+
+        await query(`CREATE DATABASE IF NOT EXISTS ${dbName}`); // create schema/database
+        console.log(`database '${dbName}' created successfully (if it didn't exist already)`);
+
+        await dummyConnection.end();
+
+        // await drop();    
         
         await create();
+
+        let hashedPassword = await bcrypt.hash("Admin123", 10);
+        let usersFound = await user.findOne({ where: { username: "admin" }});
+        if (!usersFound) {
+            let admin = await user.create({
+                userid: 0,
+                username: "admin",
+                password: hashedPassword,
+                isAdmin: true,
+                rating: -1
+            })
+
+            await email.create({
+                userid: admin.userid,
+                email: "xortaa2003@gmail.com",
+                verificationToken: -1,
+                verificationStatus: true
+            })
+        }
     } catch(err) {
         console.log(err);
     }

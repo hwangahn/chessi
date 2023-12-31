@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { verificationTemplate } = require("./templates");
+const { verificationTemplate, passwordResetTemplate } = require("./templates");
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -25,7 +25,18 @@ let sendVerificationMail = async (recipients, token) => {
     return info;
 }
 
-module.exports = { sendVerificationMail }
+let sendPassword = async (recipients, password) => {
+    const info = await transporter.sendMail({
+        from: 'chessi.no-reply',
+        to: recipients,
+        subject: "Password reset",
+        html: passwordResetTemplate(password),
+      });
+  
+      return info;
+}
+
+module.exports = { sendVerificationMail, sendPassword }
   
 
 

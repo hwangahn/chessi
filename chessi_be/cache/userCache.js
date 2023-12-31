@@ -8,6 +8,7 @@ class activeUser {
         this.priority = 0;
         this.loginTime = Date.now();
         this.accessTokenLifetime = 24 * 60 * 60 * 1000;
+        this.status = "Idle";
     }
 
     getSideIndex() { // in matchmaking
