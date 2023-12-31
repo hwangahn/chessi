@@ -3,11 +3,13 @@ const { checkHttpError } = require('../utils/checkError')
 
 let handleGetUserData = async (req, res) => {
     try {
-        let userid = req.params.userid;
+        let { userid, currentuserid } = { userid: req.params.userid, currentuserid: req.query.currentuserid  };
 
-        let { username, rating, ratingChange, gameHistory, posts } = await getUserDataService(userid);
+        console.log(currentuserid);
 
-        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory, posts: posts });
+        let { username, rating, ratingChange, gameHistory, posts, isFollowing } = await getUserDataService(userid, currentuserid);
+
+        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory, posts: posts, isFollowing });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {

@@ -31,23 +31,26 @@ ChartJS.register(
   Legend
 );
 import SinglePost from '../components/singlePost';
+import socket from '../utils/socket';
 
 
 export default function History() {
-  let { profile } = useContext(AuthContext);
+  let { profile, accessToken } = useContext(AuthContext);
 
+  let [status, setStatus] = useState("Unknown");
   let [ratingChange, setRatingChange] = useState(null);
   let [gameHistory, setGameHistory] = useState(null);
   let [username, setUsername] = useState(null);
   let [rating, setRating] = useState(null);
   let [posts, setPosts] = useState(null);
   let [historyType, setHistoryType] = useState('game');
+  let [isFollowing, setFollowing] = useState(null);
   let params = useParams();
   let navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
-      let rawData = await fetch(`/api/user/${params.userid}`, {
+      let rawData = await fetch(`/api/user/${params.userid}?currentuserid=${(profile && profile.userid !== params.userid) ? `${profile.userid}` : "-100"}`, {
         method: "GET",
       });
       let data = await rawData.json();
@@ -60,8 +63,19 @@ export default function History() {
         setGameHistory(data.gameHistory);
         setRatingChange(data.ratingChange);
         setPosts(data.posts);
+        setFollowing(data.isFollowing);
       }
     })()
+
+    socket.emit("join room", params.userid); // join user room
+
+    socket.on("user status", (status) => { // server will emit status every second. can be Online, In game|gameid, In lobby, 
+      setStatus(status);
+    })
+
+    return () => {
+      socket.off("user status");
+    }
 
   }, [params.userid])
 
@@ -103,6 +117,23 @@ export default function History() {
     }
   };
 
+  let handleFollow = async () => {
+    let rawData = await fetch(`/api/user/${params.userid}/follow`, {
+      method: `${isFollowing ? "delete" : "post"}`,
+      headers: {
+        "Authorization": "Bearer " + accessToken
+      }
+    });
+
+    let data = await rawData.json();
+
+    if (data.status === "ok") {
+      setFollowing(!isFollowing);
+    } else {
+      message.error(data.msg);
+    }
+  }
+
   return (
     <>
       <div id="leftbar" style={{ float: "left" }}>
@@ -116,7 +147,7 @@ export default function History() {
           <div className={view.Profile_text}>
             <h1> {username}</h1>
             <br />
-            <h4>Trạng thái hoạt động</h4>
+            <h4>Status: {status.split('|')[0]}</h4>
           </div>
           {
             profile && // if logged in, render
@@ -127,8 +158,8 @@ export default function History() {
                 <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> : // else
                 // render follow and spectate button
                 <>
-                  <Button className={view.btn_fill} type="submit">Follow</Button>
-                  <Button className={view.btn_fill} type="submit">Spectate</Button>
+                  {isFollowing !== null && <Button className={view.btn_fill} type="submit" onClick={handleFollow}>{isFollowing ? "Unfollow" : "Follow"}</Button>}
+                  {status.split('|')[0] == "In game" && <Button className={view.btn_fill} type="submit" onClick={() => {navigate(`/game/${status.split('|')[1]}`)}}>Spectate</Button>}
                 </>
               }
             </div>

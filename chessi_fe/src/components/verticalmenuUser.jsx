@@ -8,8 +8,7 @@ import { useContext } from "react"
 export default function verticalmenuUser(){
     let navigate = useNavigate();
 
-    let { useLogout } = useContext(AuthContext);
-    let { profile } = useContext(AuthContext);
+    let { useLogout, profile } = useContext(AuthContext);
     let handleLogout = async () => {
         let { status, msg } = await useLogout();
     
@@ -26,7 +25,7 @@ export default function verticalmenuUser(){
     return (
         <>
             {
-                profile &&
+                profile && !profile.isAdmin &&
                 <Affix offsetTop={65}>
                     <div id="leftbar" style={leftbar}>
                         <ul className="single-vertical-menu">
@@ -36,7 +35,7 @@ export default function verticalmenuUser(){
                             </li> 
                             <li>
                                 <img src="../../public/friend.png" alt=""/>
-                                <Link to ="/friendlist">Follow</Link>
+                                <Link to ="/following">Follow</Link>
                             </li>
                             <li>
                                 <img src="../../public/history.png" alt=""/>

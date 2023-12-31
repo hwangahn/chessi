@@ -5,6 +5,7 @@ const { TextArea } = Input;
 import { useParams, useNavigate } from 'react-router-dom';
 import view from './view.module.css';
 import VerticalmenuUser from '../components/verticalmenuUser';
+import VerticalmenuAdmin from '../components/verticalmenuAdmin';
 import { AuthContext } from '../contexts/auth.jsx';
 import socket from '../utils/socket.js';
 
@@ -38,8 +39,9 @@ function CommentInput() {
     }
 
     let handleComment = async () => {
-        console.log(new Date(Date.now()).toISOString());
-
+        if (content === "") {
+            return;
+        }
         socket.emit("send comment", params.postid, { author: profile.username, comment: content, timestamp: new Date(Date.now()).toISOString() } );
 
         let rawData = await fetch(`/api/post/${params.postid}/comment`, { // create post
@@ -105,6 +107,8 @@ function CommentList({ comments }) {
 }
 
 export default function PostDetail() {
+    let { profile } = useContext(AuthContext);
+
     let params = useParams();
     let navigate = useNavigate();
 
@@ -146,7 +150,7 @@ export default function PostDetail() {
     return (
         <>
             <div id="leftbar" style={{ float: "left" }}>
-                <VerticalmenuUser />
+                {profile.isAdmin ? <VerticalmenuAdmin /> : <VerticalmenuUser />}
             </div>
             <div className={view.content}>
                 <div className={view.title}>
