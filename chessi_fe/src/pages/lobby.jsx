@@ -208,7 +208,7 @@ export default function Lobby() {
                 <VerticalmenuUser />
             </div>
             <div style={{ float: "left", width: "21%", marginLeft:"15.5vw", marginTop: "1.5%" }}>
-                <Chat roomid={params.roomid} />
+                <Chat roomid={params.lobbyid} />
             </div>
             <div style={{ float: "right", width: "60%", height: "100%", marginRight: "3%", marginTop: "3%" }}>
                 <Info />

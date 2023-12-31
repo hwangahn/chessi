@@ -342,7 +342,7 @@ export default function Game() {
           <div style={gameInfor}></div>
         </div>
         <div className="lb2" style={{color: "#BEC1DC"}}>
-          <Chat roomid={params.roomid} />
+          <Chat roomid={params.gameid} />
         </div>
       </div>
       <div id="game-board" style={{float: "left", width: "42%"}}>
