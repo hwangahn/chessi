@@ -5,7 +5,7 @@ import { Input,  Button } from "reactstrap";
 
 import VerticalmenuUser from '../components/verticalmenuUser';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { message, Space } from 'antd';
 import { Line } from "react-chartjs-2";
@@ -20,6 +20,7 @@ import {
   Legend,
   // datalabels
 } from 'chart.js';
+import { AuthContext } from '../contexts/auth';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -29,22 +30,27 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+import SinglePost from '../components/singlePost';
+import socket from '../utils/socket';
 
 
 export default function History() {
+  let { profile, accessToken } = useContext(AuthContext);
 
+  let [status, setStatus] = useState("Unknown");
   let [ratingChange, setRatingChange] = useState(null);
   let [gameHistory, setGameHistory] = useState(null);
   let [username, setUsername] = useState(null);
   let [rating, setRating] = useState(null);
-  // let [posts, setPosts] = useState(null);
+  let [posts, setPosts] = useState(null);
   let [historyType, setHistoryType] = useState('game');
+  let [isFollowing, setFollowing] = useState(null);
   let params = useParams();
   let navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
-      let rawData = await fetch(`/api/user/${params.userid}`, {
+      let rawData = await fetch(`/api/user/${params.userid}?currentuserid=${(profile && profile.userid !== params.userid) ? `${profile.userid}` : "-100"}`, {
         method: "GET",
       });
       let data = await rawData.json();
@@ -56,18 +62,28 @@ export default function History() {
         setUsername(data.username);
         setGameHistory(data.gameHistory);
         setRatingChange(data.ratingChange);
-        // setPosts(data.posts);
-        console.log(ratingChange["rating"]);
+        setPosts(data.posts);
+        setFollowing(data.isFollowing);
       }
     })()
 
-  }, [])
+    socket.emit("join room", params.userid); // join user room
+
+    socket.on("user status", (status) => { // server will emit status every second. can be Online, In game|gameid, In lobby, 
+      setStatus(status);
+    })
+
+    return () => {
+      socket.off("user status");
+    }
+
+  }, [params.userid])
 
   const chartRating = [];
   const chartTime = [];
   for (let i = 0; i < ratingChange?.length; i++) {
     chartRating[i] = ratingChange[i]["rating"];
-    chartTime[i] = ratingChange[i]["timestamp"]
+    chartTime[i] = ratingChange[i]["timestamp"].replace('T', " ").slice(0, -5);
   }
   console.log(chartRating);
   const dataChart = {
@@ -101,51 +117,23 @@ export default function History() {
     }
   };
 
-  const posts = [{
-    "timestamp": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
-    "username": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethi",
-    "post": "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomething"
-  },{
-    "timestamp": 2,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 3,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 4,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 5,
-    "username": "something",
-    "post": 1500
-  },{
-    "timestamp": 6,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 7,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 8,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 9,
-    "username": "something",
-    "post": 1500
-  },
-  {
-    "timestamp": 10,
-    "username": "something",
-    "post": 1500
-  },]
+  let handleFollow = async () => {
+    let rawData = await fetch(`/api/user/${params.userid}/follow`, {
+      method: `${isFollowing ? "delete" : "post"}`,
+      headers: {
+        "Authorization": "Bearer " + accessToken
+      }
+    });
+
+    let data = await rawData.json();
+
+    if (data.status === "ok") {
+      setFollowing(!isFollowing);
+    } else {
+      message.error(data.msg);
+    }
+  }
+
   return (
     <>
       <div id="leftbar" style={{ float: "left" }}>
@@ -159,14 +147,23 @@ export default function History() {
           <div className={view.Profile_text}>
             <h1> {username}</h1>
             <br />
-            <h4>Trạng thái hoạt động</h4>
+            <h4>Status: {status.split('|')[0]}</h4>
           </div>
-          <div className={view.Profile_button}>
-            <Button className={view.btn_fill} type="submit">Follow
-            </Button>
-            <Button className={view.btn_fill} type="submit">Spectate
-            </Button>
-          </div>
+          {
+            profile && // if logged in, render
+            <div className={view.Profile_button}>
+              {
+                profile?.userid == params.userid ? // if in user's own profile
+                // render change passwond button 
+                <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> : // else
+                // render follow and spectate button
+                <>
+                  {isFollowing !== null && <Button className={view.btn_fill} type="submit" onClick={handleFollow}>{isFollowing ? "Unfollow" : "Follow"}</Button>}
+                  {status.split('|')[0] == "In game" && <Button className={view.btn_fill} type="submit" onClick={() => {navigate(`/game/${status.split('|')[1]}`)}}>Spectate</Button>}
+                </>
+              }
+            </div>
+          }
           <div className={view.chartProfile} style={{ height: "auto" }}>
             <h2>Current rating:{rating}</h2>
             <Line
@@ -178,24 +175,25 @@ export default function History() {
         </div>
 
         <div className={view.table1}>
-          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history
-          </Button>
-          <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history
-          </Button>
+          <div style={{ marginBottom: "10px", marginTop: "10px" }}>
+            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history
+            </Button>
+            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history
+            </Button>
+          </div>
           {
             historyType === 'game' ?  
             <>
-              <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>History</h2>
               <ul id="game-history-list">
                 {gameHistory && gameHistory.map((game, index) => (
                   <li className={view.history} key={index}>
-                    <Link to="/">
+                    <Link to={`/game/played/${game.gameid}`}>
                       <div className={view.history_board} style={{ width: "250px" }}>
-                        <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} />
+                        <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} />
                       </div>
                       <div style={{ minWidth: "200px", marginTop: "-15%" }}>
                         <h1>{game.reason}</h1>
-                        <p>{game.timestamp}</p>
+                        <p>{game.timestamp.replace('T', " ").slice(0, -5)}</p>
                       </div>
                       <div className={view.name} style={{ minWidth: "200px", textAlign: "right" }}>
                         <h2>{game.white}</h2>
@@ -221,22 +219,9 @@ export default function History() {
             </>
             :
             <>
-              <h2 style={{ paddingTop: "0", paddingLeft: "5%", background: "#2D2C45", color: "white" }}>Post</h2>
               <ul id="post-history-list">
                 {posts && posts.map((post, index) => (
-                  <li className={view.history_post} key={index}>
-                    <div className={view.post} style={{marginBottom:"10px",textWrap:"wrap",overflowWrap: "break-word", wordBreak: "break-word"}}>
-                    <Link to="/">
-                      <div >
-                        <h1 style={{textWrap:"wrap"}}>{post.post}</h1>
-                        <br />
-                        <h4>Author: {post.username}</h4>
-                        <br />
-                        <p style={{textWrap:"wrap"}}>{post.timestamp}ádasdasdas</p>
-                      </div>
-                    </Link>
-                    </div>
-                  </li>
+                  <SinglePost post={post} index={index} />
                 ))}
               </ul>
             </>

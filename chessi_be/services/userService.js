@@ -8,12 +8,19 @@ const { userFollow } = require('../models/userFollow');
 const { post } = require('../models/post');
 require('dotenv').config();
 
-let getUserDataService = async (userid) => {
+let getUserDataService = async (userid, currentuserid) => {
     let userFound = await user.findOne({ where: { userid: userid } });
 
     if (!userFound) {
         throw (new httpError(404, "Cannot find user"));
     }
+
+    let isCurrentUserFollowing = await userFollow.findOne({ // check whether current user is following 
+        where: {
+            userid: userid,
+            followerid: currentuserid
+        }
+    })
 
     let _ratingChange = await ratingChange.findAll({ where: { userid: userid } });
 
@@ -39,9 +46,17 @@ let getUserDataService = async (userid) => {
     // gameHistoryList.sort((a, b) => { return a.gameid - b.gameid });
     // gameUserInfo.sort((a, b) => { return a.gameid - b.gameid });
 
+    let isFollowing = false;
+
+    if (isCurrentUserFollowing) { 
+        isFollowing = true;
+    }
+
     let userPostList = await post.findAll({ 
         where: { authorid: userid },
-        include: { model: user }
+        include: { model: user },
+        order: [["timestamp", "DESC"]], 
+        limit: 10 // get 10 latest
     });
 
     let normalizedRatingChange = _ratingChange.map(Element => { 
@@ -64,10 +79,10 @@ let getUserDataService = async (userid) => {
     }
 
     let normalizedPostList = userPostList.map(Element => {
-        return { postid: Element.postid, username: Element.user.username, post: Element.post, timestamp: Element.timestamp } // map to reduce return size
+        return { postid: Element.postid, author: Element.user.username, post: Element.post, timestamp: Element.timestamp } // map to reduce return size
     });
 
-    return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory, posts: normalizedPostList }
+    return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory, posts: normalizedPostList, isFollowing: isFollowing }
 }
 
 let userFollowService = async (followerid, userid) => { // userid indicates user to follow 
@@ -159,6 +174,7 @@ let getLeaderboardService = async () => {
 
     // get 10 highest rated players
     let leaderboard = await user.findAll({
+        where: { isAdmin: false },
         order: [["rating", "DESC"]],
         limit: 10
     });

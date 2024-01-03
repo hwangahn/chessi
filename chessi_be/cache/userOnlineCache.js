@@ -26,7 +26,19 @@ let userOnlineCache = (function() { // wrapper object
     };
     
     let filterUserBySessionTime = () => {
-        userOnlineList = userOnlineList.filter(Element => Element.isStillInSession()) // remove users' sessions exceeds access token time limit
+        let userOutOfSession = new Array; 
+
+        userOnlineList = userOnlineList.filter(Element => { 
+            let isStillInSession = Element.isStillInSession();
+
+            if (!isStillInSession) {
+                userOutOfSession.push(Element);
+            }
+            
+            return isStillInSession;
+        }) // remove users' sessions exceeds access token time limit
+
+        return { userOutOfSession, userOnlineList };
     };
 
     return { findUserByuserid, findUserBysocketid, addUser, getAllUser, filterUserBysocketid, filterUserByuserid, filterUserBySessionTime }

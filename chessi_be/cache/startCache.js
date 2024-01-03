@@ -14,7 +14,12 @@ const { activeRatingChange } = require('./ratingCache');
 const { activeGame } = require('./gameCache');
 
 setInterval(() => { // user online cache
-    userOnlineCache.filterUserBySessionTime();
+    let { userOutOfSession, userOnlineList } = userOnlineCache.filterUserBySessionTime();
+
+    userOnlineList.forEach(Element => {
+        socketInstance.get().to(Element.userid.toString()).emit("user status", Element.status); // emit current status for users online
+    });
+
 }, 1000)
 
 setInterval(() => { // game cache
@@ -22,6 +27,10 @@ setInterval(() => { // game cache
     
     gamesOver.forEach(async Element => {
         socketInstance.get().to(Element.gameid).emit("game over", Element.reason); // notify room of game outcome
+
+        // set status of users to online after game
+        Element.white.status = "Idle"
+        Element.black.status = "Idle"
 
         let whiteRatingChange = 0;
         let blackRatingChange = 0;
@@ -75,6 +84,9 @@ setInterval(() => { // game cache
 
     gamesActive.forEach(Element => {
         socketInstance.get().to(Element.gameid).emit("time left", Element.getTimeLeft().turn, Element.getTimeLeft().timeLeft); // notify room of time left and turn
+        // set status of user to In game 
+        Element.white.status = `In game|${Element.gameid}`
+        Element.black.status = `In game|${Element.gameid}`
     });
 
 }, 1000);
@@ -95,6 +107,10 @@ setInterval(() => { // lobby cache
         // notify lobby of game start
         socketInstance.get().to(Element.lobbyid).emit("game started", gameid);
 
+        // set status of user to In game 
+        Element.white.status = `In game|${Element.gameid}`
+        Element.black.status = `In game|${Element.gameid}`
+
         // check if users already exist in rating change cache
         let isBlackInRatingCache = activeRatingChange.findUserByuserid(Element.black.userid);
         let isWhiteInRatingCache = activeRatingChange.findUserByuserid(Element.white.userid); 
@@ -113,7 +129,13 @@ setInterval(() => { // lobby cache
     lobbiesTimeout.forEach(Element => {
         socketInstance.get().to(Element.lobbyid).emit("time out");
 
-        console.log(`lobby ${Element.lobbyid} timed out`)
+        console.log(`lobby ${Element.lobbyid} timed out`);
+
+        // set current status of users in lobby timed out to "Online"
+        Element.creator.status = "Idle"
+        if (Element.guest){
+            Element.guest.status = "Idle"
+        }
     });
 
     lobbiesActive.forEach(Element => {
@@ -122,6 +144,11 @@ setInterval(() => { // lobby cache
                                                                     Element.getState().white,
                                                                     Element.getState().black,
                                                                     Element.getState().timeLeft)
+        // set current status of users in lobby to "In lobby"
+        Element.creator.status = "In lobby"
+        if (Element.guest){
+            Element.guest.status = "In lobby"
+        }
     })
 
 }, 1000);

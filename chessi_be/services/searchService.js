@@ -14,16 +14,18 @@ let searchUserService = async (keyword) => {
 let searchPostService = async (keyword) => {
     let data = await post.findAll({
         where: { post: { [Op.like]: `%${keyword}%` }},
-        attributes: ["postid", "authorid", "post", "timestamp"],
+        attributes: ["postid", "post", "timestamp"],
         include: {
             model: user,
             attributes: ["username"]
         }
     })
 
+    let normalizedPosts = data.map(Element => {
+        return { postid: Element.postid, author: Element.user.username, post: Element.post, timestamp: Element.timestamp }
+    })
 
-
-    return data;
+    return normalizedPosts;
 }
 
 module.exports = { searchUserService, searchPostService }

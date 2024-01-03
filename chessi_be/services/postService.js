@@ -9,10 +9,12 @@ let postService = async (userid, _post) => {
         throw (new httpError(404, "Cannot find user"));
     }
 
-    await post.create({
+    let newPost = await post.create({
         authorid: userid,
         post: _post
     });
+
+    return { postid: newPost.postid, post: newPost.post, timestamp: newPost.timestamp }
 }
 
 let postCommentService = async (userid, postid, _comment) => {
@@ -45,7 +47,7 @@ let getPostService = async (postid) => {
             },
             {
                 model: comment,
-                attributes: ["comment"],
+                attributes: ["comment", "timestamp"],
                 include: {
                     model: user, 
                     attributes: ["userid", "username"]
@@ -59,14 +61,15 @@ let getPostService = async (postid) => {
     }
 
     // normalizing return value
-    let authorName = postFound.user.username;
+    let author = postFound.user.username;
     let authorid =  postFound.user.userid;
     let _post = postFound.post;
+    let timestamp = postFound.timestamp;
     let comments = postFound.comments.map(Element => {
-        return { comment: Element.comment, authorName: Element.user.username, authorid: Element.user.userid }
+        return { comment: Element.comment, author: Element.user.username, authorid: Element.user.userid, timestamp: Element.timestamp }
     });
 
-    return { authorName: authorName, authorid: authorid, post: _post, comments: comments } 
+    return { author: author, authorid: authorid, post: _post, timestamp: timestamp, comments: comments } 
 }
 
 let getAllPostService = async () => {
@@ -74,6 +77,7 @@ let getAllPostService = async () => {
         include: {
             model: user
         },
+        order: [["timestamp", "DESC"]],
         limit: 10 
     });
 

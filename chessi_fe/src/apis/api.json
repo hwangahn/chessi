@@ -703,7 +703,7 @@
             "description": "Bearer token for session checking",
             "required": true,
             "type": "string",
-            "default": "Bearer USER_SESSION_TOKEN_HERE"
+            "default": "Bearer SESSION_TOKEN_HERE"
           },
           {
             "name": "body",
@@ -782,7 +782,7 @@
             "description": "Bearer token for authorization",
             "required": true,
             "type": "string",
-            "default": "Bearer USER_ACCESS_TOKEN_HERE"
+            "default": "Bearer ACCESS_TOKEN_HERE"
           }
         ],
         "responses": {
@@ -940,12 +940,23 @@
         }
       }
     },
-    "/user/{userid}": {
+    "/user/{userid}?currentuserid={currentuserid}": {
       "get": {
         "tags": ["User"],
         "summary": "Get user account",
         "produces": ["application/json"],
-        "parameters": [{
+        "parameters": [
+          {
+            "in": "path",
+            "name": "currentuserid",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "default": -100,
+            "description": "Current user id to check if thay have followed target user or not. If not logged in, default to -100"
+          },
+          {
             "in": "path",
             "name": "userid",
             "required": "true",
@@ -987,14 +998,15 @@
                 "posts": [
                   {
                     "postid": 1,
-                    "username": "something",
+                    "author": "something",
                     "post": "string",
                     "timestamp": "2023-12-29T16:18:55.000Z"
                   },
                   {
                     "...": "same format"
                   }
-                ]
+                ],
+                "isFollowing": true
               }
             }
           },
@@ -1121,7 +1133,7 @@
               "type": "integer",
               "minimum": "1"
             },
-            "description": "User id"
+            "description": "User id to follow"
           },
           {
             "name": "Authorization",
@@ -1204,7 +1216,7 @@
               "type": "integer",
               "minimum": "1"
             },
-            "description": "User id"
+            "description": "User id to unfollow"
           },
           {
             "name": "Authorization",
@@ -2109,7 +2121,10 @@
             "description": "Success",
             "examples": {
               "application/json": {
-                "status": "ok"
+                "status": "ok",
+                "postid": 1,
+                "post": "string",
+                "timestamp": "2023-11-30 18:26:03"
               }
             }
           },
@@ -2252,14 +2267,16 @@
             "examples": {
               "application/json": {
                 "status": "ok",
-                "authorName": "something",
+                "author": "something",
                 "authorid": 1,
                 "post": "string",
+                "timestamp":"2023-11-30 18:26:03",
                 "comments": [
                   {
                     "comment": "string",
-                    "authorName": "something",
-                    "authorid": 1
+                    "author": "something",
+                    "authorid": 1,
+                    "timestamp":"2023-11-30 18:26:03"
                   },
                   {
                     "...": "same format"
@@ -2327,7 +2344,18 @@
             "description": "Success for post query",
             "examples": {
               "application/json": {
-                "status": "ok"
+                "status": "ok",
+                "result": [
+                  {
+                    "postid": 1,
+                    "author": "something",
+                    "post": "something",
+                    "timestamp": "2023-12-30T16:11:26.000Z"
+                  },
+                  {
+                    "...": "same format"
+                  }
+                ]              
               }
             }
           },

@@ -271,6 +271,7 @@ td.Stt {
 .friend .name {
     margin:0;
     font-size: 18px;
+    width: 300px;
 }
 
 .friend.selected img {
@@ -337,4 +338,19 @@ td.Stt {
     /* background: #DDD; */
     box-shadow: rgba(80, 63, 205, 0.9) 0 1px 30px;
     transition-duration: .1s;
+}
+
+.adminHome{
+    width: 25% ;
+     display:inline-block;
+     text-align:Center ; 
+     min-height:20vh;
+}
+.adminHome h1{
+    text-shadow:
+    -1px -1px 1px #218496,  
+     1px -1px 1px #218496,
+    -1px  1px 1px #218496,
+     1px  1px 1px #218496;
+    margin-bottom: 4vh;
 }

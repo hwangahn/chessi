@@ -22,7 +22,12 @@ import Lobby from './pages/lobby';
 import GameHistory from './pages/gameHistory';
 import Search from './pages/Search'
 import ChangePassword from './pages/changePassword';
-import CreatePost from './pages/createPost';
+import Post from './pages/createPost';
+import PostDetail from './pages/postDetail';
+import AdminHome from './pages/adminHome';
+import AdminAllAdmin from './pages/adminAllAdmin';
+import AdminAddAdmin from './pages/adminAddAdmin';
+
 //test
 export default function App() {
   let [ isLoading, setLoading ] = useState(true);
@@ -57,27 +62,30 @@ export default function App() {
         <Routes>
 
           <Route exact path='/' Component={Home}></Route>
-          <Route path='/createpost' Component={CreatePost}></Route>
+          <Route path='/post/:postid' Component={PostDetail}></Route>
           <Route path='/search' Component={Search}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/signup' Component={Signup}></Route>
+          <Route path='/game/played/:gameid' Component={GameHistory}></Route>
           <Route path='/game/:roomid' Component={Game}></Route>
-          <Route path='/gamehistory' Component={GameHistory}></Route>
-          <Route path='/lobby/:lobbyid' Component={Lobby}></Route>
           <Route path='/docs' Component={APIdocs}></Route>
-          <Route path='/history/:userid' Component={History}></Route>
-          <Route path='/friendlist' Component={FriendList}></Route>
-          <Route path='/ranking' Component={Ranking}></Route>
-          <Route path='/admin' Component={AdminAllUser}></Route>
-          <Route path='/admin/active-user' Component={AdminActiveUser}></Route>
+          <Route path='/user/:userid' Component={History}></Route>
           <Route Component={ProtectedRouteAdmin}> 
-
+            <Route path='/admin' Component={AdminHome}></Route>
+            <Route path='/admin/all-user' Component={AdminAllUser}></Route>
+            <Route path='/admin/active-user' Component={AdminActiveUser}></Route>
+            <Route path='/admin/all-admin' Component={AdminAllAdmin}></Route>
+            <Route path='/admin/add-admin' Component={AdminAddAdmin}></Route>
+            <Route path='/admin/all-game' Component={AdminAllUser}></Route>
           </Route>
           <Route Component={ProtectedRouteUser}> 
- 
+            <Route path='/lobby/:lobbyid' Component={Lobby}></Route>
+            <Route path='/following' Component={FriendList}></Route>
+            <Route path='/ranking' Component={Ranking}></Route>
+            <Route path='/post' Component={Post}></Route>
+            <Route path='/change-password' Component={ChangePassword}></Route>
           </Route>
           <Route path='/forgot-password' Component={ForgotPassword}></Route>
-          <Route path='/change-password' Component={ChangePassword}></Route>
          </Routes>
         <FloatButton.BackTop visibilityHeight={100} />
       </BrowserRouter>
