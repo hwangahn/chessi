@@ -35,7 +35,7 @@ git clone https://github.com/hwangahn/chessi.git
 ```
 2. Navigate to /chessi and open Visual Studio Code
 ![alt text](https://scontent.xx.fbcdn.net/v/t1.15752-9/412399515_1052932516017578_8231178931557218208_n.png?_nc_cat=104&ccb=1-7&_nc_sid=510075&_nc_ohc=26u3zIVI4sgAX89MtI2&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&cb_e2o_trans=q&oh=03_AdT9GMga2ZywZwzmSZQ-xGGEXbG4tQQiIe8HQgajXKzojw&oe=65BD0379)
-3. In VS Code, navigate to /chessi_be folder and create a .env file \\
+3. In VS Code, navigate to /chessi_be folder and create a .env file    
 ![alt text](https://scontent.xx.fbcdn.net/v/t1.15752-9/413473933_773155544637143_300910354335167766_n.png?_nc_cat=107&ccb=1-7&_nc_sid=510075&_nc_ohc=wz7hLFAcbvMAX_zJFZc&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&cb_e2o_trans=q&oh=03_AdQKiKH731eNC92TRlj209ng5vZmhneUCHvoQRyEOTDP7g&oe=65BCEDE0)
 4. Paste the following text into the .env file
 ```
