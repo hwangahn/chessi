@@ -8,7 +8,7 @@
 - Match analysis (premium feature).
 - Social features: connect with friends, create posts, view match results, ranking and customize profile.
 
-<a href="https://docs.google.com/spreadsheets/d/1z9Phjlf06sw7jjuOinoH5bs-Hfou5OYCP_5bG5yTaMs/edit?usp=sharing" target="_blank">Detailed sheet with all features here</a>
+<a href="https://docs.google.com/spreadsheets/d/1z9Phjlf06sw7jjuOinoH5bs-Hfou5OYCP_5bG5yTaMs/edit?usp=sharing" target="_blank">Link to detailed sheet with all features here</a>
 
 
 ## Tech
@@ -33,12 +33,11 @@ git clone https://github.com/pn-minh/chessi
 ## Contribution
 | Member | Student ID | Role | Contribution (%) |
 | ------ | ---------- | ---- | ---------------- |
-| Dương Hoàng Anh | 21020603 | Literally did everything | 25 |
-| Đoàn Ngọc Long | 21020646 | smth | 15 |
-| Hoàng Quốc Đạt | 21020617 | smth | 15 |
+| Dương Hoàng Anh | 21020603 | Backend | 25 |
+| Vũ Hải Đăng | 21021479 | Backend | 15 |
+| Đoàn Ngọc Long | 21020646 | Data | 15 |
 | Phạm Nhật Minh | 21020651 | Documentation & Sildes | 15 |
-| Phan Minh Phong | 21020657 | smth | 15 |
-| Vũ Hải Đăng | 21021479 | smth | 15 |
-
+| Phan Minh Phong | 21020657 | Frontend | 15 |
+| Hoàng Quốc Đạt | 21020617 | Frontend | 15 |
 
 
