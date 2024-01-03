@@ -19,13 +19,16 @@
 - MySQL
 - A text editor
 
-#### _Getting started_
+#### _Step-by-step_
 1. Clone the repository
 ```sh
 git clone https://github.com/pn-minh/chessi
 ```
 2. 
+
+
 ## Documentation
+<a href="https://documenter.getpostman.com/view/32107897/2s9YsFEZu5" target="_blank">Link to API document here</a>
 
 ## Contribution
 | Member | Student ID | Role | Contribution (%) |
