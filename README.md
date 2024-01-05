@@ -72,13 +72,13 @@ If encounter error, run the command again.
 <a href="https://documenter.getpostman.com/view/32107897/2s9YsFEZu5" target="_blank">Link to API document here</a>
 
 ## Contribution
-| Member | Student ID | Role | Contribution (%) |
-| ------ | ---------- | ---- | ---------------- |
-| Dương Hoàng Anh | 21020603 | Backend | 20 |
-| Vũ Hải Đăng | 21021479 | Backend | 16 |
-| Đoàn Ngọc Long | 21020646 | Data | 16 |
-| Phạm Nhật Minh | 21020651 | Documentation & Sildes | 16 |
-| Phan Minh Phong | 21020657 | Frontend | 16 |
-| Hoàng Quốc Đạt | 21020617 | Frontend | 16 |
+| Member | Student ID | Role |
+| ------ | ---------- | ---- |
+| Dương Hoàng Anh | 21020603 | Backend |
+| Vũ Hải Đăng | 21021479 | Backend |
+| Đoàn Ngọc Long | 21020646 | Data |
+| Phạm Nhật Minh | 21020651 | Documentation & Sildes |
+| Phan Minh Phong | 21020657 | Frontend |
+| Hoàng Quốc Đạt | 21020617 | Frontend |
 
 
