@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const { user } = require('./user');
+const { banHistory } = require('./banHistory');
 const { email } = require('./email');
 const { game } = require('./game');
 const { gameUser } = require('./gameUser');
@@ -9,6 +10,9 @@ const { post } = require('./post');
 const { comment } = require('./comment');
 const { transaction } = require('./transaction');
 const { userFollow } = require('./userFollow');
+const { tournament } = require('./tournament');
+const { tournamentGame } = require('./tournamentGame');
+const { tournamentUser } = require('./tournamentUser');
 const mysql = require('mysql2');
 const util = require('util');
 const bcrypt = require('bcrypt');
@@ -27,6 +31,9 @@ connection.authenticate()
 })
 .catch( err => console.log(err) );
 
+/**
+ * @description: Define the relationships between the models
+ */
 // user - email: 1:1
 user.hasOne(email, {
     foreignKey: 'userid'
@@ -34,6 +41,7 @@ user.hasOne(email, {
 email.belongsTo(user, {
     foreignKey: 'userid'
 });
+
 // user - game: M:N through 'gameUser'
 user.hasMany(gameUser, {
     foreignKey: "userid"
@@ -55,6 +63,7 @@ user.belongsToMany(game, {
     through: gameUser, 
     foreignKey: "userid"
 });
+
 // game - move: 1:N
 move.belongsTo(game, {
     foreignKey: "gameid"
@@ -62,6 +71,7 @@ move.belongsTo(game, {
 game.hasMany(move, {
     foreignKey: "gameid"
 });
+
 // user - ratingChange: 1:N
 ratingChange.belongsTo(user, {
     foreignKey: "userid"
@@ -69,6 +79,7 @@ ratingChange.belongsTo(user, {
 user.hasMany(ratingChange, {
     foreignKey: "userid"
 });
+
 // user - post: 1:N
 post.belongsTo(user, {
     foreignKey: "authorid"
@@ -76,6 +87,7 @@ post.belongsTo(user, {
 user.hasMany(post, {
     foreignKey: "authorid"
 });
+
 // post - comment: 1:N
 comment.belongsTo(post, {
     foreignKey: "postid"
@@ -83,6 +95,7 @@ comment.belongsTo(post, {
 post.hasMany(comment, {
     foreignKey: "postid"
 });
+
 // user - comment: 1:N
 comment.belongsTo(user, {
     foreignKey: "authorid"
@@ -90,6 +103,7 @@ comment.belongsTo(user, {
 user.hasMany(comment, {
     foreignKey: "authorid"
 });
+
 // user - transaction: 1:1
 transaction.belongsTo(user, {
     foreignKey: "userid"
@@ -97,6 +111,7 @@ transaction.belongsTo(user, {
 user.hasOne(transaction, {
     foreignKey: "userid"
 });
+
 // user - user: M:N through "userFollow" but cannot be eager loaded through "user"
 // must be retrieved through "userFollow"
 user.hasMany(userFollow, {
@@ -112,15 +127,71 @@ userFollow.belongsTo(user, {
     foreignKey: "followerid"
 });
 
+// user - banHistory: 1:N
+banHistory.belongsTo(user, {
+    foreignKey: "userid"
+});
+user.hasMany(banHistory, {
+    foreignKey: "userid"
+});
+
+// tournament - game: M:N through "tournamentGame"
+tournament.hasMany(tournamentGame, {
+    foreignKey: "tournamentid"
+});
+tournamentGame.belongsTo(tournament, {
+    foreignKey: "tournamentid"
+});
+game.hasMany(tournamentGame, {
+    foreignKey: "gameid"
+});
+tournamentGame.belongsTo(game, {
+    foreignKey: "gameid"
+});
+game.belongsToMany(tournament, {
+    through: tournamentGame,
+    foreignKey: "gameid"
+});
+tournament.belongsToMany(game, {
+    through: tournamentGame,
+    foreignKey: "tournamentid"
+});
+
+// tournament - user: M:N through "tournamentUser"
+tournament.hasMany(tournamentUser, {
+    foreignKey: "tournamentid"
+});
+tournamentUser.belongsTo(tournament, {
+    foreignKey: "tournamentid"
+});
+user.hasMany(tournamentUser, {
+    foreignKey: "userid"
+});
+tournamentUser.belongsTo(user, {
+    foreignKey: "userid"
+});
+user.belongsToMany(tournament, {
+    through: tournamentUser,
+    foreignKey: "userid"
+});
+tournament.belongsToMany(user, {
+    through: tournamentUser,
+    foreignKey: "tournamentid"
+});
+
 let drop = async () => {
     try {
+        await tournamentUser.drop();
+        await tournamentGame.drop();
         await userFollow.drop();
+        await banHistory.drop();
         await transaction.drop();
         await comment.drop();
         await post.drop();
         await ratingChange.drop();
         await move.drop();
         await gameUser.drop();
+        await tournament.drop();
         await email.drop();
         await game.drop();
         await user.drop();
@@ -134,13 +205,17 @@ let create = async () => {
         await user.sync();
         await game.sync();
         await email.sync();
-        await transaction.sync();
+        // await transaction.sync();
         await post.sync();
+        await tournament.sync();
         await gameUser.sync();
         await move.sync();
         await ratingChange.sync();
         await comment.sync();
         await userFollow.sync();
+        await banHistory.sync();
+        await tournamentGame.sync();
+        await tournamentUser.sync();
     } catch(err) {
         console.log(err)
     }
@@ -156,8 +231,6 @@ let create = async () => {
         console.log(`database '${dbName}' created successfully (if it didn't exist already)`);
 
         await dummyConnection.end();
-
-        // await drop();    
         
         await create();
 

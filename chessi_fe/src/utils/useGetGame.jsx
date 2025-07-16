@@ -1,12 +1,11 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { message } from "antd";
 
-export default async function UseGetGame({accessToken}) { // get user's active game
-    let navigate = useNavigate();
+export default function UseGetGame({ accessToken }) { // get user's active game
+    let [gameid, setGameid] = useState(null);
 
     useEffect(() => {
-        (async function() {
+        (async function () {
             if (accessToken) {
                 let rawData = await fetch('/api/game/user-active-game', {
                     method: 'get',
@@ -14,15 +13,17 @@ export default async function UseGetGame({accessToken}) { // get user's active g
                         'authorization': 'Bearer ' + accessToken,
                     }
                 });
-        
-                let { status, inGame, gameid } = await rawData.json();
-                
-                if (status === "error") {
-                    message.warning(msg);
-                } else if (inGame) {
-                    navigate(`/game/${gameid}`);
+
+                let data = await rawData.json();
+
+                if (data.status === "error") {
+                    message.warning(data.msg);
+                } else if (data.inGame) {
+                    setGameid(data.gameid);
                 }
             }
         })()
     }, []);
+
+    return gameid;
 }

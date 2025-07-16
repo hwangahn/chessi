@@ -1,39 +1,39 @@
-// missing some additional rules involving priorities
-
-let matchMakingCache = (function() {
-    let queue = new Array;
-
-    let addUser = (user) => {
-        queue.push(user);
+class matchMakingCache { // matchmaking class, used for tournaments
+    constructor() {
+        this.queue = new Array();
     }
 
-    let filterUserByuserid = (userid) => {
-        queue = queue.filter(Element => Element.userid !== userid);
+    addUser(user) {
+        this.queue.push(user);
     }
 
-    let filterUserBysocketid = (socketid) => {
-        let userFound = queue.find(Element => Element.socketid === socketid);
+    filterUserByuserid(userid) {
+        this.queue = this.queue.filter(Element => Element.userid != userid);
+    }
+
+    filterUserBysocketid(socketid) {
+        let userFound = this.queue.find(Element => Element.socketid == socketid);
         if (userFound) {
             userFound.resetPriority(); // reset users match making priority
         }
-        queue = queue.filter(Element => Element.socketid !== socketid);
+        this.queue = this.queue.filter(Element => Element.socketid != socketid);
     }
     
-    let distributePlayers = () => { // returning players in each pool based on play history
+    distributePlayers() { // returning players in each pool based on play history
 
-        let playerRemovedFromQueue = queue.filter(Element => { // remove player waited for more than 5 iteraton of match making algo
+        let playerRemovedFromQueue = this.queue.filter(Element => { // remove player waited for more than 5 iteraton of match making algo
             return Element.priority > 5;
         })
 
-        let neutral = queue.filter(Element => {
+        let neutral = this.queue.filter(Element => {
             return Element.priority <= 5 && ((Element.getSideIndex() > -3 && Element.getSideIndex() < 3) || Element.priority >= 4);
         }).sort((a, b) => a.rating - b.rating);
 
-        let mustBeWhite = queue.filter(Element => {
+        let mustBeWhite = this.queue.filter(Element => {
             return Element.getSideIndex() <= -3 && Element.priority < 4;
         }).sort((a, b) => a.rating - b.rating);
 
-        let mustBeBlack = queue.filter(Element => {
+        let mustBeBlack = this.queue.filter(Element => {
             return Element.getSideIndex() >= 3 && Element.priority < 4;
         }).sort((a, b) => a.rating - b.rating);
 
@@ -41,8 +41,8 @@ let matchMakingCache = (function() {
     }
 
     
-    let matchMaking = () => { // match-making logic, merge-sort esque
-        let { neutral, mustBeWhite, mustBeBlack, playerRemovedFromQueue } = distributePlayers();
+    matchMaking() { // match-making logic, merge-sort esque
+        let { neutral, mustBeWhite, mustBeBlack, playerRemovedFromQueue } = this.distributePlayers();
 
         let games = new Array();
         let newQueue = new Array();
@@ -105,13 +105,16 @@ let matchMakingCache = (function() {
             Element.resetPriority(); // reset user's match making priority
         })
 
-        queue = newQueue;
+        this.queue = newQueue;
 
         return { games, playerRemovedFromQueue };
     }
 
-    return { addUser, filterUserByuserid, filterUserBysocketid, matchMaking }
-})();
+    clearQueue() {
+        this.queue = new Array();
+    }
+}
 
+// Create a singleton instance for backward compatibility
 
 module.exports = { matchMakingCache }

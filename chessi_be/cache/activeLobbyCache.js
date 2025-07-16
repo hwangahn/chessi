@@ -6,11 +6,11 @@ let activeLobbyCache = (function() {
     }
 
     let findLobbyBylobbyid = (lobbyid) => {
-        return lobbyList.find(Element => Element.lobbyid === lobbyid);
+        return lobbyList.find(Element => Element.lobbyid == lobbyid);
     }
 
     let filterLobbyBylobbyid = (lobbyid) => {
-        lobbyList = lobbyList.filter(Element => Element.lobbyid !== lobbyid);
+        lobbyList = lobbyList.filter(Element => Element.lobbyid != lobbyid);
     }
 
     let filterUserByuserid = (userid) => { // called when an user logout or lost connection to remove that user from lobby if in

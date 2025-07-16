@@ -4,14 +4,18 @@ const { user } = require('../models/user');
 const { game } = require('../models/game');
 const { gameUser } = require('../models/gameUser');
 const { ratingChange } = require('../models/ratingChange');
+const { activeGame } = require('./gameCache');
 const { move } = require('../models/move');
+const { tournament } = require('../models/tournament');
+const { tournamentUser } = require('../models/tournamentUser');
+const { tournamentGame } = require('../models/tournamentGame');
 const { socketInstance } = require('../socketInstance');
 const { userOnlineCache } = require('./userOnlineCache');
-const { matchMakingCache } = require('./matchmakingCache');
+const { matchMakingCache } = require('./centralMatchmakingCache');
 const { activeGameCache } = require('./activeGameCache');
 const { activeLobbyCache } = require('./activeLobbyCache');
 const { activeRatingChange } = require('./ratingCache');
-const { activeGame } = require('./gameCache');
+const { activeTournamentCache } = require('./activeTournamentCache');
 
 setInterval(() => { // user online cache
     let { userOutOfSession, userOnlineList } = userOnlineCache.filterUserBySessionTime();
@@ -26,8 +30,6 @@ setInterval(() => { // game cache
     let { gamesOver, gamesActive } = activeGameCache.filterGameOver();
     
     gamesOver.forEach(async Element => {
-        socketInstance.get().to(Element.gameid).emit("game over", Element.reason); // notify room of game outcome
-
         // set status of users to online after game
         Element.white.status = "Idle"
         Element.black.status = "Idle"
@@ -83,7 +85,6 @@ setInterval(() => { // game cache
     });
 
     gamesActive.forEach(Element => {
-        socketInstance.get().to(Element.gameid).emit("time left", Element.getTimeLeft().turn, Element.getTimeLeft().timeLeft); // notify room of time left and turn
         // set status of user to In game 
         Element.white.status = `In game|${Element.gameid}`
         Element.black.status = `In game|${Element.gameid}`
@@ -154,11 +155,7 @@ setInterval(() => { // lobby cache
 }, 1000);
 
 setInterval(() => { // match making cache
-    let { games, playerRemovedFromQueue } = matchMakingCache.matchMaking();
-
-    playerRemovedFromQueue.forEach(Element => {
-        socketInstance.get().to(Element.socketid).emit("cannot find game"); // notify user of inability to find game
-    });
+    let { games } = matchMakingCache.matchMaking();
 
     games.forEach((Element, index) => {
         let gameid = `${Date.now()}${index}`;
@@ -188,6 +185,50 @@ setInterval(() => { // match making cache
     });
 
 }, 5000);
+
+setInterval(() => { // tournament cache
+    let { tournamentsOver } = activeTournamentCache.filterTournamentOver();
+
+    tournamentsOver.forEach(async Element => {
+        await tournament.create({ 
+            tournamentid: Element.tournamentid,
+            organizerid: Element.organizerid,
+            name: Element.name,
+            gameTime: Element.gameTime,
+            startTime: Element.startTime,
+            endTime: Element.endTime
+        });
+
+        Element.getStandings().forEach(async (player, index) => {
+            await tournamentUser.create({
+                tournamentid: Element.tournamentid,
+                name: Element.name,
+                userid: player.userid,
+                username: player.username,
+                rating: player.rating,
+                points: player.points,
+                rank: index + 1
+            });
+        });
+
+        Element.games.forEach(async game => {
+            await tournamentGame.create({
+                tournamentid: Element.tournamentid,
+                gameid: game.gameid,
+                whiteid: game.white.userid,
+                blackid: game.black.userid,
+                whiteUsername: game.white.username,
+                blackUsername: game.black.username,
+                whiteRating: game.white.rating,
+                blackRating: game.black.rating,
+                winner: game.winner,
+                outcome: game.outcome
+            });
+        });
+
+        console.log(`tournament ${Element.tournamentid} ended`);
+    });
+}, 1000);
 
 setInterval(async () => { // rating change cache
     // normalize rating cache into ratingChange records

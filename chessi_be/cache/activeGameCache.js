@@ -6,7 +6,7 @@ let activeGameCache = (function() {
     }
 
     let findGameBygameid = (gameid) => {
-        return gameList.find(Element => Element.gameid === gameid);
+        return gameList.find(Element => Element.gameid == gameid);
     }
 
     let checkUserInGame = (userid) => { // check whether user is in an active game and return gameid

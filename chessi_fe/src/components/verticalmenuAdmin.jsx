@@ -1,4 +1,3 @@
-import './TrangChu.css';
 import { Link } from 'react-router-dom';
 import { Affix, message } from 'antd';
 import { AuthContext } from "../contexts/auth"
@@ -12,17 +11,14 @@ export default function verticalmenuAdmin(){
         let { status, msg } = await useLogout();
     
         (status === "ok") ? message.success(msg) : message.error(msg);
-      }
-
-    const leftbar = {display:"inline", float:"left", width: "14.1vw", height: "45.3vw",
-    borderRight: "2px solid #2C2B4D", marginTop: "-8px"}
+    }
 
     return(
         <>
             {
                 profile && profile.isAdmin &&
                 <Affix offsetTop={60}>
-                    <div id="leftbar" style={leftbar}>
+                    <div id="leftbar">
                         <ul className="single-vertical-menu">
                             <li>
                                 <img src="../../public/choi.png" alt=""/>
@@ -35,10 +31,6 @@ export default function verticalmenuAdmin(){
                             <li>
                                 <img src="../../public/choi.png" alt=""/>
                                 <Link to ="/admin/all-admin">All admin</Link>
-                            </li>
-                            <li>
-                                <img src="../../public/choi.png" alt=""/>
-                                <Link to ="/admin/add-admin">Add admin</Link>
                             </li>
                             <li>
                                 <img src="../../public/choi.png" alt=""/>

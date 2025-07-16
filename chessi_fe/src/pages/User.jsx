@@ -1,7 +1,7 @@
 import view from './view.module.css';
 import { Chessboard } from 'react-chessboard';
 import { Link } from "react-router-dom";
-import { Input,  Button } from "reactstrap";
+import { Input, Button } from "reactstrap";
 
 import VerticalmenuUser from '../components/verticalmenuUser';
 
@@ -32,14 +32,16 @@ ChartJS.register(
 );
 import SinglePost from '../components/singlePost';
 import socket from '../utils/socket';
+import TournamentList from '../components/tournament/list';
 
 
-export default function History() {
+export default function User() {
   let { profile, accessToken } = useContext(AuthContext);
 
   let [status, setStatus] = useState("Unknown");
   let [ratingChange, setRatingChange] = useState(null);
   let [gameHistory, setGameHistory] = useState(null);
+  let [tournamentHistory, setTournamentHistory] = useState(null);
   let [username, setUsername] = useState(null);
   let [rating, setRating] = useState(null);
   let [posts, setPosts] = useState(null);
@@ -61,6 +63,7 @@ export default function History() {
         setRating(data.rating);
         setUsername(data.username);
         setGameHistory(data.gameHistory);
+        setTournamentHistory(data.tournamentHistory);
         setRatingChange(data.ratingChange);
         setPosts(data.posts);
         setFollowing(data.isFollowing);
@@ -85,7 +88,6 @@ export default function History() {
     chartRating[i] = ratingChange[i]["rating"];
     chartTime[i] = ratingChange[i]["timestamp"].replace('T', " ").slice(0, -5);
   }
-  console.log(chartRating);
   const dataChart = {
     labels: chartTime,
     datasets: [
@@ -154,18 +156,18 @@ export default function History() {
             <div className={view.Profile_button}>
               {
                 profile?.userid == params.userid ? // if in user's own profile
-                // render change passwond button 
-                <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> : // else
-                // render follow and spectate button
-                <>
-                  {isFollowing !== null && <Button className={view.btn_fill} type="submit" onClick={handleFollow}>{isFollowing ? "Unfollow" : "Follow"}</Button>}
-                  {status.split('|')[0] == "In game" && <Button className={view.btn_fill} type="submit" onClick={() => {navigate(`/game/${status.split('|')[1]}`)}}>Spectate</Button>}
-                </>
+                  // render change passwond button 
+                  <Button className={view.btn_fill} type="submit" onClick={() => { navigate('/change-password') }}>Change password</Button> : // else
+                  // render follow and spectate button
+                  <>
+                    {isFollowing !== null && <Button className={view.btn_fill} type="submit" onClick={handleFollow}>{isFollowing ? "Unfollow" : "Follow"}</Button>}
+                    {status.split('|')[0] == "In game" && <Button className={view.btn_fill} type="submit" onClick={() => { navigate(`/game/${status.split('|')[1]}`) }}>Spectate</Button>}
+                  </>
               }
             </div>
           }
-          <div className={view.chartProfile} style={{ height: "auto" }}>
-            <h2>Current rating:{rating}</h2>
+          <div className={view.chartProfile}>
+            <h2>Current rating: {rating}</h2>
             <Line
               data={dataChart}
               options={options}
@@ -176,20 +178,20 @@ export default function History() {
 
         <div className={view.table1}>
           <div style={{ marginBottom: "10px", marginTop: "10px" }}>
-            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history
-            </Button>
-            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history
-            </Button>
+            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('game') }}>Game history</Button>
+            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('tournament') }}>Tournament history</Button>
+            <Button className={view.btn_fill} type="submit" onClick={() => { setHistoryType('post') }}>Post history</Button>
+
           </div>
           {
-            historyType === 'game' ?  
+            historyType === 'game' &&
             <>
               <ul id="game-history-list">
                 {gameHistory && gameHistory.map((game, index) => (
                   <li className={view.history} key={index}>
                     <Link to={`/game/played/${game.gameid}`}>
                       <div className={view.history_board} style={{ width: "250px" }}>
-                        <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} />
+                        <Chessboard id={game.gameId} arePiecesDraggable={false} position={game.finalFen} customDarkSquareStyle={{ backgroundColor: "#6d7fd1" }} />
                       </div>
                       <div style={{ minWidth: "200px", marginTop: "-15%" }}>
                         <h1>{game.reason}</h1>
@@ -217,7 +219,12 @@ export default function History() {
                 ))}
               </ul>
             </>
-            :
+          }
+          {historyType === 'tournament' &&
+            <TournamentList tournaments={tournamentHistory} past />
+          }
+          {
+            historyType === 'post' &&
             <>
               <ul id="post-history-list">
                 {posts && posts.map((post, index) => (
@@ -231,5 +238,3 @@ export default function History() {
     </>
   )
 }
-
-

@@ -2,11 +2,11 @@ let userOnlineCache = (function() { // wrapper object
     let userOnlineList = new Array();
 
     let findUserByuserid = (userid) => {
-        return userOnlineList.find(Element => Element.userid === userid);
+        return userOnlineList.find(Element => Element.userid == userid);
     };
 
     let findUserBysocketid = (socketid) => {
-        return userOnlineList.find(Element => Element.socketid === socketid);
+        return userOnlineList.find(Element => Element.socketid == socketid);
     };
     
     let addUser = (userObj) => {
@@ -18,11 +18,11 @@ let userOnlineCache = (function() { // wrapper object
     }
 
     let filterUserBysocketid = (socketid) => {
-        userOnlineList = userOnlineList.filter(Element => Element.socketid !== socketid);
+        userOnlineList = userOnlineList.filter(Element => Element.socketid != socketid);
     };
     
     let filterUserByuserid = (userid) => {
-        userOnlineList = userOnlineList.filter(Element => Element.userid !== userid);
+        userOnlineList = userOnlineList.filter(Element => Element.userid != userid);
     };
     
     let filterUserBySessionTime = () => {

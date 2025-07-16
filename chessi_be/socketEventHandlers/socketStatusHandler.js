@@ -1,4 +1,4 @@
-const { matchMakingCache } = require('../cache/matchmakingCache');
+const { matchMakingCache } = require('../cache/centralMatchmakingCache');
 const { userOnlineCache } = require('../cache/userOnlineCache');
 const { activeLobbyCache } = require('../cache/activeLobbyCache');
 

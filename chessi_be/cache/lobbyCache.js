@@ -30,7 +30,7 @@ class activeLobby {
     }
 
     filterUserByuserid(userid) {
-        if (this.creator.userid === userid) {
+        if (this.creator.userid == userid) {
             if (this.guest === null) { // no one else in room
                 this.timeLeft = 0; // timeout the room so it can be removed
             } else {
@@ -38,15 +38,15 @@ class activeLobby {
                 this.creator = this.guest; 
                 this.guest = null;
             }
-        } else if (this.guest?.userid === userid) {
+        } else if (this.guest?.userid == userid) {
             this.guest = null;
         }
 
-        this.black?.userid === userid ? this.black = null : this.white = null;
+        this.black?.userid == userid ? this.black = null : this.white = null;
     }
 
     filterUserBysocketid(socketid) {
-        if (this.creator.socketid === socketid) {
+        if (this.creator.socketid == socketid) {
             if (this.guest === null) { // no one else in room
                 this.timeLeft = 0; // timeout the room so it can be removed
             } else {
@@ -54,11 +54,11 @@ class activeLobby {
                 this.creator = this.guest; 
                 this.guest = null;            
             }
-        } else if (this.guest?.socketid === socketid) {
+        } else if (this.guest?.socketid == socketid) {
             this.guest = null;
         }
 
-        this.black?.socketid === socketid ? this.black = null : this.white = null;
+        this.black?.socketid == socketid ? this.black = null : this.white = null;
     }
 
     getState() {

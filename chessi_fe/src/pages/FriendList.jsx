@@ -28,7 +28,7 @@ export default function FriendList() {
             if (data.status === "ok") {
                 setUsers(() => {
                     data.following.forEach(Element => { users.push(Element) });
-                    return [ ...users ];
+                    return [...users];
                 });
             } else {
                 message.error(data.error);
@@ -52,8 +52,8 @@ export default function FriendList() {
             setUsers(() => {
                 users = users.filter(Element => {
                     return Element.userid !== userid;
-                });                
-                return [ ...users ];
+                });
+                return [...users];
             });
         } else {
             message.error(data.msg);
@@ -80,7 +80,7 @@ export default function FriendList() {
                                         <p>Rating: {item.rating}</p>
                                     </div>
                                 </Link>
-                                <Button className={view.btn_fill} onClick={() => {handleUnfollow(item.userid)}}>Unfollow</Button>
+                                <Button className={view.btn_fill} onClick={() => { handleUnfollow(item.userid) }}>Unfollow</Button>
                             </li>
                         ))}
                     </ul>

@@ -7,9 +7,9 @@ let handleGetUserData = async (req, res) => {
 
         console.log(currentuserid);
 
-        let { username, rating, ratingChange, gameHistory, posts, isFollowing } = await getUserDataService(userid, currentuserid);
+        let { username, rating, ratingChange, gameHistory, posts, tournamentHistory, isFollowing } = await getUserDataService(userid, currentuserid);
 
-        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory, posts: posts, isFollowing });
+        res.status(200).json({ status: "ok", msg: "Done", username: username, rating: rating, ratingChange: ratingChange, gameHistory: gameHistory, posts: posts, tournamentHistory: tournamentHistory, isFollowing });
     } catch(err) {
         console.log(err);
         if (checkHttpError(err)) {

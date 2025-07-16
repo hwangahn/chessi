@@ -6,7 +6,7 @@ let activeRatingChange = (function() {
     };
 
     let findUserByuserid = (userid) => {
-        return ratingChangeList.find(Element => Element.userid === userid);
+        return ratingChangeList.find(Element => Element.userid == userid);
     };
 
     let getRatingChangeAndClear = () => { // create a copy of current list and then clear the list

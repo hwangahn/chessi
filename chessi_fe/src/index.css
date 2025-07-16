@@ -17,6 +17,15 @@ body{
     background: #242337;
 }
 
+#leftbar{
+    height: 85vh;
+    float: left;
+    width: 14.1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .header{
     display: flex;
     list-style: none;
@@ -29,6 +38,9 @@ body{
 
 .home{
     border-right: 2px solid #2C2B4D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .logo{
@@ -59,53 +71,31 @@ body{
 ul.single-vertical-menu  {
 	padding: 0px;
     padding-top: 1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 25px;
 
 }
 ul.single-vertical-menu  li {
 	left:0px;
-	height: 6.5vw;
-	padding:0px ;  
+	padding:15px;  
     margin:0px;        
 	list-style:none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 ul.single-vertical-menu  li > a {
 	text-decoration:none;
 	cursor: pointer;
-	position:relative;
     font-size: 1.5vw;
-    top: 0.85vw;
-    left: 1.5vw;
 	color: #BEC1DC;
-}
-
-ul.single-vertical-menu  li > img {
-    position:relative;
-	width: 1.95vw;
-	top: 1.2vw;
-	left: 1vw;
 }
 
 ul.single-vertical-menu  li > a:hover {
 	color:#B5E67B;
-}
-
-.gp1{
-    position: relative;
-    justify-content: space-between;
-    top: 8vw;
-    left: 1.5vw;
-}
-
-.gp2{
-    position: relative;
-    top: 8vw;
-    left: 5vw;
-}
-
-#gm2, #gm4{
-    position:relative;
-    top: 3.4vw;
 }
 
 .game-btn{
@@ -137,14 +127,13 @@ ul.single-vertical-menu  li > a:hover {
 }
 
 .logoutButton{
+    width: 70%;
     background-color: #1E1D2F;
     color: #232237;
-    width: 70%;
     height: 3vw;
     border: none;
     border-radius: 2.5vw;
-    margin-left: 15%;
-    margin-top: 6vw;
+    margin: 0 auto;
     cursor: pointer;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     -webkit-transition-duration: 0.3s;
@@ -158,3 +147,4 @@ ul.single-vertical-menu  li > a:hover {
     -webkit-transform: scale(1.03);
     transform: scale(1.03);
 }
+

@@ -6,20 +6,21 @@ import { AuthContext } from "../contexts/auth"
 import { useContext, useEffect, useState } from "react"
 import VerticalmenuUser from '../components/verticalmenuUser';
 import UseGetGame from '../utils/useGetGame';
-import UseGetLobby from '../utils/useGetLobby';
-
+import UseGetTournament from '../utils/useGetTournament';
+import JoinGameBanner from '../components/home/joinGameBanner';
+import JoinTournamentBanner from '../components/home/joinTournamentBanner';
 
 export default function Home() {
   const [popup, setPop] = useState(false);
 
   let navigate = useNavigate();
 
-  let { useLogout, accessToken, profile } = useContext(AuthContext);
+  let { accessToken, profile } = useContext(AuthContext);
 
   let [isFindingGame, setIsFindingGame] = useState(false);
 
-  UseGetGame({accessToken});
-  UseGetLobby({accessToken});
+  let gameid = UseGetGame({ accessToken });
+  let tournamentid = UseGetTournament({ accessToken });
 
   useEffect(() => {
     socket.on("cannot find game", () => {
@@ -37,13 +38,6 @@ export default function Home() {
       socket.off("game found");
     }
   }, []);
-
-
-  let handleLogout = async () => {
-    let { status, msg } = await useLogout();
-
-    (status === "ok") ? message.success(msg) : message.error(msg);
-  }
 
   const handleFindGame = async () => {
     if (socket.connected) {
@@ -73,7 +67,7 @@ export default function Home() {
             }
           });
 
-          let data = await rawData.json();      
+          let data = await rawData.json();
 
           data.status === "ok" ? setIsFindingGame(false) : message.error(data.msg);
         } catch (error) {
@@ -111,11 +105,18 @@ export default function Home() {
     }
   }
 
+
+  const handleCreateCompGame = () => {
+    if (socket.connected) {
+      navigate(`/play-computer/`);
+    }
+  }
+
   let handleClickOpen = () => {
     setPop(!popup);
   }
 
-  function Gallery(){
+  function Gallery() {
     const gallery = {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
       position: "absolute",
@@ -124,7 +125,7 @@ export default function Home() {
       zIndex: "1"
     }
 
-    const findGameInner = {
+    const createTournamentInner = {
       width: "500px",
       position: "relative",
       top: "30%",
@@ -132,7 +133,7 @@ export default function Home() {
       background: "white",
     }
 
-    const findGameHeader = {
+    const createTournamentHeader = {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
@@ -141,12 +142,12 @@ export default function Home() {
       color: "white"
     }
 
-    const findGameBody = {
+    const createTournamentBody = {
       paddingTop: "30px",
       textAlign: "center"
     }
 
-    const findGameBodyInput = {
+    const createTournamentBodyInput = {
       width: "100%",
       height: "40px",
       fontSize: "25px",
@@ -155,7 +156,7 @@ export default function Home() {
       outline: "none"
     }
 
-    const findGameFooter = {
+    const createTournamentFooter = {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -163,7 +164,7 @@ export default function Home() {
       textAlign: "right"
     }
 
-    const findGameFooterButton = {
+    const createTournamentFooterButton = {
       padding: "10px 100px",
       color: "white",
       background: "#242337",
@@ -173,79 +174,98 @@ export default function Home() {
       cursor: "pointer"
     }
 
+    let handleCreateTournament = async () => {
+      if (tournamentName !== "") {
+        let rawData = await fetch(`/api/tournament/create`, { // join lobby
+          method: 'post',
+          body: JSON.stringify({
+            name: tournamentName
+          }),
+          headers: {
+            'authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json',
+          }
+        });
 
+        let data = await rawData.json();
 
-    let handleJoinLobby = () => {
-      if (lobbyid !== "") {
-        navigate(`/lobby/${lobbyid}`);
+        if (data.status === "error") {
+          message.error(data.msg);
+          navigate('/');
+        } else {
+          navigate(`/tournament/${data.tournamentid}`);
+        }
       }
     }
 
-    let [lobbyid, setLobbyid] = useState("");
+    let [tournamentName, setTournamentName] = useState("");
 
-    return(
+    return (
       <>
-        {popup?
+        {popup ?
           <div style={gallery}>
-              <div style={findGameInner}>
-                  <div style={findGameHeader}>
-                      <p>Find Game</p>
-                      <img src="x-regular-24.png" onClick={handleClickOpen} style = {{cursor: "pointer"}}/>
-                  </div>
-                  <div style={findGameBody}>
-                      <input style={findGameBodyInput} value={lobbyid} type="text" id="roomID" placeholder="roomID" onChange={(e) => {setLobbyid(e.target.value)}} />
-                  </div>
-                  <div style={findGameFooter}>
-                      <button style={findGameFooterButton} onClick={handleJoinLobby}>Find Game</button>
-                  </div>
+            <div style={createTournamentInner}>
+              <div style={createTournamentHeader}>
+                <p>Create Tournament</p>
+                <img src="x-regular-24.png" onClick={handleClickOpen} style={{ cursor: "pointer" }} />
               </div>
+              <div style={createTournamentBody}>
+                <input style={createTournamentBodyInput} value={tournamentName} type="text" id="tournament-name" placeholder="Tournament name" onChange={(e) => { setTournamentName(e.target.value) }} />
+              </div>
+              <div style={createTournamentFooter}>
+                <button style={createTournamentFooterButton} onClick={handleCreateTournament}>Create</button>
+              </div>
+            </div>
           </div>
-        :""}
+          : ""}
       </>
     );
-  } 
+  }
 
-  const introduce = {marginLeft: "212px", padding: "5px 0px", color:"#B0ABAB", textAlign: "center",
-  borderBottom: "2px solid #2C2B4D", fontSize: "1.6vw", fontWeight: "bold"}
-
-  const title = {position: "relative", color: "#00ace3", fontWeight: "bold", fontSize: "3.4vw",
-  top:"5vw", left: "18.2vw", width: "19vw"}
+  const introduce = {
+    marginLeft: "14.1vw", padding: "5px 0px", color: "#B0ABAB", textAlign: "center",
+    borderBottom: "2px solid #2C2B4D", fontSize: "1.6vw", fontWeight: "bold"
+  }
 
   return (
     <div>
-      {accessToken ? 
+      {accessToken ?
         <>
           <Gallery />
           <VerticalmenuUser />
           <div className="introduce" style={introduce}>
-            👋Hello {profile.username}! <br/>
+            👋 Hello {profile.username}! <br />
             Let's play a game.
           </div>
 
-          <div className="game-screen" style={{display: "flex",padding: "0px",margin: "0px", marginLeft:"14.1vw"}}>
-            <div className="board" style={{width: "46%"}}>
-              <Chessboard id={0} arePiecesDraggable={false} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} />              
+          <div className="game-screen" style={{ display: "flex", padding: "0px", margin: "0px", marginLeft: "14.1vw" }}>
+            <div className="board" style={{ width: "46%" }}>
+              <Chessboard id={0} customDarkSquareStyle={{ backgroundColor: "#6d7fd1" }} />
             </div>
-            <div className="play">
-              <div className="title" style={title}>Chessi</div>
-              <div className="game-play" style={{display: "flex", justifyContent: "space-between"}}>
-                <div className="gp1">
-                  {!isFindingGame ?
-                    <div id="gm1" className="game-btn" onClick={handleFindGame}>Quick play</div>
-                    : 
-                    <div id="gm1" className="game-btn" onClick={handleFindGame} style={{color: "red"}}>Cancel</div>
-                  }
-                  <div id="gm2" className="game-btn" onClick={handleClickOpen}>Join lobby</div>
-                </div>
-                <div className="gp2">
-                  <div id="gm3" className="game-btn">
-                    <Link to ="/new">Play with computer</Link>
+
+
+            <div id="play-container" className="flex flex-col justify-around gap-[40px] w-[54%] p-[30px]">
+              {
+                tournamentid ? <JoinTournamentBanner tournamentid={tournamentid} /> : ""
+              }
+              {
+                gameid ?
+                  <JoinGameBanner gameid={gameid} /> :
+                  <div id="game-play" className="flex flex-row justify-between">
+                    <div className="flex flex-col gap-[30px]">
+                      {!isFindingGame ?
+                        <div id="gm1" className="game-btn" onClick={handleFindGame}>Quick play</div>
+                        :
+                        <div id="gm1" className="game-btn" onClick={handleFindGame} style={{ color: "red" }}>Cancel</div>
+                      }
+                      <div id="gm2" className="game-btn" onClick={handleClickOpen}>Create tournament</div>
+                    </div>
+                    <div className="flex flex-col gap-[30px]">
+                      <div id="gm3" className="game-btn" onClick={handleCreateCompGame}>Play with computer</div>
+                      <div id="gm4" className="game-btn" onClick={handleCreateLobby}>Create lobby</div>
+                    </div>
                   </div>
-                  <div id="gm4" className="game-btn" onClick={handleCreateLobby}>
-                    Create lobby
-                  </div>
-                </div>
-              </div>
+              }
             </div>
           </div>
         </> : ""

@@ -6,6 +6,7 @@ const { httpError } = require('../error/httpError')
 const { ratingChange } = require('../models/ratingChange');
 const { userFollow } = require('../models/userFollow');
 const { post } = require('../models/post');
+const { tournamentUser } = require('../models/tournamentUser');
 require('dotenv').config();
 
 let getUserDataService = async (userid, currentuserid) => {
@@ -31,6 +32,11 @@ let getUserDataService = async (userid, currentuserid) => {
         },
         order: [['gameid', 'DESC']],
         limit: 20
+    });
+
+    let tournamentHistory = await tournamentUser.findAll({ // get all tournaments user played
+        where: { userid: userid },
+        order: [['tournamentid', 'DESC']],
     });
 
     let conditions = gameHistoryList.map(Element => { // building condition array for Sequelize query
@@ -82,7 +88,7 @@ let getUserDataService = async (userid, currentuserid) => {
         return { postid: Element.postid, author: Element.user.username, post: Element.post, timestamp: Element.timestamp } // map to reduce return size
     });
 
-    return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory, posts: normalizedPostList, isFollowing: isFollowing }
+    return { username: userFound.username, rating: userFound.rating, ratingChange: normalizedRatingChange, gameHistory: normalizedGameHistory, posts: normalizedPostList, isFollowing: isFollowing, tournamentHistory: tournamentHistory }
 }
 
 let userFollowService = async (followerid, userid) => { // userid indicates user to follow 

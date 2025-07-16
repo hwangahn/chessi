@@ -30,8 +30,10 @@ app.use('/', require('./APIs/gameAPI'));
 app.use('/', require('./APIs/adminAPI'));
 app.use('/', require('./APIs/userAPI'));
 app.use('/', require('./APIs/lobbyAPI'));
+app.use('/', require('./APIs/compGameAPI'));
 app.use('/', require('./APIs/searchAPI'));
 app.use('/', require('./APIs/postAPI'));
+app.use('/', require('./APIs/tournamentAPI'));
 
 socketInstance.get().on("connection", (socket) => {
     require('./socketEventListeners/socketStatusListener')(socketInstance.get(), socket);

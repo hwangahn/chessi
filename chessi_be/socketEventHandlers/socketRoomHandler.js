@@ -21,20 +21,10 @@ module.exports = (io) => {
     } 
 
     let handleMakeMove = function(roomid, move) {
-        let socket = this;
-
         let game = activeGameCache.findGameBygameid(roomid); // check game's existence
 
         if (game) {
-            let isMoveMade = game.makeMove(move); // try making move
-            // will return null if move cant be made
-
-            if (isMoveMade) { // move ok
-
-                // broadcast to room
-                socket.to(roomid).emit("move made", isMoveMade);
-                socket.emit("move made", isMoveMade);
-            }
+            game.makeMove(move); // try making move
         }
     }
 

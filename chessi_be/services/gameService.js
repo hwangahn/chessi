@@ -1,7 +1,8 @@
 const { activeGameCache } = require('../cache/activeGameCache');
-const { matchMakingCache } = require('../cache/matchmakingCache');
+const { matchMakingCache } = require('../cache/centralMatchmakingCache');
 const { userOnlineCache } = require('../cache/userOnlineCache');
 const { activeLobbyCache } = require('../cache/activeLobbyCache');
+const { activeTournamentCache } = require('../cache/activeTournamentCache');
 const { game } = require('../models/game');
 const { user } = require('../models/user');
 const { gameUser } = require('../models/gameUser');
@@ -25,6 +26,18 @@ let findGameService = async ( userid ) => {
 
     if (isUserInLobby) {
         throw (new httpError(409, "You are already in a lobby"));
+    }
+
+    let userTournament = activeTournamentCache.checkUserInTournament(userid); // check if user in tournament
+
+    if (userTournament.inTournament) {
+        let tournamentFound = activeTournamentCache.findTournamentByid(userTournament.tournamentid);
+
+        if (tournamentFound.isPlayerInTournamentGame(userid)) {
+            throw (new httpError(409, "You are already in a tournament game"));
+        }
+
+        tournamentFound.userStopFindGame(userid);
     }
 
     matchMakingCache.addUser(userFound); // add user to match making queue
@@ -94,10 +107,6 @@ let getGamePlayedService = async (gameid) => {
     let normalizedMoves = moves.map(Element => {
         return { moveOrder: Element.moveOrder, side: Element.side, notation: Element.notation, fen: Element.fen }
     })
-
-    console.log(normalizedMoves);
-    console.log(black);
-    console.log(white);
 
     return { reason: gameFound.reason, moves: normalizedMoves, white: white, black: black }
 }

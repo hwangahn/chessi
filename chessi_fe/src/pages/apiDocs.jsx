@@ -1,6 +1,6 @@
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
-import data from '../../src/apis/api.json'
+import data from '../apis/api.json'
 
 export default function APIdocs() {
     return (
