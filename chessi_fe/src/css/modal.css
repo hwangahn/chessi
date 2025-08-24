@@ -1,0 +1,24 @@
+/* background & text */
+.modal .ant-modal-content {
+  background-color: #242337;
+  color: white;
+
+  .ant-modal-close{
+    color: white;
+  }
+}
+
+/* header */
+.modal .ant-modal-header {
+  background-color: #242337;
+}
+
+/* title text */
+.modal .ant-modal-title {
+  color: white;
+}
+
+/* footer */
+.modal .ant-modal-footer {
+  background-color: #242337;
+}

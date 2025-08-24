@@ -37,7 +37,7 @@ export default function ActiveTournament() {
                     <h1 style={{ textShadow: "0 0 1.3 #396FAE" }}>Active tournaments</h1>
                 </div>
                 <div className="ml-[14.2%] flex flex-col align-center p-7">
-                    <div className="w-[80%]" style={{ backgroundColor: "#334155", borderRadius: "8px", overflow: "hidden" }}>
+                    <div className="w-[80%]" style={{ borderRadius: "8px", overflow: "hidden" }}>
                         <TournamentList tournaments={tournaments} />
                     </div>
                 </div>

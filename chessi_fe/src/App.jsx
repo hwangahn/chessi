@@ -32,6 +32,12 @@ import Tournament from './pages/tournament';
 import PastTournament from './pages/pastTournament';
 import StatusBar from './utils/status';
 import ActiveTournament from './pages/activeTournaments';
+import EditStudyChapter from './pages/editStudyChapter';
+import EditStudy from './pages/editStudy';
+import Studies from './pages/studies';
+import './css/input.css';
+import "./css/modal.css"
+import './css/empty.css'
 
 //test
 export default function App() {
@@ -88,6 +94,9 @@ export default function App() {
           </Route>
           <Route Component={ProtectedRouteUser}>
             <Route path='/lobby/:lobbyid' Component={Lobby}></Route>
+            <Route path="/study/" Component={Studies}></Route>
+            <Route path="/study/:studyid" Component={EditStudy}></Route>
+            <Route path="/study/:studyid/chapter/:chapterid/edit" Component={EditStudyChapter}></Route>
             <Route path="/tournaments/" Component={ActiveTournament}></Route>
             <Route path="/tournament/:tournamentid" Component={Tournament}></Route>
             <Route path="/tournament/past/:tournamentid" Component={PastTournament}></Route>

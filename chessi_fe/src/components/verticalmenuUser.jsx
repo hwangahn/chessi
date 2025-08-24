@@ -40,11 +40,19 @@ export default function verticalmenuUser() {
                                 <Link to={`/user/${userId}`}>User</Link>
                             </li>
                             <li>
-                                    <TrophyOutlined style={{
-                                        color: "#F59E0B", 
-                                        fontSize: "24px",     // controls both width & height
-                                        lineHeight: "1",
-                                    }} />
+                                <TrophyOutlined style={{
+                                    color: "#F59E0B",
+                                    fontSize: "24px",     // controls both width & height
+                                    lineHeight: "1",
+                                }} />
+                                <Link to="/study">Study</Link>
+                            </li>
+                            <li>
+                                <TrophyOutlined style={{
+                                    color: "#F59E0B",
+                                    fontSize: "24px",     // controls both width & height
+                                    lineHeight: "1",
+                                }} />
                                 <Link to="/tournaments">Tournaments</Link>
                             </li>
                             <li>

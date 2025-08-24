@@ -13,6 +13,7 @@ const { userFollow } = require('./userFollow');
 const { tournament } = require('./tournament');
 const { tournamentGame } = require('./tournamentGame');
 const { tournamentUser } = require('./tournamentUser');
+const { study } = require('./study');
 const mysql = require('mysql2');
 const util = require('util');
 const bcrypt = require('bcrypt');
@@ -179,8 +180,17 @@ tournament.belongsToMany(user, {
     foreignKey: "tournamentid"
 });
 
+// user - study: 1:N
+study.belongsTo(user, {
+    foreignKey: "authorid"
+});
+user.hasMany(study, {
+    foreignKey: "authorid"
+});
+
 let drop = async () => {
     try {
+        await study.drop();
         await tournamentUser.drop();
         await tournamentGame.drop();
         await userFollow.drop();
@@ -216,6 +226,7 @@ let create = async () => {
         await banHistory.sync();
         await tournamentGame.sync();
         await tournamentUser.sync();
+        await study.sync();
     } catch(err) {
         console.log(err)
     }

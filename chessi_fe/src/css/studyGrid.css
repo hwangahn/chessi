@@ -1,0 +1,20 @@
+.ant-checkbox-wrapper {
+    color: inherit;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.ant-checkbox:hover .ant-checkbox-inner {
+    border-color: #3b82f6;
+}
+
+.ant-card {
+    border-radius: 8px;
+}
+
+.ant-card-body {
+    padding: 20px;
+}

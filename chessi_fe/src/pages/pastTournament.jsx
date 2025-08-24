@@ -56,7 +56,7 @@ function TournamentDisplay() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-800 p-6 flex justify-center gap-[100px]" style={{ backgroundColor: "#1E293B" }}>
+        <div className="min-h-screen p-6 flex justify-center gap-[100px]">
             <div className="w-[900px] space-y-6">
                 <TournamentHeader ended />
 

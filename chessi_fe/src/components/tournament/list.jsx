@@ -1,4 +1,4 @@
-import { List } from "antd"
+import { List, Empty } from "antd"
 import { useNavigate } from "react-router-dom";
 
 function parseTime(isoTimestamp) {
@@ -31,41 +31,45 @@ export default function TournamentList({ tournaments, past }) {
             if (item.status == "not started" || !item.startTime) {
                 return `Not started`;
             } else {
-                return `Started at ${parseTime(item.startTime)}`; 
+                return `Started at ${parseTime(item.startTime)}`;
             }
         }
     }
 
     return (
-        <div className="bg-[#334155] h-fit p-4">
-            <List
-                className="bg-[#334155]"
-                dataSource={tournaments}
-                renderItem={(item) => (
-                    <List.Item 
-                        className="border-0 border-b border-gray-700 last:border-b-0 hover:bg-gray-800 transition-colors cursor-pointer" 
-                        onClick={() => handleOpenTournament(item.tournamentid)}
-                        style={{ borderRadius: "8px", paddingLeft: "10px" }}
-                    >
-                        <div className="flex justify-between items-center w-full">
-                            <div className="flex-1">
-                                <div className="text-gray-200 text-base font-medium mb-1">{item.name}</div>
-                                <div className="text-gray-400 text-sm">
-                                    {getSubtitle(item)}
+        <div className="h-fit p-4">
+            {tournaments?.length == 0 && <Empty description="No tournaments found" />}
+
+            {tournaments?.length > 0 &&
+                <List
+                    className=""
+                    dataSource={tournaments}
+                    renderItem={(item) => (
+                        <List.Item
+                            className="border-0 border-b border-gray-700 last:border-b-0 hover:bg-gray-800 transition-colors cursor-pointer"
+                            onClick={() => handleOpenTournament(item.tournamentid)}
+                            style={{ borderRadius: "8px", paddingLeft: "10px" }}
+                        >
+                            <div className="flex justify-between items-center w-full">
+                                <div className="flex-1">
+                                    <div className="text-gray-200 text-base font-medium mb-1">{item.name}</div>
+                                    <div className="text-gray-400 text-sm">
+                                        {getSubtitle(item)}
+                                    </div>
+                                </div>
+                                <div className="flex items-center space-x-8 text-gray-300">
+                                    <div className="text-center min-w-[2rem]">
+                                        <span className="text-sm font-medium">{item.points}</span>
+                                    </div>
+                                    <div className="text-center min-w-[2rem]">
+                                        <span className="text-sm font-medium">{item.rank}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex items-center space-x-8 text-gray-300">
-                                <div className="text-center min-w-[2rem]">
-                                    <span className="text-sm font-medium">{item.points}</span>
-                                </div>
-                                <div className="text-center min-w-[2rem]">
-                                    <span className="text-sm font-medium">{item.rank}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </List.Item>
-                )}
-            />
+                        </List.Item>
+                    )}
+                />
+            }
         </div>
     )
 }
