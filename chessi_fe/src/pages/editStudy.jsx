@@ -1,17 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Input, Typography, Space, message } from "antd";
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
 import VerticalmenuUser from "../components/verticalmenuUser";
 import StudyChapterMemberList from "../components/study/list";
 import { AuthContext } from "../contexts/auth"
-import socket from "../utils/socket";
 import { StudyContent, StudyContentContext } from "../contexts/studyContext";
-import EmojiSelector from "../components/selectors/emojiSelector";
-import ColorSelector from "../components/selectors/colorSelector";
+import EmojiSelector from "../components/inputs/emojiSelector";
+import ColorSelector from "../components/inputs/colorSelector";
+import RichTextEditor from "../components/inputs/richTextEditor";
 
 const { Text } = Typography;
 
@@ -20,17 +16,14 @@ function EditStudyContent() {
 
     let { study, setStudy, name, setName, description, setDescription, chapters, setChapters, members, setMembers } = useContext(StudyContentContext);
 
-    const editor = useCreateBlockNote();
+    const [emoji, setEmoji] = useState("♟️");
+    const [color, setColor] = useState("#ffffff");
+
     const params = useParams() // Get the 'id' from the URL parameters
 
-    editor.onContentChange = (editor) => {
-        const json = editor.topLevelBlocks;
-        console.log("Document JSON:", json);
-    };
-
     useEffect(() => {
-        let getStudyInfo = async () => {
-            let rawData = await fetch(`/api/study/${params.studyid}`, {
+        (async () => {
+            let rawData = await fetch(`/api/study/${params.studyid}/get`, {
                 method: 'get',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -42,24 +35,16 @@ function EditStudyContent() {
             if (data.status === "ok") {
                 setStudy(data.study);
                 setName(data.study.name);
+                setColor(data.study.color);
+                setEmoji(data.study.emoji);
                 setDescription(data.study.description);
-                setChapters(data.chapters);
-                setMembers(data.members);
-
-                game.load(data.study.position, { skipValidation: true });
+                setChapters(data.study.chapters);
+                // setMembers(data.study.members);
             } else {
                 message.error(data.msg);
                 navigate('/'); // return to main page
             }
-        }
-
-        socket.on("connect", async () => {
-            // getChapterInfo();
-        });
-
-        return () => {
-            socket.off("connect");
-        }
+        })()
     }, []);
 
     return (
@@ -71,39 +56,36 @@ function EditStudyContent() {
                 <div className="flex flex-col gap-3 pb-4">
                     <Text className="text-xl text-white" strong>Study name</Text>
                     <div className="flex gap-2">
-                        <EmojiSelector leftAlign />
+                        <EmojiSelector leftAlign emoji={emoji} onChange={setEmoji} />
                         <Input
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Enter study name"
                             className="text-xl font-thick bg-[#1f1f1f] text-white border border-gray-600 p-2"
                         />
-                        <ColorSelector />
+                        <ColorSelector color={color} onChange={setColor} />
                     </div>
                 </div>
                 <div className="flex flex-col gap-3 pb-4">
                     <Text className="text-xl text-white" strong>Study description</Text>
-                    <BlockNoteView
-                        editor={editor}
-                        style={{
-                            minHeight: "300px",
-                            backgroundColor: "var(--bn-colors-editor-background)",
-                            color: "white",
-                            borderRadius: "8px",
-                            padding: "12px",
-                        }}
+                    <RichTextEditor 
+                        styles={{ minHeight: "300px" }} 
+                        content={description} 
+                        onChange={(content) => { setDescription(content) }}
                     />
                 </div>
-                <ActionButtons study={study} name={name} description={description} setName={setName} setDescription={setDescription} />
+                <ActionButtons study={study} name={name} description={description} color={color} emoji={emoji} />
             </div>
         </div>
 
     );
 }
 
-function ActionButtons({ study, name, description, setName, setDescription }) {
+function ActionButtons({ study, name, description, color, emoji }) {
+    let { accessToken } = useContext(AuthContext);
+
     const onSave = async () => {
-        let rawData = await fetch(`/api/study/${study.id}/edit`, {
+        let rawData = await fetch(`/api/study/${study.studyid}/edit`, {
             method: 'post',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -111,15 +93,16 @@ function ActionButtons({ study, name, description, setName, setDescription }) {
             },
             body: JSON.stringify({
                 name,
-                description
+                description,
+                color,
+                emoji
             })
         });
 
         let data = await rawData.json();
 
         if (data.status === "ok") {
-            setName(data.study.name);
-            setDescription(data.study.description);
+            message.success("Study edited successfully");
         } else {
             message.error(data.msg);
             navigate('/'); // return to main page

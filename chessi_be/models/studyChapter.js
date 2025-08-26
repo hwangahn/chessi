@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const connection = new Sequelize(process.env.DB_KEY);
 
-let study = connection.define('study', {
-    studyid: {
+let studyChapter = connection.define('studyChapter', {
+    chapterid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
@@ -14,33 +14,38 @@ let study = connection.define('study', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    studyid: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    description: {
+    fen: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    annotations: {
+        type: DataTypes.JSON,
+        defaultValue: {},
+        allowNull: true
+    },
+    moves: {
         type: DataTypes.JSON,
         defaultValue: [],
         allowNull: true
     },
-    editors: {
-        type: DataTypes.JSON,
-        defaultValue: [],
-        allowNull: true
-    },
-    emoji: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    color: {
-        type: DataTypes.STRING,
-        allowNull: true
+    internalOrder: {
+        type: DataTypes.INTEGER,
+        defaultValue: 10000,
+        allowNull: false
     }
 }, {
-    tableName: "study",
+    tableName: "studychapter",
     timestamps: true,
     createdAt: "timestamp",
     updatedAt: false
 });
 
-module.exports = { study };
+module.exports = { studyChapter };

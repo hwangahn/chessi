@@ -99,8 +99,6 @@ function Info() {
 
         let data = await rawData.json();
 
-        console.log(data);
-
         if (data.status === "ok") {
             navigate('/');
         } else {

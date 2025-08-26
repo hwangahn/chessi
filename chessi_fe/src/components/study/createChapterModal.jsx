@@ -4,7 +4,7 @@ import { AuthContext } from "../../contexts/auth";
 import { useParams } from "react-router-dom" // Import useParams
 import BoardEditor from "../boardEditor";
 
-export default function CreateChapterModal({ chapters, setChapters }) {
+export default function CreateChapterModal({ chapters, onSuccess }) {
     const [isOpen, setIsOpen] = useState(false);
     const [chapterName, setChapterName] = useState("");
     const [loading, setLoading] = useState(false);
@@ -22,32 +22,30 @@ export default function CreateChapterModal({ chapters, setChapters }) {
     }
 
     const handleCreateChapter = async () => {
-        // let rawData = await fetch(`/api/study/${params.studyid}/chapter/create`, {
-        //     method: 'post',
-        //     headers: {
-        //         'Authorization': `Bearer ${accessToken}`,
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({ name: chapterName })
-        // });
+        let rawData = await fetch(`/api/study/${params.studyid}/chapter/create`, {
+            method: 'post',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                name: chapterName,
+                fen: boardEditorRef.current.getPosition()
+            })
+        });
 
-        // let data = await rawData.json();
+        let data = await rawData.json();
 
-        // if (data.status === "ok") {
-            // message.success("Chapter created successfully");
-            // boardEditorRef.current.resetPosition();
-            // setLoading(false);
-            // setChapterName("");
-            // setChapters([...chapters, data.chapter]);
-        // } else {
-        //     message.error(data.msg);
-        // }
-
-        boardEditorRef.current.resetPosition();
-        setChapters([...chapters, { name: chapterName, position: boardEditorRef.current.getPosition() }]);
-        setLoading(false);
-        setChapterName("");
-        setIsOpen(false);
+        if (data.status === "ok") {
+            message.success("Chapter created successfully");
+            boardEditorRef.current.resetPosition();
+            setLoading(false);
+            setChapterName("");
+            setIsOpen(false);
+            onSuccess([...chapters, data.chapter]);
+        } else {
+            message.error(data.msg);
+        }
     }
 
     return (

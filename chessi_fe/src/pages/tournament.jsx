@@ -68,7 +68,6 @@ function TournamentDisplay() {
         })
 
         socket.on("player left", (userid) => {
-            console.log(players, userid);
             setPlayers(prev => {
                 return prev.filter((p) => p.userid !== userid);
             });

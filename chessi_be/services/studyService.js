@@ -1,39 +1,62 @@
 const { user } = require('../models/user');
 const { study } = require('../models/study');
+const { studyChapter } = require('../models/studyChapter');
 const { httpError } = require('../error/httpError');
+const { get } = require('../APIs/studyAPI');
 
 
-let getAllStudiesService = async function() {
-    let studies = await study.findAll();
+let getAllStudiesService = async function () {
+    let studies = await study.findAll({
+        order: [["timestamp", "DESC"]], // newest first
+        include: [{
+            model: user,
+        }]
+    });
+
+    studies = studies.map(study => {
+        return {
+            studyid: study.studyid,
+            name: study.name,
+            emoji: study.emoji,
+            author: study.user.username,
+            color: study.color,
+            timestamp: study.timestamp
+        };
+    });
 
     return { studies };
 }
 
 
-let createStudyService = async function( userid, name, emoji, color ) {
-    let usersFound = await user.findOne({ where: { userid: userid }}); // check user exist
+let createStudyService = async function (userid, { name, emoji, color }) {
+    let usersFound = await user.findOne({ where: { userid: userid } }); // check user exist
 
     if (!usersFound) { // if not, throw error
-        throw (new httpError(404, "Cannot find user"));
+        throw (new httpError(403, "Cannot create study"));
     }
 
     let newStudy = await study.create({
         name,
-        description: {},
         emoji,
         color,
         authorid: userid,
         editors: [userid],
     });
 
-    console.log(`Study ${newStudy.id} created by ${userid}`);
+    console.log(`Study ${newStudy.studyid} created by user ${userid}`);
 
-    return { id: newStudy.id };
+    return { studyid: newStudy.studyid };
 }
 
 
-let editStudyService = async function( userid, id, title, description, emoji, color ) {
-    let studyFound = await study.findOne({ where: { id: id }});
+let editStudyService = async function (userid, { studyid, name, description, emoji, color }) {
+    let usersFound = await user.findOne({ where: { userid: userid } }); // check user exist
+
+    if (!usersFound) { // if not, throw error
+        throw (new httpError(403, "Cannot create study"));
+    }
+
+    let studyFound = await study.findOne({ where: { studyid: studyid } });
 
     if (!studyFound) {
         throw (new httpError(404, "Cannot find study"));
@@ -43,30 +66,154 @@ let editStudyService = async function( userid, id, title, description, emoji, co
         throw (new httpError(403, "You cannot edit this study, as you are not an editor"));
     }
 
-    await studyFound.edit({
-        name: title,
+    await studyFound.update({
+        name,
         description,
         emoji,
         color
     });
 
-    console.log(`Study ${studyFound.id} edited by ${userid}`);
+    console.log(`Study ${studyFound.studyid} edited by user ${userid}`);
 }
 
 
-let getStudyService = async function( id ) {
-    let studyFound = await study.findOne({ where: { id: id }});
+let getStudyService = async function (studyid) {
+    let studyFound = await study.findOne({
+        where: { studyid: studyid },
+        include: [
+            {
+                model: studyChapter,
+                separate: true, // ensures ordering works properly
+                order: [
+                    ['internalOrder', 'ASC'], // first order by column internalOrder
+                    ['timestamp', 'ASC'], // then order by column timestamp
+                ]
+            }
+        ]
+    });
 
     if (!studyFound) {
         throw (new httpError(404, "Cannot find study"));
     }
 
+    studyFound = {
+        studyid: studyFound.studyid,
+        name: studyFound.name,
+        description: studyFound.description,
+        emoji: studyFound.emoji,
+        color: studyFound.color,
+        timestamp: studyFound.timestamp,
+        chapters: studyFound.studyChapters.map(chapter => {
+            return {
+                chapterid: chapter.chapterid,
+                name: chapter.name,
+            };
+        })
+    };
+
     return studyFound;
 }
 
 
-let removeStudyService = async function( userid, id ) {
-    let studyFound = await study.findOne({ where: { id: id }});
+let createChapterService = async function (userid, { studyid, name, fen }) {
+    let usersFound = await user.findOne({ where: { userid: userid } }); // check user exist
+
+    if (!usersFound) { // if not, throw error
+        throw (new httpError(403, "Cannot create chapter"));
+    }
+
+    let studyFound = await study.findOne({
+        where: {
+            studyid: studyid,
+            authorid: userid
+        }
+    });
+
+    if (!studyFound) {
+        throw (new httpError(404, "Cannot find study"));
+    }
+
+    let newChapter = await studyChapter.create({
+        name,
+        fen,
+        studyid: studyid,
+        authorid: userid
+    });
+
+    console.log(`Chapter ${newChapter.chapterid} created in study ${studyid} by user ${userid}`);
+
+    newChapter = {
+        chapterid: newChapter.chapterid,
+        name: newChapter.name
+    };
+
+    return { chapter: newChapter };
+}
+
+
+let getChapterService = async function (studyid, chapterid) {
+    let chapterFound = await studyChapter.findOne({ where: { chapterid: chapterid, studyid: studyid } });
+
+    if (!chapterFound) {
+        throw (new httpError(404, "Cannot find chapter"));
+    }
+
+    return chapterFound;
+}
+
+
+let editChapterService = async function (userid, studyid, { chapterid, name }) {
+    let usersFound = await user.findOne({ where: { userid: userid } }); // check user exist
+
+    if (!usersFound) { // if not, throw error
+        throw (new httpError(403, "Cannot edit chapter"));
+    }
+
+    let chapterFound = await studyChapter.findOne({ where: { chapterid: chapterid, studyid: studyid } });
+
+    if (!chapterFound) {
+        throw (new httpError(404, "Cannot find chapter"));
+    }
+
+    if (chapterFound.authorid !== userid) {
+        throw (new httpError(403, "You cannot edit this chapter, as you are not the author"));
+    }
+
+    await chapterFound.update({ name });
+
+    console.log(`Chapter ${chapterid} edited in study ${studyid} by user ${userid}`);
+}
+
+
+let sortChapterService = async function (userid, studyid, chapters) {
+    let usersFound = await user.findOne({ where: { userid: userid } }); // check user exist
+
+    if (!usersFound) { // if not, throw error
+        throw (new httpError(403, "Cannot sort chapters"));
+    }
+
+    let studyFound = await study.findOne({ where: { studyid: studyid } });
+
+    if (!studyFound) {
+        throw (new httpError(404, "Cannot find study"));
+    }
+
+    await Promise.all(chapters.map(async (chapter, index) => {
+        let chapterFound = await studyChapter.findOne({ where: { chapterid: chapter.chapterid, studyid: studyid } });
+
+        if (!chapterFound) {
+            throw (new httpError(404, "Cannot find chapter"));
+        }
+
+        await chapterFound.update({ internalOrder: index });
+    }));
+
+    console.log(`Chapters sorted in study ${studyid} by user ${userid}`);
+}
+
+
+let removeStudyService = async function (userid, studyid) {
+    let studyFound = await study.findOne({ where: { studyid: studyid } });
 
     if (!studyFound) {
         throw (new httpError(404, "Cannot find study"));
@@ -76,16 +223,21 @@ let removeStudyService = async function( userid, id ) {
         throw (new httpError(403, "You cannot remove this study, as you are not an editor"));
     }
 
-    await study.destroy({ where: { id: id }});
+    await study.destroy({ where: { studyid: studyid } });
 
-    console.log(`Study ${id} removed by ${userid}`);
-}
+    console.log(`Study ${studyid} removed by user ${userid}`);
+};
 
 
-module.exports = { 
+module.exports = {
     getAllStudiesService,
     createStudyService,
     editStudyService,
     getStudyService,
-    removeStudyService
+    removeStudyService,
+
+    createChapterService,
+    getChapterService,
+    editChapterService,
+    sortChapterService
 };

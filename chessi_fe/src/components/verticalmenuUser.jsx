@@ -45,7 +45,7 @@ export default function verticalmenuUser() {
                                     fontSize: "24px",     // controls both width & height
                                     lineHeight: "1",
                                 }} />
-                                <Link to="/study">Study</Link>
+                                <Link to="/studies">Study</Link>
                             </li>
                             <li>
                                 <TrophyOutlined style={{

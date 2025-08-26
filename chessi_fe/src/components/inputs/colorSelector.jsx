@@ -5,7 +5,10 @@ export default function ColorSelector({ color, leftAlign, onChange }) {
   const [_color, setColor] = useState(color);
   const [showPicker, setShowPicker] = useState(false);
 
-  console.log(showPicker)
+  // keep local state in sync with parent prop
+  useEffect(() => {
+    setColor(color);
+  }, [color]);
 
   const handleChange = (newColor) => {
     setColor(newColor);

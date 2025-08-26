@@ -1,38 +1,41 @@
 import { useState, useContext, useRef } from "react"
 import { useNavigate } from "react-router-dom";
-import { Modal, Input, message, Button } from "antd"
+import { Modal, Input, message, Button, Typography } from "antd"
 import { AuthContext } from "../../contexts/auth";
+import EmojiSelector from "../inputs/emojiSelector";
+import ColorSelector from "../inputs/colorSelector";
 
-export default function CreateStudyModal({ chapters, setChapters }) {
+let { Text } = Typography;
+
+export default function CreateStudyModal() {
     const [isOpen, setIsOpen] = useState(false);
     const [name, setName] = useState("");
-    const [emoji, setEmoji] = useState("");
-    const [color, setColor] = useState("");
+    const [emoji, setEmoji] = useState("♟️");
+    const [color, setColor] = useState("#ffffff");
     const [loading, setLoading] = useState(false);
 
     let { accessToken } = useContext(AuthContext);
 
-    const boardEditorRef = useRef();
     const navigate = useNavigate();
 
     const handleCancel = () => {
         setIsOpen(false);
         setName("");
-        setEmoji("");
-        setColor("");
+        setEmoji("♟️");
+        setColor("#ffffff");
     }
 
-    const handleCreateChapter = async () => {
+    const handleCreateStudy = async () => {
         let rawData = await fetch(`/api/study/create`, {
             method: 'post',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ 
-                name: name, 
+            body: JSON.stringify({
+                name: name,
                 emoji: emoji,
-                color: color 
+                color: color
             })
         });
 
@@ -40,22 +43,21 @@ export default function CreateStudyModal({ chapters, setChapters }) {
 
         if (data.status === "ok") {
             message.success("Study created successfully");
+            setIsOpen(false);
+            setName("");
+            setEmoji("♟️");
+            setColor("#ffffff");
+
             navigate(`/study/${data.studyid}/edit`);
         } else {
             message.error(data.msg);
         }
-
-        boardEditorRef.current.resetPosition();
-        setChapters([...chapters, { name: chapterName, position: boardEditorRef.current.getPosition() }]);
-        setLoading(false);
-        setChapterName("");
-        setIsOpen(false);
     }
 
     return (
         <>
-            <div className="border-t border-gray-700 p-4">
-                <Button className="bg-slate-800 w-full justify-start text-gray-300 hover:text-white hover:bg-gray-800" onClick={() => setIsOpen(true)}>
+            <div className="p-4 ml-auto w-fit">
+                <Button className="bg-slate-800 w-fit justify-start text-gray-300 hover:text-white hover:bg-gray-800 m" onClick={() => setIsOpen(true)}>
                     Create study
                 </Button>
             </div>
@@ -63,22 +65,21 @@ export default function CreateStudyModal({ chapters, setChapters }) {
                 title="Create Study"
                 open={isOpen}
                 confirmLoading={loading}
-                onOk={handleCreateChapter}
+                onOk={handleCreateStudy}
                 onCancel={handleCancel}
                 okText="Confirm"
                 cancelText="Cancel"
                 className="modal"
             >
                 <div className="flex flex-col gap-3 pb-4">
-                    <Text className="text-xl text-white" strong>Study name</Text>
                     <div className="flex gap-2">
-                        <EmojiSelector leftAlign />
+                        <EmojiSelector leftAlign emoji={emoji} onChange={setEmoji} />
                         <Input
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Enter study name"
                             className="text-xl font-thick bg-[#1f1f1f] text-white border border-gray-600 p-2"
                         />
-                        <ColorSelector />
+                        <ColorSelector color={color} onChange={setColor} />
                     </div>
                 </div>
             </Modal>

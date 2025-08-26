@@ -94,8 +94,8 @@ export default function App() {
           </Route>
           <Route Component={ProtectedRouteUser}>
             <Route path='/lobby/:lobbyid' Component={Lobby}></Route>
-            <Route path="/study/" Component={Studies}></Route>
-            <Route path="/study/:studyid" Component={EditStudy}></Route>
+            <Route path="/studies" Component={Studies}></Route>
+            <Route path="/study/:studyid/edit" Component={EditStudy}></Route>
             <Route path="/study/:studyid/chapter/:chapterid/edit" Component={EditStudyChapter}></Route>
             <Route path="/tournaments/" Component={ActiveTournament}></Route>
             <Route path="/tournament/:tournamentid" Component={Tournament}></Route>

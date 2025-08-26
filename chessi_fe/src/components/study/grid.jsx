@@ -6,11 +6,15 @@ import AgoText from "../agoText"
 
 const { Meta } = Card
 
-export default function StudyGrid({ studies }) {
+export default function StudyGrid({ studies, edit }) {
     const navigate = useNavigate();
 
-    const handleClick = (studyId) => {
-        navigate(`/study/${studyId}`);
+    const handleClick = (studyid) => {
+        if (edit) {
+            navigate(`/study/${studyid}/edit`);
+        } else {
+            navigate(`/study/${studyid}`);
+        }
     };
 
     return (
@@ -20,13 +24,14 @@ export default function StudyGrid({ studies }) {
             {studies?.length > 0 &&
                 <Row gutter={[24, 24]} className="mx-auto">
                     {studies.map((study) => (
-                        <Col xs={24} md={12} lg={8} key={study.id}>
+                        <Col xs={24} md={12} lg={8} key={study.studyid}>
                             <Card
-                                className={`bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors duration-200 border-l-4 ${study.accentColor}`}
+                                className={`bg-gray-800 border-gray-700 hover:bg-gray-750 transition-colors duration-200 border-l-4`}
+                                style={{ borderLeftColor: study.color }}
                                 bodyStyle={{ padding: "20px" }}
                             >
-                                <div className="flex items-center gap-3 mb-4 cursor-pointer" onClick={() => handleClick(study.id)}>
-                                    <div className="text-2xl">{study.avatar}</div>
+                                <div className="flex items-center gap-3 mb-4 cursor-pointer" onClick={() => handleClick(study.studyid)}>
+                                    <div className="text-2xl">{study.emoji}</div>
                                     <div className="flex-1">
                                         <h3 className="text-blue-400 text-lg font-semibold mb-1">{study.name}</h3>
                                     </div>

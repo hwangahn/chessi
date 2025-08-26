@@ -34,6 +34,7 @@ app.use('/', require('./APIs/compGameAPI'));
 app.use('/', require('./APIs/searchAPI'));
 app.use('/', require('./APIs/postAPI'));
 app.use('/', require('./APIs/tournamentAPI'));
+app.use('/', require('./APIs/studyAPI'));
 
 socketInstance.get().on("connection", (socket) => {
     require('./socketEventListeners/socketStatusListener')(socketInstance.get(), socket);

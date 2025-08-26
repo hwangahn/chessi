@@ -14,6 +14,7 @@ const { tournament } = require('./tournament');
 const { tournamentGame } = require('./tournamentGame');
 const { tournamentUser } = require('./tournamentUser');
 const { study } = require('./study');
+const { studyChapter } = require('./studyChapter');
 const mysql = require('mysql2');
 const util = require('util');
 const bcrypt = require('bcrypt');
@@ -188,8 +189,17 @@ user.hasMany(study, {
     foreignKey: "authorid"
 });
 
+// study - studyChapter: 1:N
+studyChapter.belongsTo(study, {
+    foreignKey: "studyid"
+});
+study.hasMany(studyChapter, {
+    foreignKey: "studyid"
+});
+
 let drop = async () => {
     try {
+        await studyChapter.drop();
         await study.drop();
         await tournamentUser.drop();
         await tournamentGame.drop();
@@ -227,6 +237,7 @@ let create = async () => {
         await tournamentGame.sync();
         await tournamentUser.sync();
         await study.sync();
+        await studyChapter.sync();  
     } catch(err) {
         console.log(err)
     }
@@ -242,7 +253,7 @@ let create = async () => {
         console.log(`database '${dbName}' created successfully (if it didn't exist already)`);
 
         await dummyConnection.end();
-        
+
         await create();
 
         let hashedPassword = await bcrypt.hash("Admin123", 10);

@@ -2,7 +2,6 @@ import { useEffect, useContext, useState, useRef, forwardRef } from "react"
 import { useParams, useNavigate } from "react-router-dom" // Import useParams
 import { message, Modal } from "antd";
 import { Chessboard } from "react-chessboard"
-import socket from "../utils/socket";
 import VerticalmenuUser from "../components/verticalmenuUser";
 import StudyChapterMemberList from "../components/study/list";
 import { AuthContext } from "../contexts/auth"
@@ -214,7 +213,7 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
 }
 
 function ChapterDisplay() {
-    let { profile, accessToken } = useContext(AuthContext);
+    let { accessToken } = useContext(AuthContext);
     let { game, side, setSide, position, setPosition, onMove, setOnMove, history, setHistory } = useContext(GameContentContext);
     let { study, setStudy, chapters, setChapters, members, setMembers } = useContext(StudyContentContext);
 
@@ -222,16 +221,16 @@ function ChapterDisplay() {
     const params = useParams() // Get the 'id' from the URL parameters
 
     // data of current chapter
-    const [chapterId, setChapterId] = useState(params.chapterid);
+    const [chapterId, setChapterId] = useState();
     const [chapter, setChapter] = useState(null);
     // used to store what user drawed on board
     const [circles, setCircles] = useState([]); // inittiate circles. if nothing is passed, set as empty array
     const [arrows] = useState([]); // inittiate arrows. if nothing is passed, set as empty array
 
-
+    // getting study info based on study param change
     useEffect(() => {
-        let getStudyInfo = async () => {
-            let rawData = await fetch(`/api/study/${params.studyid}`, {
+        (async () => {
+            let rawData = await fetch(`/api/study/${params.studyid}/get`, {
                 method: 'get',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -242,16 +241,19 @@ function ChapterDisplay() {
 
             if (data.status === "ok") {
                 setStudy(data.study);
-                setChapters(data.chapters);
-                setMembers(data.members);
+                setChapters(data.study.chapters);
+                // setMembers(data.members);
             } else {
                 message.error(data.msg);
                 navigate('/'); // return to main page
             }
-        }
+        })();
+    }, [params.studyid]);
 
-        let getChapterInfo = async () => {
-            let rawData = await fetch(`/api/study/${params.studyid}/chapter/${chapterId}`, {
+    // getting chapter info based on chapterId param change
+    useEffect(() => {
+        (async () => {
+            let rawData = await fetch(`/api/study/${params.studyid}/chapter/${params.chapterid}/get`, {
                 method: 'get',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -262,25 +264,17 @@ function ChapterDisplay() {
 
             if (data.status === "ok") {
                 setChapter(data.chapter);
+                setChapterId(data.chapter.chapterid);
                 setSide(data.chapter.side);
-                setPosition(data.chapter.position);
+                setPosition(data.chapter.fen);
 
-                game.load(data.chapter.position, { skipValidation: true });
+                game.load(data.chapter.fen, { skipValidation: true });
             } else {
                 message.error(data.msg);
                 navigate(`study/${params.studyid}`); // return to main study
             }
-        }
-
-        socket.on("connect", async () => {
-            // getStudyInfo();
-            // getChapterInfo();
-        });
-
-        return () => {
-            socket.off("connect");
-        }
-    }, []);
+        })();
+    }, [params.chapterid]);
 
     return (
         <>
