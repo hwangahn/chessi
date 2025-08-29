@@ -7,9 +7,10 @@ import StudyChapterMemberList from "../components/study/list";
 import { AuthContext } from "../contexts/auth"
 import { GameContent, GameContentContext } from "../contexts/gameContent";
 import { StudyContent, StudyContentContext } from "../contexts/studyContext";
+import MoveHistory from "../components/game/moveHistory";
 
-function Board({ game, circles, setCircles, arrows, position, setPosition, side }) {
-    const [drawMode, setDrawMode] = useState(true); // draw mode: for drawing arrows and circles
+function Board({ game, circles, setCircles, arrows, position, setPosition, history, setHistory, setOnMove, side }) {
+    const [drawMode, setDrawMode] = useState(false); // draw mode: for drawing arrows and circles
     const [moveFrom, setMoveFrom] = useState('');
     const [optionSquares, setOptionSquares] = useState({});
 
@@ -75,6 +76,39 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
         );
     });
 
+    // get the move options for a square to show valid moves
+    function getMoveOptions(square) {
+        // get the moves for the square
+        const moves = game.moves({
+            square,
+            verbose: true
+        });
+
+        // if no moves, clear the option squares
+        if (moves.length === 0) {
+            // setOptionSquares({});
+            return false;
+        }
+
+        // create a new object to store the option squares
+        const newSquares = {};
+
+        // loop through the moves and set the option squares
+        for (const move of moves) {
+            let capturing = game.get(move.to) && (game.get(move.to)?.color !== game.get(square)?.color); // indicates there is an opponent piece at the square for capturing
+            newSquares[move.to] = { type: capturing ? 'captureSquare' : 'normalSquare' }; // set the square type based on whether it is a capture or not
+        }
+
+        // set the square clicked to move from to yellow
+        newSquares[square] = { type: 'sourceSquare' };
+
+        // set the option squares
+        // setOptionSquares(newSquares);
+
+        // return true to indicate that there are move options
+        return newSquares;
+    }
+
     const onSquareRightClick = (square) => {
         if (!drawMode) {
             return;
@@ -97,13 +131,30 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
         arrows = newArrows; // no re-renders, but keep data in stage
     };
 
+    const onPieceDragBegin = (piece, sourceSquare) => {
+        if (drawMode) {
+            return;
+        }
+
+        // get the move options for the square
+        const moveOptions = getMoveOptions(sourceSquare);
+
+        // if move options, set the moveFrom to the square
+        if (moveOptions) {
+            requestAnimationFrame(() => {
+                setOptionSquares(moveOptions);
+                setMoveFrom(sourceSquare);
+            });
+        }
+    }
+
     const onPieceDrop = (sourceSquare, targetSquare, piece) => {
         if (drawMode) {
             return;
         }
 
         try {
-            game.move({
+            let move = game.move({
                 from: sourceSquare,
                 to: targetSquare,
                 promotion: piece[1].toLowerCase() // promotion dialog returns the piece as the promoted piece, not the pawn
@@ -113,40 +164,11 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
             setPosition(game.fen());
             setMoveFrom(''); // clear moveFrom
             setOptionSquares({}); // clear option squares
+
+            history.push(move);
+            setHistory([...history]);
+            setOnMove(history.length - 1); // selecting latest move
         } catch (error) { }
-    }
-
-    // get the move options for a square to show valid moves
-    function getMoveOptions(square) {
-        // get the moves for the square
-        const moves = game.moves({
-            square,
-            verbose: true
-        });
-
-        // if no moves, clear the option squares
-        if (moves.length === 0) {
-            setOptionSquares({});
-            return false;
-        }
-
-        // create a new object to store the option squares
-        const newSquares = {};
-
-        // loop through the moves and set the option squares
-        for (const move of moves) {
-            let capturing = game.get(move.to) && (game.get(move.to)?.color !== game.get(square)?.color); // indicates there is an opponent piece at the square for capturing
-            newSquares[move.to] = { type: capturing ? 'captureSquare' : 'normalSquare' }; // set the square type based on whether it is a capture or not
-        }
-
-        // set the square clicked to move from to yellow
-        newSquares[square] = { type: 'sourceSquare' };
-
-        // set the option squares
-        setOptionSquares(newSquares);
-
-        // return true to indicate that there are move options
-        return true;
     }
 
     const onSquareClick = function (square, piece) {
@@ -157,10 +179,11 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
         // piece clicked to move
         if (!moveFrom && piece) {
             // get the move options for the square
-            const hasMoveOptions = getMoveOptions(square);
+            const moveOptions = getMoveOptions(square);
 
             // if move options, set the moveFrom to the square
-            if (hasMoveOptions) {
+            if (moveOptions) {
+                setOptionSquares(moveOptions);
                 setMoveFrom(square);
             }
 
@@ -170,7 +193,7 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
 
         // try moving
         try {
-            game.move({
+            let move = game.move({
                 from: moveFrom,
                 to: square,
                 promotion: 'q'
@@ -180,12 +203,17 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
             setPosition(game.fen());
             setMoveFrom(''); // clear moveFrom
             setOptionSquares({}); // clear option squares
+
+            history.push(move);
+            setHistory([...history]);
+            setOnMove(history.length - 1); // selecting latest move
         } catch {
             // if invalid, setMoveFrom and getMoveOptions
-            const hasMoveOptions = getMoveOptions(square);
+            const moveOptions = getMoveOptions(square);
 
-            // if new piece, setMoveFrom, otherwise clear moveFrom
-            if (hasMoveOptions) {
+            // if move options, set the moveFrom to the square
+            if (moveOptions) {
+                setOptionSquares(moveOptions);
                 setMoveFrom(square);
             }
 
@@ -204,6 +232,7 @@ function Board({ game, circles, setCircles, arrows, position, setPosition, side 
                 boardOrientation={side}
                 onSquareRightClick={onSquareRightClick}
                 onArrowsChange={onArrowsChange}
+                onPieceDragBegin={onPieceDragBegin}
                 onPieceDrop={onPieceDrop}
                 onSquareClick={onSquareClick}
                 customDarkSquareStyle={{ backgroundColor: "#6d7fd1" }}
@@ -267,6 +296,7 @@ function ChapterDisplay() {
                 setChapterId(data.chapter.chapterid);
                 setSide(data.chapter.side);
                 setPosition(data.chapter.fen);
+                setHistory(data.chapter.moves);
 
                 game.load(data.chapter.fen, { skipValidation: true });
             } else {
@@ -278,7 +308,7 @@ function ChapterDisplay() {
 
     return (
         <>
-            <div className="min-h-screen p-6 flex gap-[50px]">
+            <div className="p-6 flex gap-[50px]">
                 <div className="space-y-6">
                     <StudyChapterMemberList edit chapterId={chapterId} />
                 </div>
@@ -290,8 +320,14 @@ function ChapterDisplay() {
                         arrows={arrows}
                         position={position}
                         setPosition={setPosition}
+                        history={history}
+                        setHistory={setHistory}
+                        setOnMove={setOnMove}
                         side={side}
                     />
+                </div>
+                <div className="flex-1">
+                    <MoveHistory />
                 </div>
             </div>
         </>

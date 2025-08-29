@@ -4,7 +4,7 @@ import { Chessboard } from 'react-chessboard';
 import { message } from 'antd'
 import { UserOutlined } from '@ant-design/icons';
 import { GameContent, GameContentContext } from "../contexts/gameContent";
-import Move from "../components/move";
+import MoveHistory from "../components/game/moveHistory";
 
 function GameInfo() {
   let { setPosition, setOnMove, history, setHistory } = useContext(GameContentContext);
@@ -22,12 +22,12 @@ function GameInfo() {
 
       let data = await rawData.json();
 
-      if (data.status === "ok") {        
+      if (data.status === "ok") {
         setHistory(() => {
-          data.moves.forEach(Element => { 
-            history.push({ san: Element.notation, after: Element.fen });
+          data.moves.forEach(Element => {
+            history.push({ color: Element.side, san: Element.notation, after: Element.fen });
           });
-          return [ ...history ];
+          return [...history];
         });
         setPosition(data.moves[data.moves.length - 1].fen);
         setPlayerInfo({ white: data.white, black: data.black });
@@ -45,17 +45,17 @@ function GameInfo() {
   }
 
   const playerAva = {
-      margin: "0.3vw 0vw 0.5vw 0vw",
-      width: "20vw",
-      color: "#B0ABAB",
-      fontSize: "1.6vw",
-      fontWeight: "bold"
+    margin: "0.3vw 0vw 0.5vw 0vw",
+    width: "20vw",
+    color: "#B0ABAB",
+    fontSize: "1.6vw",
+    fontWeight: "bold"
   }
 
   const gameComponent = {
-      backgroundColor: "#1E1D2F",
-      width: "93%",
-      height: "17vw",
+    backgroundColor: "#1E1D2F",
+    width: "93%",
+    height: "17vw",
   }
 
   const gc1 = {
@@ -69,23 +69,20 @@ function GameInfo() {
 
   return (
     <>
-      <div style = {playerComponent}>
-              <div style = {playerAva}>
-                  <UserOutlined style = {{width: "2vw", height: "3vw"}}/>                  
-                  {`${playerInfo?.black?.username} (${playerInfo?.black?.rating})`} 
-              </div>
+      <div style={playerComponent}>
+        <div style={playerAva}>
+          <UserOutlined style={{ width: "2vw", height: "3vw" }} />
+          {`${playerInfo?.black?.username} (${playerInfo?.black?.rating})`}
+        </div>
       </div>
-      <div style = {gameComponent}>
-          <div style = {gc1}>Lịch sử nước di chuyển</div>
-          <div style={{color: "#BEC1DC"}}>
-              <MoveHistory />
-          </div>
+      <div style={gameComponent}>
+        <MoveHistory />
       </div>
-      <div style = {playerComponent}>
-          <div style = {playerAva}>
-              <UserOutlined style = {{width: "2vw", height: "3vw"}}/>                  
-              {`${playerInfo?.white?.username} (${playerInfo?.white?.rating})`}
-          </div>
+      <div style={playerComponent}>
+        <div style={playerAva}>
+          <UserOutlined style={{ width: "2vw", height: "3vw" }} />
+          {`${playerInfo?.white?.username} (${playerInfo?.white?.rating})`}
+        </div>
       </div>
     </>
   );
@@ -96,41 +93,14 @@ function Board() {
 
   return (
     <>
-      <Chessboard id={1000000000} position={position} arePiecesDraggable={false} animationDuration={0} customDarkSquareStyle={{backgroundColor: "#6d7fd1"}} /> 
+      <Chessboard id={1000000000} position={position} arePiecesDraggable={false} animationDuration={0} customDarkSquareStyle={{ backgroundColor: "#6d7fd1" }} />
     </>
-  )
-}
-
-function MoveHistory() {
-  let { history } = useContext(GameContentContext);
-  let moveByPair = new Array;
-
-  let lastMove = useRef(null);
-
-  useEffect(() => {
-    lastMove.current.scrollIntoView({behavior: "smooth", block: "nearest"});
-  });
-
-  for (let i = 0; i < history?.length; i += 2) {
-    moveByPair.push([
-      { history: history[i], moveIndex: i },
-      { history: history[i + 1], moveIndex: i + 1 }
-    ]);
-  }
-
-  return (
-    <div style={{width: "100%", height: "calc(14.2vw)", marginBottom: "calc(20vw * 0.05)", overflowY: "auto"}}>
-      {moveByPair.map((Element, index) => {
-        return <Move movePair={Element} moveOrder={index}/>
-      })}
-      <div ref={lastMove} style={{height: "0px"}}></div>
-    </div>
   )
 }
 
 export default function Game() {
   const leftbar = {
-    float:"left",
+    float: "left",
     width: "27.5%",
     marginTop: "0px",
     paddingTop: "0.8vw",
@@ -151,7 +121,7 @@ export default function Game() {
     marginLeft: "4%",
     marginTop: "28%",
     justifyContent: "center"
-}
+  }
 
   return (
     <GameContent>
@@ -160,11 +130,11 @@ export default function Game() {
           <div style={gameInfor}></div>
         </div>
       </div>
-      <div id="game-board" style={{float: "left", width: "42%"}}>
-          <Board />
+      <div id="game-board" style={{ float: "left", width: "42%" }}>
+        <Board />
       </div>
-      <div id="game-misc" style={{float: "right", width: "30%"}}>
-        <div style = {rightbar}>
+      <div id="game-misc" style={{ float: "right", width: "30%" }}>
+        <div style={rightbar}>
           <GameInfo />
         </div>
       </div>

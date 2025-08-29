@@ -6,7 +6,7 @@ import { UserOutlined } from '@ant-design/icons';
 import socket from "../utils/socket";
 import { AuthContext } from "../contexts/auth";
 import { GameContent, GameContentContext } from "../contexts/gameContent";
-import Move from "../components/move";
+import MoveHistory from "../components/game/moveHistory";
 import Chat from "../components/chat";
 
 function GameInfo() {
@@ -155,10 +155,7 @@ function GameInfo() {
         </div>
       </div>
       <div style={gameComponent}>
-        <div style={gc1}>Lịch sử nước di chuyển</div>
-        <div style={{ color: "#BEC1DC" }}>
-          <MoveHistory />
-        </div>
+        <MoveHistory />
       </div>
       <div style={playerComponent}>
         <div style={playerAva}>
@@ -229,33 +226,6 @@ function Board() {
       }
       {side}
     </>
-  )
-}
-
-function MoveHistory() {
-  let { history } = useContext(GameContentContext);
-  let moveByPair = new Array;
-
-  let lastMove = useRef(null);
-
-  useEffect(() => {
-    lastMove.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  });
-
-  for (let i = 0; i < history?.length; i += 2) {
-    moveByPair.push([
-      { history: history[i], moveIndex: i },
-      { history: history[i + 1], moveIndex: i + 1 }
-    ]);
-  }
-
-  return (
-    <div style={{ width: "100%", height: "calc(14.2vw)", marginBottom: "calc(20vw * 0.05)", overflowY: "auto" }}>
-      {moveByPair.map((Element, index) => {
-        return <Move movePair={Element} moveOrder={index} />
-      })}
-      <div ref={lastMove} style={{ height: "0px" }}></div>
-    </div>
   )
 }
 
